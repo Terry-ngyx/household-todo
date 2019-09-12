@@ -41,27 +41,27 @@ class WelcomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: 100.0,
-                      margin: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 20.0),
+                      width: 150.0,
+                      margin: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 15.0),
                       child: RaisedButton(
                         color: Color(0xFFF96871),
                         onPressed: () {
                           Navigator.pushNamed(context,SignUpRoute);
                         },
-                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
                         padding: EdgeInsets.all(15.0),
                         child: Text('Sign Up', textAlign: TextAlign.center, style: BtnText),
                       ) 
                     ),
                     Container(
-                      width: 100.0,
-                      margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 20.0),
+                      width: 150.0,
+                      margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 15.0),
                       child: RaisedButton(
                         color: Color(0xFFF73D99),
                         onPressed: () {
                           Navigator.pushNamed(context,LoginRoute);
                         },
-                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
                         padding: EdgeInsets.all(15.0),
                         child: Text('Login', textAlign: TextAlign.center, style: BtnText),
                       ) 
@@ -76,7 +76,7 @@ class WelcomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(context,LoginRoute);
                   },
-                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0)),
+                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
                   padding: EdgeInsets.all(5.0),
                   child: Text('Login with Google', textAlign: TextAlign.center, style: BtnText),
                 ) 

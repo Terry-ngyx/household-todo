@@ -125,7 +125,7 @@ class LoginFormState extends State<LoginForm>{
                   onPressed: () {
                     Navigator.pushNamed(context,LoginRoute);
                   },
-                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0)),
+                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
                   padding: EdgeInsets.all(15.0),
                   child: Text('Login with Google', textAlign: TextAlign.center, style: BtnText),
                 ) 
