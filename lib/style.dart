@@ -5,7 +5,7 @@ const String FontNameDefault = 'Montserrat';
 const AppBarTitle = TextStyle(
     fontFamily: FontNameDefault,
     fontWeight: FontWeight.w600,
-    fontSize: 20.0,
+    fontSize: 30.0,
     color: Colors.white,
 );
 
@@ -30,9 +30,23 @@ const BtnText = TextStyle(
   color: Colors.white,
 );
 
+const TitleText = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w600,
+  fontSize: 25.0,
+  color: Colors.white,
+);
+
 const NormalFont = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w400,
   fontSize: 18.0,
+  color: Colors.white,
+);
+
+const MutedText = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w200,
+  fontSize: 20.0,
   color: Colors.white,
 );

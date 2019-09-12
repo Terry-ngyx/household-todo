@@ -3,10 +3,12 @@ import 'style.dart';
 import 'start/welcome.dart';
 import 'start/signup.dart';
 import 'start/login.dart';
+import 'session/homepage.dart';
 
 const Home = '/';
 const LoginRoute = '/login';
 const SignUpRoute = '/signup';
+const HomeRoute = '/home';
 
 void main() => runApp(MyApp());
 
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       onGenerateRoute: Router.generateRoute,
-      initialRoute: Home,
+      initialRoute: HomeRoute,
     );
   }
 }
@@ -41,6 +43,8 @@ class Router{
         return MaterialPageRoute(builder: (_) => LoginPage());
       case SignUpRoute:
         return MaterialPageRoute(builder: (_) => SignUpPage());
+      case HomeRoute:
+        return MaterialPageRoute(builder: (_) => HomePage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
