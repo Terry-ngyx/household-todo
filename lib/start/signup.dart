@@ -42,24 +42,31 @@ class _SigninFormState extends State<SigninForm> {
         child: SingleChildScrollView(
             child: Form(
                 key: _formkey,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Container(
-                          child: Text('Sign Up',
-                              style: PageTitle, textAlign: TextAlign.center)),
-                      Column(
+                child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 40.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(top: 10.0, bottom: 40.0),
+                              child: Text('Sign Up',
+                                  style: PageTitle,
+                                  textAlign: TextAlign.center)),
                           Text('Username', style: NormalFont),
                           SizedBox(height: 20.0),
                           Container(
-                            margin: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+                            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
                             child: TextFormField(
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.blue, width: 3.0))),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFF96861))),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.white,
+                                )),
+                              ),
                               autofocus: true,
                               obscureText: false,
                               validator: (value) {
@@ -73,19 +80,20 @@ class _SigninFormState extends State<SigninForm> {
                               },
                             ),
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
                           Text('Email', style: NormalFont),
                           SizedBox(height: 20.0),
                           Container(
-                            margin: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+                            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
                             child: TextFormField(
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.blue, width: 3.0))),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFF73D99))),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.white,
+                                )),
+                              ),
                               autofocus: false,
                               obscureText: false,
                               validator: (value) {
@@ -99,26 +107,28 @@ class _SigninFormState extends State<SigninForm> {
                               },
                             ),
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
                           Text('Password', style: NormalFont),
                           SizedBox(height: 20.0),
                           Container(
-                            margin: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+                            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
                             child: TextFormField(
                               controller: passwordController,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.blue, width: 3.0))),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFF61C6C0))),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.white,
+                                )),
+                              ),
                               autofocus: false,
                               obscureText: true,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return 'please enter your password';
-                                } else if (value != confirmPasswordController.text) {
+                                } else if (value !=
+                                    confirmPasswordController.text) {
                                   // print(passwordController.text);
                                   return 'please check if password matches';
                                 } else {
@@ -130,20 +140,21 @@ class _SigninFormState extends State<SigninForm> {
                               },
                             ),
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
                           Text('Confirm Password', style: NormalFont),
                           SizedBox(height: 20.0),
                           Container(
-                            margin: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+                            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
                             child: TextFormField(
                               controller: confirmPasswordController,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.blue, width: 3.0))),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFBDCC11))),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.white,
+                                )),
+                              ),
                               autofocus: false,
                               obscureText: true,
                               validator: (value) {
@@ -161,29 +172,38 @@ class _SigninFormState extends State<SigninForm> {
                               },
                             ),
                           ),
-                        ],
-                      ),
-                      Container(
-                          padding:
-                              const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 30.0),
-                          margin: EdgeInsets.fromLTRB(120.0, 10.0, 120.0, 10.0),
-                          child: RaisedButton(
-                            onPressed: () {
-                              if (_formkey.currentState.validate()) {
-                                Scaffold.of(context).showSnackBar(
-                                    SnackBar(content: Text('Processing Data')));
-                                _formkey.currentState.save();
-                                // print(email);
-                                // print(username);
-                                // print(password);
-                                // print(confirmPassword);
-                              }
+                          Container(
+                              padding: const EdgeInsets.fromLTRB(
+                                  0.0, 30.0, 0.0, 30.0),
+                              margin: EdgeInsets.fromLTRB(80.0, 0.0, 80.0, 0.0),
+                              child: RaisedButton(
+                                color: Color(0xFFF96861),
+                                onPressed: () {
+                                  if (_formkey.currentState.validate()) {
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content: Text('Processing Data')));
+                                    _formkey.currentState.save();
+                                    // print(email);
+                                    // print(userVname);
+                                    // print(password);
+                                    // print(confirmPassword);
+                                  }
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(15.0)),
+                                child: Text('Submit',
+                                    textAlign: TextAlign.center,
+                                    style: BtnText),
+                              )),
+                          Container(
+                              child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, LoginRoute);
                             },
-                            child: Text(
-                              'Submit',
-                              textAlign: TextAlign.center,
-                            ),
-                          )),
-                    ]))));
+                            child: Text("Already have an account? Login now!",
+                                textAlign: TextAlign.center),
+                          ))
+                        ])))));
   }
 }
