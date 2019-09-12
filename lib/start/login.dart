@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../appbar.dart';
 import '../style.dart';
+import '../main.dart';
 
 class LoginPage extends StatelessWidget{
   @override
@@ -113,7 +113,8 @@ class LoginFormState extends State<LoginForm>{
             Container(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context,"SignUpRoute");
+                  Navigator.pushNamed(context,SignUpRoute);
+                  print("are you working");
                 },
                 child: Text("Don't have an account? Sign Up now!", textAlign: TextAlign.center),
               )

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../appbar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../main.dart';
 import '../style.dart';
 
@@ -10,11 +10,18 @@ class ImageBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return Container(
+    //   constraints: BoxConstraints.expand(height:250.0,width:250.0),
+    //   child: Image.asset(
+    //     _assetPath,
+    //     fit: BoxFit.contain,
+    //   ));
     return Container(
-      constraints: BoxConstraints.expand(height:250.0,width:250.0),
-      child: Image.asset(
+      margin: EdgeInsets.fromLTRB(10.0,50.0,10.0,50.0),
+      constraints: BoxConstraints.expand(height:300.0,width:300.0),
+      child: SvgPicture.asset(
         _assetPath,
-        fit: BoxFit.contain,
+        fit: BoxFit.fill,
       ));
   }
 }
@@ -33,9 +40,9 @@ class WelcomePage extends StatelessWidget {
               Container(      
                 child: Text('Welcome to Household', style: WelcomeTitle, textAlign: TextAlign.center,),
               ),
-              ImageBanner("assets/images/logo.png"),
+              ImageBanner('assets/images/logo.svg'),
               Container(
-                margin: EdgeInsets.fromLTRB(70.0,50.0,70.0,15.0),
+                margin: EdgeInsets.fromLTRB(70.0,0.0,70.0,30.0),
                 child: RaisedButton(
                   onPressed: () {
                     Navigator.pushNamed(context,LoginRoute);

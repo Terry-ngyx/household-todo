@@ -1,10 +1,128 @@
 import 'package:flutter/material.dart';
+import '../style.dart';
+import '../main.dart';
 
 class SignUpPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
-    return Scaffold(
-      body: Center(child: Text('Sign Up'),)
+    return Scaffold(    
+      backgroundColor: Theme.of(context).backgroundColor, 
+      body: SignUpForm()
+    );
+  }
+}
+
+class SignUpForm extends StatefulWidget{
+  @override
+  SignUpFormState createState(){
+    return SignUpFormState();
+  }
+}
+
+class SignUpFormState extends State<SignUpForm>{
+  final _formkey = GlobalKey<FormState>();
+  String username;
+  String password;
+
+  @override
+  Widget build(BuildContext context){
+    return Center(
+      child: SingleChildScrollView(
+        child: Form(
+        key: _formkey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              child: Text('Sign Up', style:PageTitle, textAlign:TextAlign.center)
+            ),
+            Column(
+              children: <Widget>[
+                Text('Username',style:NormalFont),
+                SizedBox(height: 20.0,),
+                Container(
+                  margin: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue, width: 3.0
+                        )
+                      )
+                    ),
+                    autofocus: true,
+                    validator: (value) {
+                      if (value.isEmpty){
+                        return 'please enter your username';
+                      }
+                      return null;
+                    },
+                    onSaved: (String value){
+                      username = value;
+                    },
+                  ),
+                ),
+              ]
+            ),
+            Column(
+              children: <Widget>[
+                Text('Password',style:NormalFont),
+                SizedBox(height: 20.0),
+                Container(
+                  margin: EdgeInsets.fromLTRB(40.0, 10.0, 40.0, 10.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.blue, width: 3.0
+                        )
+                      )
+                    ),
+                    autofocus: false,
+                    obscureText: true,
+                    validator: (value) {
+                      if (value.isEmpty){
+                        return 'please enter your password';
+                      }
+                      return null;
+                    },
+                    onSaved: (String value){
+                      password = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(0.0,30.0,0.0,30.0),
+              margin: EdgeInsets.fromLTRB(120.0,10.0,120.0,10.0),
+              child: RaisedButton(
+                onPressed: () {
+                  if (_formkey.currentState.validate()){
+                    Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                      _formkey.currentState.save();
+                      print(username);
+                      print(password);
+                  }
+                },
+                child: Text('Submit', textAlign: TextAlign.center,),
+              )
+            ),
+            Container(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context,LoginRoute);
+                  print("are you working");
+                },
+                child: Text("Already have an account? Login now!", textAlign: TextAlign.center),
+              )
+            )
+          ]
+        )
+      )
+      )
     );
   }
 }
