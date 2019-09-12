@@ -10,12 +10,6 @@ class ImageBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   constraints: BoxConstraints.expand(height:250.0,width:250.0),
-    //   child: Image.asset(
-    //     _assetPath,
-    //     fit: BoxFit.contain,
-    //   ));
     return Container(
       margin: EdgeInsets.fromLTRB(10.0,50.0,10.0,50.0),
       constraints: BoxConstraints.expand(height:300.0,width:300.0),
@@ -42,13 +36,49 @@ class WelcomePage extends StatelessWidget {
               ),
               ImageBanner('assets/images/logo.svg'),
               Container(
-                margin: EdgeInsets.fromLTRB(70.0,0.0,70.0,30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 100.0,
+                      margin: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 20.0),
+                      child: RaisedButton(
+                        color: Color(0xFFF96871),
+                        onPressed: () {
+                          Navigator.pushNamed(context,SignUpRoute);
+                        },
+                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                        padding: EdgeInsets.all(15.0),
+                        child: Text('Sign Up', textAlign: TextAlign.center, style: BtnText),
+                      ) 
+                    ),
+                    Container(
+                      width: 100.0,
+                      margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 20.0),
+                      child: RaisedButton(
+                        color: Color(0xFFF73D99),
+                        onPressed: () {
+                          Navigator.pushNamed(context,LoginRoute);
+                        },
+                        shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                        padding: EdgeInsets.all(15.0),
+                        child: Text('Login', textAlign: TextAlign.center, style: BtnText),
+                      ) 
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(110.0, 0.0, 110.0, 0.0),
                 child: RaisedButton(
+                  color: Color(0xFF61C6C0),
                   onPressed: () {
                     Navigator.pushNamed(context,LoginRoute);
                   },
-                  padding: EdgeInsets.all(15.0),
-                  child: Text('Login | Sign Up', textAlign: TextAlign.center, style: BtnText),
+                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0)),
+                  padding: EdgeInsets.all(5.0),
+                  child: Text('Login with Google', textAlign: TextAlign.center, style: BtnText),
                 ) 
               ),
             ]
@@ -58,3 +88,4 @@ class WelcomePage extends StatelessWidget {
     );
   }
 }
+
