@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:household/start/getstarted.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -57,18 +57,17 @@ class LoginFormState extends State<LoginForm> {
     String body = response.body;
 
     final jsonResponse = jsonDecode(response.body);
-    _User user = new _User.fromJson(jsonResponse);
+    _User user = new _User.fromJson(jsonResponse[0]);
     // print(user.status);
     // print(user.jwt_token);
     if (user.status == "success"){
     return true;
     }
-    // {
-    //   "title": "Hello",
-    //   "body": "body text",
-    //   "userId": 1,
-    //   "id": 101
-    // }
+    
+    final storage = new FlutterSecureStorage();
+    await storage.write(key:'jwt',value:user.jwt_token);
+    print(await storage.read(key:'jwt'));
+
   }
 
   @override
