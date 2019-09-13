@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
 class Router{
   static Route<dynamic> generateRoute(RouteSettings settings){
     switch(settings.name){
-      case Home: 
+      case Home:
         return MaterialPageRoute(builder: (_) => WelcomePage());
       case LoginRoute:
         return MaterialPageRoute(builder: (_) => LoginPage());
