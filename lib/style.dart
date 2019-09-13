@@ -26,7 +26,7 @@ const PageTitle = TextStyle(
 const BtnText = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w600,
-  fontSize: 18.0,
+  fontSize: 20.0,
   color: Colors.white,
 );
 
