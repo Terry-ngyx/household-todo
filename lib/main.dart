@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:household/start/getstarted.dart';
 import 'style.dart';
 import 'start/welcome.dart';
 import 'start/signup.dart';
 import 'start/login.dart';
+<<<<<<< HEAD
 import 'session/homepage.dart';
+=======
+import 'start/getstarted.dart';
+>>>>>>> layout for start up page
 
 const Home = '/';
 const LoginRoute = '/login';
 const SignUpRoute = '/signup';
+<<<<<<< HEAD
 const HomeRoute = '/home';
+=======
+const GetStartedRoute = '/getstarted';
+>>>>>>> layout for start up page
 
 void main() => runApp(MyApp());
 
@@ -45,6 +54,8 @@ class Router{
         return MaterialPageRoute(builder: (_) => SignUpPage());
       case HomeRoute:
         return MaterialPageRoute(builder: (_) => HomePage());
+      case GetStartedRoute:
+        return MaterialPageRoute(builder:(_) => GetStartedPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
