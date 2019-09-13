@@ -41,13 +41,13 @@ class _SigninFormState extends State<SigninForm> {
   String password;
   String confirmPassword;
 
-  _signup(String userName, String userUsername, String userEmail,
+  _signup(String userUsername, String userEmail,
       String userPassword, String userConfirmPassword) async {
     // set up POST request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/signup';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json =
-        '{"name": "$userName", "username": "$userUsername", "email": "$userEmail", "password": "$userPassword", "confirmed_password": "$userConfirmPassword"}';
+        '{"username": "$userUsername", "email": "$userEmail", "password": "$userPassword", "confirmed_password": "$userConfirmPassword"}';
     print(json);
     // make POST request
     http.Response response = await http.post(url, headers: headers, body: json);
@@ -56,19 +56,11 @@ class _SigninFormState extends State<SigninForm> {
     int statusCode = response.statusCode;
     // print(statusCode);
     // this API passes back the id of the new item added to the body
-    print(response.body);
-    // final jsonResponse = jsonDecode(response.body);
-    // _User user = new _User.fromJson(jsonResponse);
-    // print(user.status);
+    // print(response.body);
+    final jsonResponse = jsonDecode(response.body);
+    _User user = new _User.fromJson(jsonResponse);
+    print(user.status);
 
-    // if (body[status]==){
-    // }
-    // {
-    //   "title": "Hello",
-    //   "body": "body text",
-    //   "userId": 1,
-    //   "id": 101
-    // }
   }
 
   final passwordController = TextEditingController();
@@ -237,7 +229,7 @@ class _SigninFormState extends State<SigninForm> {
                                         content: Text('Processing Data')));
                                     _formkey.currentState.save();
                                     print(username + email + password);
-                                    _signup("Terry", username, email, password,
+                                    _signup( username, email, password,
                                         confirmPassword);
                                     // print(email);
                                     // print(username);

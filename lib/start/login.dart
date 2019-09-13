@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:household/start/getstarted.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -29,7 +30,6 @@ class _User {
   _User({this.status, this.jwt_token});
 
   factory _User.fromJson(Map<String, dynamic> parsedJson) {
-
     return _User(
       status: parsedJson['status'],
       jwt_token: parsedJson['jwt_token'],
@@ -42,12 +42,12 @@ class LoginFormState extends State<LoginForm> {
   String username;
   String password;
 
-  _login(String userUsername, String userPassword) async {
+  Future<bool> _login(String userUsername, String userPassword) async {
     // set up POST request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"username": "$userUsername", "password": "$userPassword"}';
-    print(json);
+    // print(json);
     // make POST request
     http.Response response = await http.post(url, headers: headers, body: json);
     // check the status code for the result
@@ -58,8 +58,11 @@ class LoginFormState extends State<LoginForm> {
 
     final jsonResponse = jsonDecode(response.body);
     _User user = new _User.fromJson(jsonResponse);
-    print(user.status);
-    print(user.jwt_token);
+    // print(user.status);
+    // print(user.jwt_token);
+    if (user.status == "success"){
+    return true;
+    }
     // {
     //   "title": "Hello",
     //   "body": "body text",
@@ -150,14 +153,23 @@ class LoginFormState extends State<LoginForm> {
                               child: RaisedButton(
                                 padding: EdgeInsets.symmetric(vertical: 20.0),
                                 color: Color(0xFFF96861),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formkey.currentState.validate()) {
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content: Text('Processing Data')));
                                     _formkey.currentState.save();
-                                    print(username);
-                                    print(password);
-                                    _login(username, password);
+                                    
+                                    var value = await _login(username, password);
+                                    if (value) {
+                                      Navigator.pushNamed(
+                                          context, GetStartedRoute);
+                                    }
+                                    // if (_login(username, password)) {
+                                      // print(username);
+                                      // print(password);
+                                    //   Navigator.pushNamed(
+                                    //       context, GetStartedRoute);
+                                    // }
                                   }
                                 },
                                 shape: RoundedRectangleBorder(
