@@ -4,20 +4,14 @@ import 'style.dart';
 import 'start/welcome.dart';
 import 'start/signup.dart';
 import 'start/login.dart';
-<<<<<<< HEAD
 import 'session/homepage.dart';
-=======
 import 'start/getstarted.dart';
->>>>>>> layout for start up page
 
 const Home = '/';
 const LoginRoute = '/login';
 const SignUpRoute = '/signup';
-<<<<<<< HEAD
 const HomeRoute = '/home';
-=======
 const GetStartedRoute = '/getstarted';
->>>>>>> layout for start up page
 
 void main() => runApp(MyApp());
 
