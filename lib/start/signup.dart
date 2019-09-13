@@ -22,13 +22,13 @@ class SigninForm extends StatefulWidget {
   _SigninFormState createState() => _SigninFormState();
 }
 
-class User {
+class _User {
   String status;
 
-  User({this.status});
+  _User({this.status});
 
-  factory User.fromJson(Map<String, dynamic> parsedJson) {
-    return User(
+  factory _User.fromJson(Map<String, dynamic> parsedJson) {
+    return _User(
       status: parsedJson['status'],
     );
   }
@@ -51,15 +51,15 @@ class _SigninFormState extends State<SigninForm> {
     print(json);
     // make POST request
     http.Response response = await http.post(url, headers: headers, body: json);
-    print(response);
+    // print(response);
     // check the status code for the result
     int statusCode = response.statusCode;
-    print(statusCode);
+    // print(statusCode);
     // this API passes back the id of the new item added to the body
-
-    final jsonResponse = jsonDecode(response.body);
-    User user = new User.fromJson(jsonResponse);
-    print(user.status);
+    print(response.body);
+    // final jsonResponse = jsonDecode(response.body);
+    // _User user = new _User.fromJson(jsonResponse);
+    // print(user.status);
 
     // if (body[status]==){
     // }
