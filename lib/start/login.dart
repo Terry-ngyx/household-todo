@@ -130,6 +130,7 @@ class LoginFormState extends State<LoginForm>{
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context,SignUpRoute);
+                    print("are you working?");
                   },
                   child: Text("Don't have an account? Sign Up now!", textAlign: TextAlign.center),
                 )

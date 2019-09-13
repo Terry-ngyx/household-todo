@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       onGenerateRoute: Router.generateRoute,
-      initialRoute: HomeRoute,
+      initialRoute: Home,
     );
   }
 }
