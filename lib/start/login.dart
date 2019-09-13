@@ -47,17 +47,15 @@ class LoginFormState extends State<LoginForm>{
                 child: TextFormField(
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFF96861)
-                      )
+                      borderSide: BorderSide(color: Color(0xFFF96861)),
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white
-                      )
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(15.0),
                     )
                   ),
-                  autofocus: true,
+                  autofocus: false,
                   validator: (value) {
                     if (value.isEmpty){
                       return 'please enter your username';
@@ -76,14 +74,12 @@ class LoginFormState extends State<LoginForm>{
                 child: TextFormField(
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xFFF73D99)
-                      )
+                      borderSide: BorderSide(color: Color(0xFFF73D99)),
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white
-                      )
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(15.0),
                     )
                   ),
                   autofocus: false,
@@ -134,6 +130,7 @@ class LoginFormState extends State<LoginForm>{
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context,SignUpRoute);
+                    print("are you working?");
                   },
                   child: Text("Don't have an account? Sign Up now!", textAlign: TextAlign.center),
                 )

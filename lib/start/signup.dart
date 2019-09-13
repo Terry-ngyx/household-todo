@@ -60,14 +60,15 @@ class _SigninFormState extends State<SigninForm> {
                             child: TextFormField(
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFFF96861))),
+                                  borderSide: BorderSide(color: Color(0xFFF96861)),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.white,
-                                )),
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15.0)
+                                ),
                               ),
-                              autofocus: true,
+                              autofocus: false,
                               obscureText: false,
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -87,12 +88,13 @@ class _SigninFormState extends State<SigninForm> {
                             child: TextFormField(
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFFF73D99))),
+                                  borderSide:BorderSide(color: Color(0xFFF73D99)),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.white,
-                                )),
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                               ),
                               autofocus: false,
                               obscureText: false,
@@ -115,12 +117,13 @@ class _SigninFormState extends State<SigninForm> {
                               controller: passwordController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFF61C6C0))),
+                                  borderSide:BorderSide(color: Color(0xFF61C6C0)),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.white,
-                                )),
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                               ),
                               autofocus: false,
                               obscureText: true,
@@ -148,12 +151,13 @@ class _SigninFormState extends State<SigninForm> {
                               controller: confirmPasswordController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFFBDCC11))),
+                                  borderSide:BorderSide(color: Color(0xFFBDCC11)),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                  color: Colors.white,
-                                )),
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                               ),
                               autofocus: false,
                               obscureText: true,
