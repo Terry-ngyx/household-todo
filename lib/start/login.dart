@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+
 import '../style.dart';
 import '../main.dart';
 
@@ -6,7 +9,7 @@ class LoginPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor, 
+      backgroundColor: Theme.of(context).backgroundColor,
       body: LoginForm()
     );
   }
@@ -23,6 +26,28 @@ class LoginFormState extends State<LoginForm>{
   final _formkey = GlobalKey<FormState>();
   String username;
   String password;
+
+  _login(String userUsername, String userPassword) async {
+  // set up POST request arguments
+  String url = 'http://10.0.2.2:5000/api/v1/users/login';
+  Map<String, String> headers = {"Content-type": "application/json"};
+  String json = '{"username": "$userUsername", "password": "$userPassword"}';
+  print(json);
+  // make POST request
+  http.Response response = await http.post(url, headers: headers, body: json);
+  // check the status code for the result
+  int statusCode = response.statusCode;
+  // print(statusCode);
+  // this API passes back the id of the new item added to the body
+  String body = response.body;
+  print(body);
+  // {
+  //   "title": "Hello",
+  //   "body": "body text",
+  //   "userId": 1,
+  //   "id": 101
+  // }
+}
 
   @override
   Widget build(BuildContext context){
@@ -108,6 +133,7 @@ class LoginFormState extends State<LoginForm>{
                         _formkey.currentState.save();
                         print(username);
                         print(password);
+                        _login(username, password);
                     }
                   },
                   shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
@@ -124,7 +150,7 @@ class LoginFormState extends State<LoginForm>{
                   shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
                   padding: EdgeInsets.all(15.0),
                   child: Text('Login with Google', textAlign: TextAlign.center, style: BtnText),
-                ) 
+                )
               ),
               Container(
                 child: GestureDetector(
