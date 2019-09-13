@@ -52,13 +52,10 @@ class Router{
         return MaterialPageRoute(builder: (_) => LoginPage());
       case SignUpRoute:
         return MaterialPageRoute(builder: (_) => SignUpPage());
-<<<<<<< HEAD
       case HomeRoute:
         return MaterialPageRoute(builder: (_) => HomePage());
-=======
       case GetStartedRoute:
         return MaterialPageRoute(builder:(_) => GetStartedPage());
->>>>>>> layout for start up page
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
