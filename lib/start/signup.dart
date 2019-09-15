@@ -41,8 +41,8 @@ class _SigninFormState extends State<SigninForm> {
   String password;
   String confirmPassword;
 
-  _signup(String userUsername, String userEmail,
-      String userPassword, String userConfirmPassword) async {
+  _signup(String userUsername, String userEmail, String userPassword,
+      String userConfirmPassword) async {
     // set up POST request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/signup';
     Map<String, String> headers = {"Content-type": "application/json"};
@@ -60,7 +60,19 @@ class _SigninFormState extends State<SigninForm> {
     final jsonResponse = jsonDecode(response.body);
     _User user = new _User.fromJson(jsonResponse);
     print(user.status);
+    if (user.status == "success") {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Sign Up Successful !')));
+      await new Future.delayed(const Duration(seconds: 5));
+      Navigator.pushNamed(context, LoginRoute);
 
+      // Scaffold.of(context)
+      //     .showSnackBar(SnackBar(content: Text('Login Successful!')));
+      return true;
+    } else {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text('Username or email already exist!')));
+    }
   }
 
   final passwordController = TextEditingController();
@@ -225,16 +237,12 @@ class _SigninFormState extends State<SigninForm> {
                                 color: Color(0xFFF96861),
                                 onPressed: () {
                                   if (_formkey.currentState.validate()) {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: Text('Processing Data')));
+                                    Scaffold.of(context).showSnackBar(
+                                        SnackBar(content: Text('Signing Up')));
                                     _formkey.currentState.save();
                                     print(username + email + password);
-                                    _signup( username, email, password,
+                                    _signup(username, email, password,
                                         confirmPassword);
-                                    // print(email);
-                                    // print(username);
-                                    // print(password);
-                                    // print(confirmPassword);
                                   }
                                 },
                                 shape: RoundedRectangleBorder(

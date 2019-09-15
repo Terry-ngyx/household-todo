@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:household/start/getstarted.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -57,17 +58,24 @@ class LoginFormState extends State<LoginForm> {
     String body = response.body;
 
     final jsonResponse = jsonDecode(response.body);
-    _User user = new _User.fromJson(jsonResponse[0]);
+    _User user = new _User.fromJson(jsonResponse);
     // print(user.status);
     // print(user.jwt_token);
-    if (user.status == "success"){
-    return true;
-    }
-    
-    final storage = new FlutterSecureStorage();
-    await storage.write(key:'jwt',value:user.jwt_token);
-    print(await storage.read(key:'jwt'));
+    if (user.status == "success") {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Login Successful!')));
 
+      // Scaffold.of(context)
+      //     .showSnackBar(SnackBar(content: Text('Login Successful!')));
+      return true;
+    } else {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Login Failed!')));
+    }
+
+    final storage = new FlutterSecureStorage();
+    await storage.write(key: 'jwt', value: user.jwt_token);
+    print(await storage.read(key: 'jwt'));
   }
 
   @override
@@ -154,18 +162,21 @@ class LoginFormState extends State<LoginForm> {
                                 color: Color(0xFFF96861),
                                 onPressed: () async {
                                   if (_formkey.currentState.validate()) {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: Text('Processing Data')));
+                                    Scaffold.of(context).showSnackBar(
+                                        SnackBar(content: Text('Logging In')));
                                     _formkey.currentState.save();
-                                    
-                                    var value = await _login(username, password);
+
+                                    var value =
+                                        await _login(username, password);
                                     if (value) {
+                                      await new Future.delayed(
+                                          const Duration(seconds: 3));
                                       Navigator.pushNamed(
                                           context, GetStartedRoute);
                                     }
                                     // if (_login(username, password)) {
-                                      // print(username);
-                                      // print(password);
+                                    // print(username);
+                                    // print(password);
                                     //   Navigator.pushNamed(
                                     //       context, GetStartedRoute);
                                     // }
