@@ -1,0 +1,224 @@
+[33mcommit 25ae37c74d1210c252add2d52dfff05de683b89f[m[33m ([m[1;36mHEAD -> [m[1;32mjwt_secure_storage[m[33m, [m[1;31morigin/jwt_secure_storage[m[33m)[m
+Author: Su Ong <suzen.osz@gmail.com>
+Date:   Fri Sep 13 19:48:09 2019 +0800
+
+    added flutter secure storage to login page
+
+[33mcommit e17b318a54825077949d23a3858cd1ebe8264e63[m[33m ([m[1;32mmaster[m[33m)[m
+Merge: ad0bd68 8ebc43e
+Author: TerryTubby <52766987+TerryNgYX@users.noreply.github.com>
+Date:   Fri Sep 13 18:59:32 2019 +0800
+
+    Merge pull request #12 from suzennn/login_reroute
+    
+    login brings you to get started page
+
+[33mcommit 8ebc43ebc9d05ab7fe88e4f822983742043d1460[m[33m ([m[1;31morigin/login_reroute[m[33m)[m
+Author: Terrence Ng <terrence_ngyx@hotmail.com>
+Date:   Fri Sep 13 18:58:03 2019 +0800
+
+    login brings you to get started page
+
+[33mcommit ad0bd68ea50a1f147d046d946e1ec6d8d1d42e8e[m
+Merge: 19e665d 6dcde5b
+Author: TerryTubby <52766987+TerryNgYX@users.noreply.github.com>
+Date:   Fri Sep 13 17:16:27 2019 +0800
+
+    Merge pull request #11 from suzennn/login_json_decoder
+    
+    login page can get jwt!
+
+[33mcommit 6dcde5b64ed40e0d5fb290e65ef66439ecb193e3[m[33m ([m[1;31morigin/login_json_decoder[m[33m)[m
+Author: Terrence Ng <terrence_ngyx@hotmail.com>
+Date:   Fri Sep 13 17:10:42 2019 +0800
+
+    login page can get jwt!
+
+[33mcommit 19e665d476812b56f7bf35b5a356428754b3e34a[m
+Merge: 928d466 e3c9d38
+Author: TerryTubby <52766987+TerryNgYX@users.noreply.github.com>
+Date:   Fri Sep 13 15:45:54 2019 +0800
+
+    Merge pull request #10 from suzennn/signup_json_decoder
+    
+    sign up can get the response!
+
+[33mcommit e3c9d3828ca497dae0e680c27586e7d3a1fe8efb[m[33m ([m[1;31morigin/signup_json_decoder[m[33m)[m
+Author: Terrence Ng <terrence_ngyx@hotmail.com>
+Date:   Fri Sep 13 15:43:15 2019 +0800
+
+    sign up can get the response!
+
+[33mcommit 928d4662f293c31ff28e8598693474edcb1cb978[m
+Merge: a842cc1 ddf0525
+Author: lingleechai <52614038+lingleechai@users.noreply.github.com>
+Date:   Fri Sep 13 15:28:28 2019 +0800
+
+    Merge pull request #9 from suzennn/StartUpPage
+    
+    fixed conflict
+
+[33mcommit ddf05254aaddb74a342d38686a1c4d602e791227[m[33m ([m[1;31morigin/StartUpPage[m[33m)[m
+Author: linglee <lingleechai>
+Date:   Fri Sep 13 15:27:49 2019 +0800
+
+    fixed conflict
+
+[33mcommit a842cc1be45e72163cfe6817bfbd686da82ba1a4[m
+Merge: a9d688e 9a061d5
+Author: lingleechai <52614038+lingleechai@users.noreply.github.com>
+Date:   Fri Sep 13 15:26:27 2019 +0800
+
+    Merge pull request #8 from suzennn/StartUpPage
+    
+    Start up page
+
+[33mcommit 9a061d5973329daf7cf86a100a78818206360bfc[m
+Author: linglee <lingleechai>
+Date:   Fri Sep 13 15:24:02 2019 +0800
+
+    resolve conflicts
+
+[33mcommit 34f95f85f99ce5e649d7d10e02eb8a23cab6035e[m
+Author: linglee <lingleechai>
+Date:   Fri Sep 13 15:19:14 2019 +0800
+
+    layout for start up page
+
+[33mcommit a9d688ed8331faaa2734d9fabe91a7976d64072b[m
+Merge: c450950 84d76d5
+Author: TerryTubby <52766987+TerryNgYX@users.noreply.github.com>
+Date:   Fri Sep 13 12:16:26 2019 +0800
+
+    Merge pull request #7 from suzennn/login_user
+    
+    signup_page_edit
+
+[33mcommit 84d76d5d2109ba34e80f04a64288d5caff04370b[m[33m ([m[1;31morigin/login_user[m[33m)[m
+Author: Terrence Ng <terrence_ngyx@hotmail.com>
+Date:   Fri Sep 13 12:14:19 2019 +0800
+
+    stuff
+
+[33mcommit c45095015857e2798513b9d92bf8b4fe15b0f49c[m
+Merge: 0983005 7605b59
+Author: TerryTubby <52766987+TerryNgYX@users.noreply.github.com>
+Date:   Fri Sep 13 12:04:17 2019 +0800
+
+    Merge pull request #6 from suzennn/login_user
+    
+    User can login. YAY!
+
+[33mcommit 7605b59a6e069a02b7e5cf5db5ceab9f7b9a2b5c[m
+Author: TerryNgYX <terrence_ngyx@hotmail.com>
+Date:   Fri Sep 13 11:42:27 2019 +0800
+
+    User can login
+
+[33mcommit 098300548c6286d8185520e1f09ba8f9650a7de9[m[33m ([m[1;32mhomepage[m[33m)[m
+Merge: 9d3f7c6 4c8f9c3
+Author: suzennn <52767681+suzennn@users.noreply.github.com>
+Date:   Fri Sep 13 11:09:40 2019 +0800
+
+    Merge pull request #5 from suzennn/homepage
+    
+    Homepage UI for after login, added route of homepage in main.dart, formatting changes
+
+[33mcommit 4c8f9c32589f4694f6352347f9368dda7202f178[m[33m ([m[1;31morigin/homepage[m[33m)[m
+Author: Su Ong <suzen.osz@gmail.com>
+Date:   Fri Sep 13 11:07:50 2019 +0800
+
+    amended routing
+
+[33mcommit 7b9cca53b33c89c0b0bd5483d1de36a720f132e1[m
+Author: Su Ong <suzen.osz@gmail.com>
+Date:   Fri Sep 13 03:54:02 2019 +0800
+
+    chg textform radius in login & signup, homepage UI layout added, switched off autofocus, added styles
+
+[33mcommit 25ef4e4fb006875cc7aa0a8993abb5e5ccd1e44c[m
+Author: Su Ong <suzen.osz@gmail.com>
+Date:   Thu Sep 12 20:38:32 2019 +0800
+
+    Added homepage with UI
+
+[33mcommit 9d3f7c6e9fbb7d863eeffc965bb4a69166f8c5c6[m
+Author: linglee <lingleechai>
+Date:   Thu Sep 12 20:40:03 2019 +0800
+
+    typo in readme
+
+[33mcommit e69439cbe05937722ffe71659b75285c1d53e1cd[m
+Merge: 8157847 2ab041d
+Author: lingleechai <52614038+lingleechai@users.noreply.github.com>
+Date:   Thu Sep 12 20:31:08 2019 +0800
+
+    Merge pull request #4 from suzennn/linglee1
+    
+    sign up, login & welcome layout changed, style btn font size changed
+
+[33mcommit 2ab041ddbb44fbd8d899ca18ac9c2c765d98b096[m[33m ([m[1;31morigin/linglee1[m[33m)[m
+Author: Chai Ling Lee <lingleechai@Chais-MacBook-Pro.local>
+Date:   Thu Sep 12 20:21:30 2019 +0800
+
+    sign up, login & welcome layout changed, style btn font size changed
+
+[33mcommit 815784729d7ad7a5df8f085b24b8bbf90ce7c7e5[m
+Author: suzennn <52767681+suzennn@users.noreply.github.com>
+Date:   Thu Sep 12 18:54:56 2019 +0800
+
+    fixed layout of login
+
+[33mcommit 3bf87482c988cfc14497f1be5186a8ababdac744[m
+Author: suzennn <52767681+suzennn@users.noreply.github.com>
+Date:   Thu Sep 12 18:53:08 2019 +0800
+
+    fixed layout of login
+
+[33mcommit 6da4ed889f37f6bbdcd0d1b1d15c6e8a1b2cfc21[m
+Merge: acf79b4 257f968
+Author: suzennn <52767681+suzennn@users.noreply.github.com>
+Date:   Thu Sep 12 18:17:14 2019 +0800
+
+    Merge pull request #2 from suzennn/zen_branch
+    
+    fixed layout of Welcome Page
+
+[33mcommit 257f968f7ca771906dce936fd4e18e2d2a3ea373[m[33m ([m[1;31morigin/zen_branch[m[33m)[m
+Author: suzennn <52767681+suzennn@users.noreply.github.com>
+Date:   Thu Sep 12 18:14:24 2019 +0800
+
+    fixed layout of Welcome Page
+
+[33mcommit acf79b421ba5b1f303274a36bc792de7935158c7[m
+Merge: 622aeae 19148d9
+Author: TerryTubby <52766987+TerryNgYX@users.noreply.github.com>
+Date:   Thu Sep 12 17:45:20 2019 +0800
+
+    Merge pull request #1 from suzennn/feat/signup
+    
+    signup page added
+
+[33mcommit 19148d92625fa4c2cdb8fe15a0ea5a7e7dd00553[m[33m ([m[1;31morigin/feat/signup[m[33m)[m
+Author: TerryNgYX <terrence_ngyx@hotmail.com>
+Date:   Thu Sep 12 17:44:13 2019 +0800
+
+    signup page added
+
+[33mcommit 622aeaed892bf32d95ed29bb6f15d87569d2ef4f[m
+Author: suzennn <52767681+suzennn@users.noreply.github.com>
+Date:   Thu Sep 12 16:20:18 2019 +0800
+
+    fixed nav error in onTap; allow for svg files
+
+[33mcommit ab5277efcceb50ecbccb48b6aaf52b1dd30d358f[m
+Author: Chai Ling Lee <lingleechai@Chais-MacBook-Pro.local>
+Date:   Thu Sep 12 13:38:23 2019 +0800
+
+     SVG icons added into asset folder
+
+[33mcommit 2055643a5b76a5913361d0b6ac78af4fff8e7d9a[m
+Author: suzennn <52767681+suzennn@users.noreply.github.com>
+Date:   Thu Sep 12 13:27:48 2019 +0800
+
+    initial commit

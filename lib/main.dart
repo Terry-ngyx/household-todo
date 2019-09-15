@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:household/start/getstarted.dart';
 import 'style.dart';
 import 'start/welcome.dart';
 import 'start/signup.dart';
 import 'start/login.dart';
-import 'session/homepage.dart';
 import 'start/getstarted.dart';
+import 'session/homepage.dart';
+import 'session/todo.dart';
 
 const Home = '/';
 const LoginRoute = '/login';
 const SignUpRoute = '/signup';
 const HomeRoute = '/home';
 const GetStartedRoute = '/getstarted';
+const TodoRoute = '/todo';
 
 void main() => runApp(MyApp());
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       onGenerateRoute: Router.generateRoute,
-      initialRoute: Home,
+      initialRoute: TodoRoute,
     );
   }
 }
@@ -50,6 +51,8 @@ class Router{
         return MaterialPageRoute(builder: (_) => HomePage());
       case GetStartedRoute:
         return MaterialPageRoute(builder:(_) => GetStartedPage());
+      case TodoRoute:
+        return MaterialPageRoute(builder:(_) => TodoPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
