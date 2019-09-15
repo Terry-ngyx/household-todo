@@ -50,3 +50,10 @@ const MutedText = TextStyle(
   fontSize: 20.0,
   color: Colors.white,
 );
+
+const MemberNames = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w200,
+  fontSize: 15.0,
+  color: Colors.white,
+);

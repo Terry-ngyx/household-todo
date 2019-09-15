@@ -1,10 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:household/start/getstarted.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:async';
+import 'dart:convert';
 
 import '../style.dart';
 import '../main.dart';
@@ -13,7 +14,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor, body: LoginForm());
+      backgroundColor: Theme.of(context).backgroundColor, 
+      body: LoginForm()
+    );
   }
 }
 
@@ -27,13 +30,15 @@ class LoginForm extends StatefulWidget {
 class _User {
   String status;
   String jwt_token;
+  int user_id;
 
-  _User({this.status, this.jwt_token});
+  _User({this.status, this.jwt_token, this.user_id});
 
   factory _User.fromJson(Map<String, dynamic> parsedJson) {
     return _User(
       status: parsedJson['status'],
       jwt_token: parsedJson['jwt_token'],
+      user_id: parsedJson['user_id'],
     );
   }
 }
@@ -53,7 +58,8 @@ class LoginFormState extends State<LoginForm> {
     http.Response response = await http.post(url, headers: headers, body: json);
     // check the status code for the result
     int statusCode = response.statusCode;
-    // print(statusCode);
+    // print(response);
+    // print(statusCode);   //200
     // this API passes back the id of the new item added to the body
     String body = response.body;
 
@@ -62,11 +68,18 @@ class LoginFormState extends State<LoginForm> {
     // print(user.status);
     // print(user.jwt_token);
     if (user.status == "success") {
+      //Snackbar
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Login Successful!')));
-
       // Scaffold.of(context)
       //     .showSnackBar(SnackBar(content: Text('Login Successful!')));
+      //Shared Preferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('user_id',user.user_id);
+      //Secured Storage
+      final storage = new FlutterSecureStorage();
+      await storage.write(key:'jwt',value:user.jwt_token);
+
       return true;
     } else {
       Scaffold.of(context)
@@ -174,12 +187,6 @@ class LoginFormState extends State<LoginForm> {
                                       Navigator.pushNamed(
                                           context, GetStartedRoute);
                                     }
-                                    // if (_login(username, password)) {
-                                    // print(username);
-                                    // print(password);
-                                    //   Navigator.pushNamed(
-                                    //       context, GetStartedRoute);
-                                    // }
                                   }
                                 },
                                 shape: RoundedRectangleBorder(
@@ -194,8 +201,21 @@ class LoginFormState extends State<LoginForm> {
                                   EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 50.0),
                               child: RaisedButton(
                                 color: Color(0xFF61C6C0),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, LoginRoute);
+                                onPressed: () async {
+                                  if (_formkey.currentState.validate()) {
+                                    Scaffold.of(context).showSnackBar(
+                                        SnackBar(content: Text('Logging In')));
+                                    _formkey.currentState.save();
+
+                                    var value =
+                                        await _login(username, password);
+                                    if (value) {
+                                      await new Future.delayed(
+                                          const Duration(seconds: 3));
+                                      Navigator.pushNamed(
+                                          context, HomeRoute);
+                                    }
+                                  }
                                 },
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
