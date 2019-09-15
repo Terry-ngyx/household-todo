@@ -8,6 +8,7 @@ import 'start/login.dart';
 import 'start/getstarted.dart';
 import 'session/homepage.dart';
 import 'session/todo.dart';
+import 'session/profile.dart';
 
 const Home = '/';
 const LoginRoute = '/login';
@@ -15,6 +16,7 @@ const SignUpRoute = '/signup';
 const HomeRoute = '/home';
 const GetStartedRoute = '/getstarted';
 const TodoRoute = '/todo';
+const ProfileRoute = '/profile';
 
 void main() => runApp(MyApp());
 
@@ -57,6 +59,8 @@ class Router{
         return MaterialPageRoute(builder:(_) => GetStartedPage());
       case TodoRoute:
         return MaterialPageRoute(builder:(_) => TodoPage());
+      case ProfileRoute:
+        return MaterialPageRoute(builder:(_) => ProfilePage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

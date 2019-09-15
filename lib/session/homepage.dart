@@ -9,6 +9,7 @@ import 'dart:convert';
 import '../main.dart';
 import '../style.dart';
 import '../widgets/appbar.dart';
+import '../widgets/members.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -32,33 +33,45 @@ class _Current{
     );
   }
 }
+class _Housemates{
+  String status;
+  List users;
+
+  _Housemates({this.status,this.users});
+
+  factory _Housemates.fromJson(Map<String,dynamic> parsedJson){
+    return _Housemates(
+      status: parsedJson['status'],
+      users: parsedJson['users']
+    );
+  }
+}
 
 class HomePageState extends State<HomePage> {
   int _userid = 0;
-  String _token = '';
+  int _roomid = 0;
+  String _username = '';
+  bool _isAdmin = false;
   List<String> _memberColors = [];
   List<String> _members = [];
+  List<String> _membersAdmin = [];
 
   @override
   void initState() {
     super.initState();
     getStoredData();
     getCurrentUser();
+    getHousemates();
   }
 
   Future<void> getStoredData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int userId = prefs.getInt("user_id");
-    String token = await storage.read(key:'jwt');
-    print(userId);
-    print(token);
     setState(() => _userid = userId);
-    setState(() => _token = token);
   }
 
   //GET REQUEST FOR CURRENT USER:
   Future<void> getCurrentUser() async {
-    print(_userid);
     String token = await storage.read(key:'jwt');
     // set up authenticated GET request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/me';
@@ -67,47 +80,64 @@ class HomePageState extends State<HomePage> {
       '$url',
       headers:  {'Authorization': 'Bearer $token'},
     );
-
-    print(response.body);
+    // print(response.body);
     final responseJson = jsonDecode(response.body);
     _Current currentUser = new _Current.fromJson(responseJson);
-    print(currentUser);
-    print(currentUser.username);
-    print(currentUser.email);
-    print(currentUser.is_admin);
-    print(currentUser.room_id);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('username',currentUser.username);
     prefs.setString('email',currentUser.email);
     prefs.setBool('is_admin',currentUser.is_admin);
     prefs.setInt('room_id',currentUser.room_id);
+    //Get Shared Preference
+    int roomId = prefs.getInt("room_id");
+    String username = prefs.getString("username");
+    bool isAdmin = prefs.getBool("is_admin");
+    //setState of current_user info
+    setState(() => _roomid = roomId);
+    setState(() => _username = username);
+    setState(() => _isAdmin = isAdmin);
   }
-
-  //GET REQUEST FOR ALL PEOPLE IN THE ROOM:
-  // Future<void> getHousemates() async {
-  //   // set up authenticated GET request arguments
-  //   String url = 'http://10.0.2.2:5000/api/v1/users/housemates';
-  //   // Map<String, String> headers ={'Authorization:': 'Bearer $_token'};
-  //   http.Response response = await http.get(
-  //     '$url',
-  //     headers:  {HttpHeaders.authorizationHeader: 'Bearer $_token'},
-  //     // headers: {
-  //     //   HttpHeaders.contentTypeHeader: 'application/json',
-  //     //   HttpHeaders.authorizationHeader: 'Bearer $_token'
-  //     // },
-  //   );
-  // }
-
-  Future<void> getHouseholdData() async{
-    List<String> membercolors = ['F96861','61C6C0','BDCC11','F73D99','F28473','C7CEEA','73C2FB','F9C1A0','FFE9A1','FE5855'];
-    List<String> members = ['linglee','suzen','weihan','terrence'];
+  
+  // GET REQUEST FOR ALL PEOPLE IN THE ROOM:
+  Future<void> getHousemates() async {
+    //Access Shared Preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList("memberColors",membercolors);
-    prefs.setStringList("members",members);
-    // List<String> memberColors = prefs.getStringList("memberColors");
-    // List<String> members = prefs.getStringList("members");
+    int roomId = prefs.getInt('room_id');
+    // set up authenticated GET request arguments
+    String url = 'http://10.0.2.2:5000/api/v1/users/housemates/$roomId';
+    http.Response response = await http.get(
+      '$url',
+      headers:  {"Content-type": "application/json"}
+    );
+    // print(response.body);
+    final responseJson = jsonDecode(response.body);
+    _Housemates housemates = new _Housemates.fromJson(responseJson);
+
+    //Convert list of objects into individual lists:
+    List<String> memberAdmin=[];
+    List<String> memberName=[];
+    List<String> memberId=[];
+    for (int i=0;i<housemates.users.length;i++){
+      memberAdmin.add(housemates.users[i]["is admin"].toString());
+      memberName.add(housemates.users[i]["name"].toString());
+      memberId.add(housemates.users[i]["id"].toString());
+    }
+
+    //set member colors
+    List<String> membercolors = ["0xFFF96861","0xFF61C6C0","0xFFBDCC11","0xFFF73D99","0xFFF28473","0xFFC7CEEA","0xFF73C2FB","0xFFF9C1A0","0xFFFFE9A1","0xFFFE5855"];
+    
+    //Store Shared Preferences
+    prefs.setStringList("members",memberName);
+    prefs.setStringList("member_is_admin",memberAdmin);
+    prefs.setStringList("member_id",memberId);
+    prefs.setStringList("member_color",membercolors);
+    
+    //Get Shared Preference and set state
+    List members = prefs.getStringList("members");
+    List member_is_admin = prefs.getStringList("member_is_admin");
+    setState(()=>_members = memberName);
+    setState(()=>_membersAdmin = memberAdmin);
     setState(() => _memberColors = membercolors);
-    setState(() => _members = members);
   }
 
   @override
@@ -120,7 +150,7 @@ class HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
 
           children: <Widget>[
-            ReusableWidgets.roomBanner("ROOM ID"),
+            ReusableWidgets.roomBanner("ROOM ID: $_roomid"),
             Container(
               margin: EdgeInsets.symmetric(horizontal:20.0),
               child: Column(
@@ -132,18 +162,29 @@ class HomePageState extends State<HomePage> {
                   Container(
                     height: 150.0,
                     margin: EdgeInsets.only(bottom:20.0),
-                    padding: EdgeInsets.all(30.0),
+                    padding: EdgeInsets.fromLTRB(20.0,20.0,20.0,20.0),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(15.0)
                     ),
-                    child: Center(
+                    child: Container(       
                       child: Column(
                         children: <Widget>[
                           Text("Members",textAlign: TextAlign.center,style:TitleText),
-                          Row(children: <Widget>[
-                            //PENDING MEMBERS ADD IN
-                          ])
+                          Expanded(
+                            child: Center(
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: _members.length,
+                                itemBuilder: (context,index){
+                                  var member = _members[index];
+                                  var color = int.parse(_memberColors[index]);
+                                  return HouseMembers(member,color);
+                                }
+                              )
+                            )
+                          )
                         ],)
                     )
                   ),
@@ -160,8 +201,15 @@ class HomePageState extends State<HomePage> {
                           border: Border.all(width:3.0,color: Color(0xFFF96861)),
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        child: Center(
-                          child: Text('Profile',textAlign: TextAlign.center,style: TitleText)
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: (){
+                            Navigator.pushNamed(context,ProfileRoute);
+                            print("are you working?");
+                          },
+                          child: Center(
+                            child: Text('Profile',textAlign: TextAlign.center,style: TitleText)
+                          )
                         )
                       ), 
                       //To do
@@ -174,8 +222,10 @@ class HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(15.0)
                         ),
                         child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
                           onTap:() {
                             Navigator.pushNamed(context,TodoRoute);
+                            print("are you working?");
                           },
                           child: Center(
                             child: Text('To Do',textAlign: TextAlign.center,style: TitleText)
@@ -230,10 +280,6 @@ class HomePageState extends State<HomePage> {
                       child: Column(children: <Widget>[
                         Text("Due Today :",textAlign: TextAlign.left,style:TitleText),
                         Container(
-                          // decoration: BoxDecoration(
-                          //   border: Border.all(color: Colors.white),
-                          //   borderRadius: BorderRadius.circular(15.0)
-                          // ),
                           height: 73.0,
                           child: Center(
                             child: Text("Task/Schedule due by today", textAlign: TextAlign.center,style:MutedText)

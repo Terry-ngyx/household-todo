@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
 import '../style.dart';
 
-class Members extends StatelessWidget{
+class HouseMembers extends StatelessWidget{
   String member;
-  String color;
+  int color;
 
-  Members({this.member,this.color});
+  HouseMembers(this.member,this.color);
 
   @override
   Widget build(BuildContext context){
-    return Row(
-      children: <Widget>[
-        
-        Container(
-          child: Column(children: <Widget>[
-            Center(
-              child: Container(
-                width: 30.0,
-                height: 30.0,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF96861),
-                  shape: BoxShape.circle
-                )
-              )
-            ),
-            Text(member,textAlign:TextAlign.center,style: MemberNames)
-          ],)
+    return Container(
+      width: 90.0,
+      child: Column(children: <Widget>[
+        Center(
+          child: Container(
+            width: 25.0,
+            height: 25.0,
+            margin: EdgeInsets.fromLTRB(0.0, 15.0, 10.0, 10.0),
+            decoration: BoxDecoration(
+              color: Color(color),
+              shape: BoxShape.circle
+            )
+          )
         ),
-
-      ],
+        Text(member,textAlign:TextAlign.center,style: MemberNames)
+      ],)
     );
   }
 }
