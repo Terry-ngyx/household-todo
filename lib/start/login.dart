@@ -217,7 +217,6 @@ class LoginFormState extends State<LoginForm> {
                                           context, HomeRoute);
                                     }
                                   }
-                                },
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(15.0)),
