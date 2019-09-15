@@ -73,7 +73,6 @@ class LoginFormState extends State<LoginForm> {
           .showSnackBar(SnackBar(content: Text('Login Successful!')));
       // Scaffold.of(context)
       //     .showSnackBar(SnackBar(content: Text('Login Successful!')));
-
       //Shared Preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt('user_id',user.user_id);
@@ -217,6 +216,7 @@ class LoginFormState extends State<LoginForm> {
                                           context, HomeRoute);
                                     }
                                   }
+                                },
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(15.0)),

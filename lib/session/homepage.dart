@@ -40,6 +40,8 @@ class HomePageState extends State<HomePage> {
   List<String> _memberColors = [];
   List<String> _members = [];
 
+  final storage = FlutterSecureStorage();
+  
   @override
   void initState() {
     super.initState();
@@ -47,10 +49,10 @@ class HomePageState extends State<HomePage> {
     getCurrentUser();
   }
 
+
   Future<void> getStoredData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int userId = prefs.getInt("user_id");
-    final storage = FlutterSecureStorage();
     String token = await storage.read(key:'jwt');
     print(userId);
     print(token);
@@ -60,16 +62,15 @@ class HomePageState extends State<HomePage> {
 
   //GET REQUEST FOR CURRENT USER:
   Future<void> getCurrentUser() async {
+    
+    print(_userid);
+    String token = await storage.read(key:'jwt');
     // set up authenticated GET request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/me';
     // Map<String, String> headers ={'Authorization:': 'Bearer $_token'};
     http.Response response = await http.get(
       '$url',
-      headers:  {HttpHeaders.authorizationHeader: 'Bearer $_token'},
-      // headers: {
-      //   HttpHeaders.contentTypeHeader: 'application/json',
-      //   HttpHeaders.authorizationHeader: 'Bearer $_token'
-      // },
+      headers:  {'Authorization': 'Bearer $token'},
     );
 
     print(response.body);
