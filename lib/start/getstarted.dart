@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+
 import '../main.dart';
 import '../style.dart';
+import '../session/homepage.dart';
+import 'dart:async';
+import 'dart:convert';
 
 class GetStartedPage extends StatelessWidget {
   @override
@@ -19,9 +24,101 @@ class JoinRoomForm extends StatefulWidget {
   }
 }
 
+class _Room {
+  String status;
+  String room_id;
+  String room_name;
+
+  _Room({this.status, this.room_id, this.room_name});
+
+  factory _Room.fromJson(Map<String, dynamic> parsedJson) {
+    return _Room(
+      status: parsedJson['status'],
+      room_id: parsedJson['room_id'],
+      room_name: parsedJson['room_name'],
+    );
+  }
+}
+
 class JoinRoomFormState extends State<JoinRoomForm> {
   final _formkey = GlobalKey<FormState>();
-  String roomId;
+
+  Future<String> _createRoom() async {
+    String token = await storage.read(key: 'jwt');
+    // set up POST request arguments
+    String url = 'http://10.0.2.2:5000/api/v1/users/create';
+
+    // make POST request
+    http.Response response = await http.post(
+      '$url',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    // check the status code for the result
+    int statusCode = response.statusCode;
+
+    final jsonResponse = jsonDecode(response.body);
+    _Room user = new _Room.fromJson(jsonResponse);
+    print(user.status);
+    if (user.status == "success") {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('New Room created!')));
+      await new Future.delayed(const Duration(seconds: 1));
+
+      Navigator.pushNamed(context, HomeRoute);
+
+      return '';
+    }
+  }
+
+  Future<String> _joinRoom(String room_id) async {
+    String token = await storage.read(key: 'jwt');
+    print(token);
+    // set up POST request arguments
+    String url = 'http://10.0.2.2:5000/api/v1/users/join';
+    // Map<String, String> headers = {
+    //   "Content-type": "application/json",
+    //   'Authorization': 'Bearer $token',
+    // };
+    String json = '{"room_id": "$room_id"}';
+
+    // make POST request
+    http.Response response = await http.post(
+      url,
+      headers: {
+      "Content-type": "application/json",
+      'Authorization': 'Bearer $token',
+    },
+      body: json,
+    );
+
+    print('IHIHIHI');
+    // check the status code for the result
+    int statusCode = response.statusCode;
+
+    final jsonResponse = jsonDecode(response.body);
+    _Room user = new _Room.fromJson(jsonResponse);
+
+    print(user.status);
+    if (user.status == "success") {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Room joined!')));
+      await new Future.delayed(const Duration(seconds: 1));
+      Navigator.pushNamed(context, HomeRoute);
+
+      return '';
+    }
+  }
+
+  final roomIdController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    roomIdController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -63,6 +160,7 @@ class JoinRoomFormState extends State<JoinRoomForm> {
                         Container(
                           margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                           child: TextFormField(
+                            controller: roomIdController,
                             // style: TextStyle(height: 2.0),
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
@@ -89,7 +187,8 @@ class JoinRoomFormState extends State<JoinRoomForm> {
                             child: RaisedButton(
                               color: Color(0xFFF96861),
                               onPressed: () {
-                                Navigator.pushNamed(context, GetStartedRoute);
+                                print(roomIdController.text);
+                                _joinRoom(roomIdController.text);
                               },
                               shape: RoundedRectangleBorder(
                                   borderRadius:
@@ -105,7 +204,7 @@ class JoinRoomFormState extends State<JoinRoomForm> {
                       child: RaisedButton(
                     color: Color(0xFF61C6C0),
                     onPressed: () {
-                      Navigator.pushNamed(context, GetStartedRoute);
+                      _createRoom();
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(15.0)),
