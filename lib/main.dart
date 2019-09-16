@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'style.dart';
 import 'start/welcome.dart';
 import 'start/signup.dart';
@@ -15,6 +17,8 @@ const GetStartedRoute = '/getstarted';
 const TodoRoute = '/todo';
 
 void main() => runApp(MyApp());
+
+final storage = FlutterSecureStorage();
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

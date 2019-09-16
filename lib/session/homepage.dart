@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,15 +39,12 @@ class HomePageState extends State<HomePage> {
   List<String> _memberColors = [];
   List<String> _members = [];
 
-  final storage = FlutterSecureStorage();
-  
   @override
   void initState() {
     super.initState();
     getStoredData();
     getCurrentUser();
   }
-
 
   Future<void> getStoredData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,7 +58,6 @@ class HomePageState extends State<HomePage> {
 
   //GET REQUEST FOR CURRENT USER:
   Future<void> getCurrentUser() async {
-    
     print(_userid);
     String token = await storage.read(key:'jwt');
     // set up authenticated GET request arguments
@@ -87,7 +82,7 @@ class HomePageState extends State<HomePage> {
     prefs.setBool('is_admin',currentUser.is_admin);
     prefs.setInt('room_id',currentUser.room_id);
   }
-  
+
   //GET REQUEST FOR ALL PEOPLE IN THE ROOM:
   // Future<void> getHousemates() async {
   //   // set up authenticated GET request arguments
@@ -105,7 +100,7 @@ class HomePageState extends State<HomePage> {
 
   Future<void> getHouseholdData() async{
     List<String> membercolors = ['F96861','61C6C0','BDCC11','F73D99','F28473','C7CEEA','73C2FB','F9C1A0','FFE9A1','FE5855'];
-    List<String> members = ['linglee','suzen','weihan','terrence']; 
+    List<String> members = ['linglee','suzen','weihan','terrence'];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList("memberColors",membercolors);
     prefs.setStringList("members",members);
@@ -118,7 +113,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor, 
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -147,7 +142,7 @@ class HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Text("Members",textAlign: TextAlign.center,style:TitleText),
                           Row(children: <Widget>[
-                            //PENDING MEMBERS ADD IN                   
+                            //PENDING MEMBERS ADD IN
                           ])
                         ],)
                     )
@@ -155,7 +150,7 @@ class HomePageState extends State<HomePage> {
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[ 
+                    children: <Widget>[
                       //Profile
                       Container(
                         margin: EdgeInsets.only(bottom:20.0),
@@ -192,7 +187,7 @@ class HomePageState extends State<HomePage> {
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[  
+                    children: <Widget>[
                       //Assign to me
                       Container(
                         margin: EdgeInsets.only(bottom:20.0),
@@ -205,7 +200,7 @@ class HomePageState extends State<HomePage> {
                         child: Center(
                           child: Text('Assign to Me',textAlign: TextAlign.center,style: TitleText)
                         )
-                      ),  
+                      ),
                       //Schedule
                       Container(
                         margin: EdgeInsets.only(bottom:20.0),
@@ -252,7 +247,7 @@ class HomePageState extends State<HomePage> {
                 ]
               )
             )
-          ] 
+          ]
         )
       )
     );
