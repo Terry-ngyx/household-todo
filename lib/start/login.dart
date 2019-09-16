@@ -31,14 +31,18 @@ class _User {
   String status;
   String jwt_token;
   int user_id;
+  int room_id;
+  bool is_admin;
 
-  _User({this.status, this.jwt_token, this.user_id});
+  _User({this.status, this.jwt_token, this.user_id, this.room_id, this.is_admin});
 
   factory _User.fromJson(Map<String, dynamic> parsedJson) {
     return _User(
       status: parsedJson['status'],
       jwt_token: parsedJson['jwt_token'],
       user_id: parsedJson['user_id'],
+      room_id: parsedJson['room_id'],
+      is_admin: parsedJson['is_admin'],
     );
   }
 }
@@ -48,7 +52,7 @@ class LoginFormState extends State<LoginForm> {
   String username;
   String password;
 
-  Future<bool> _login(String userUsername, String userPassword) async {
+  Future<_User> _login(String userUsername, String userPassword) async {
     // set up POST request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
@@ -67,6 +71,7 @@ class LoginFormState extends State<LoginForm> {
     _User user = new _User.fromJson(jsonResponse);
     // print(user.status);
     // print(user.jwt_token);
+
     if (user.status == "success") {
       //Snackbar
       Scaffold.of(context)
@@ -76,19 +81,20 @@ class LoginFormState extends State<LoginForm> {
       //Shared Preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt('user_id',user.user_id);
+      prefs.setInt('user_room_id',user.room_id);
+      prefs.setBool('user_is_admin',user.is_admin);
       //Secured Storage
-      final storage = new FlutterSecureStorage();
       await storage.write(key:'jwt',value:user.jwt_token);
 
-      return true;
+      // print(user.user_id);
+      // print(user.room_id);
+      // print(user.is_admin);
+
+      return user;
     } else {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Login Failed!')));
     }
-
-    final storage = new FlutterSecureStorage();
-    await storage.write(key: 'jwt', value: user.jwt_token);
-    print(await storage.read(key: 'jwt'));
   }
 
   @override
@@ -179,11 +185,17 @@ class LoginFormState extends State<LoginForm> {
                                         SnackBar(content: Text('Logging In')));
                                     _formkey.currentState.save();
 
-                                    var value =
+                                    var user =
                                         await _login(username, password);
-                                    if (value) {
+                                    if (user.room_id!=null) {
                                       await new Future.delayed(
-                                          const Duration(seconds: 3));
+                                          const Duration(seconds: 1));
+                                      Navigator.pushNamed(
+                                          context, HomeRoute);
+                                    }
+                                    else{
+                                      await new Future.delayed(
+                                          const Duration(seconds: 1));
                                       Navigator.pushNamed(
                                           context, GetStartedRoute);
                                     }
@@ -207,9 +219,9 @@ class LoginFormState extends State<LoginForm> {
                                         SnackBar(content: Text('Logging In')));
                                     _formkey.currentState.save();
 
-                                    var value =
+                                    var user =
                                         await _login(username, password);
-                                    if (value) {
+                                    if (user.room_id != null) {
                                       await new Future.delayed(
                                           const Duration(seconds: 3));
                                       Navigator.pushNamed(

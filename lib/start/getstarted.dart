@@ -51,7 +51,10 @@ class JoinRoomFormState extends State<JoinRoomForm> {
     // make POST request
     http.Response response = await http.post(
       '$url',
-      headers: {'Authorization': 'Bearer $token'},
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-type": "application/json"
+      },
     );
 
     // check the status code for the result
@@ -86,9 +89,9 @@ class JoinRoomFormState extends State<JoinRoomForm> {
     http.Response response = await http.post(
       url,
       headers: {
-      "Content-type": "application/json",
-      'Authorization': 'Bearer $token',
-    },
+        "Content-type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
       body: json,
     );
 
