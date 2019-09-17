@@ -85,6 +85,7 @@ class LoginFormState extends State<LoginForm> {
       prefs.setBool('user_is_admin',user.is_admin);
       //Secured Storage
       await storage.write(key:'jwt',value:user.jwt_token);
+      print(await storage.read(key:'jwt'));     //PLEASE REMEMBER TO DELETE
 
       // print(user.user_id);
       // print(user.room_id);
