@@ -22,6 +22,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfileState extends State<ProfilePage> {
   String _username ='';
+  int _userId = 0;
   int _roomId = 0;
   bool _isAdmin = false;
   List _members = [];
@@ -33,12 +34,14 @@ class ProfileState extends State<ProfilePage> {
   Future<void> getStoredProfileData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = prefs.getString("username");
+    int userId = prefs.getInt("user_id");
     int roomId = prefs.getInt('room_id');
     bool isAdmin = prefs.getBool('is_admin');
     List members = prefs.getStringList('members');
     List memberColors = prefs.getStringList('member_color');
     List memberIds = prefs.getStringList('member_id');
     setState(() => _username = username);
+    setState(() => _userId = userId);
     setState(() => _roomId = roomId);
     setState(() => _isAdmin = isAdmin);
     setState(() => _members = members);
@@ -66,7 +69,7 @@ class ProfileState extends State<ProfilePage> {
             NavBar('Profile',0xFFF96861,true),
               
             Container(
-              margin: EdgeInsets.symmetric(vertical:70.0,horizontal:40.0),
+              margin: EdgeInsets.symmetric(vertical:45.0,horizontal:40.0),
               // decoration: BoxDecoration(border: Border.all(color:Colors.white)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -74,8 +77,8 @@ class ProfileState extends State<ProfilePage> {
                 children: <Widget>[
 
                   Container(
-                    margin: EdgeInsets.only(bottom: 40.0),
-                    height: 200.0,
+                    margin: EdgeInsets.only(bottom: 20.0),
+                    height: 140.0,
                     decoration: BoxDecoration(
                       border: Border.all(color:Color(0xFF61C6C0)),
                       borderRadius: BorderRadius.circular(15.0)
@@ -85,7 +88,7 @@ class ProfileState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.symmetric(vertical:20.0),
+                          padding: EdgeInsets.symmetric(vertical:10.0),
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(color:Color(0xFF61C6C0))
@@ -94,8 +97,36 @@ class ProfileState extends State<ProfilePage> {
                           child: Text('ROOM ID',style: PageTitle, textAlign: TextAlign.center,)
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(vertical:30.0),
+                          padding: EdgeInsets.symmetric(vertical:10.0),
                           child: Text('$_roomId',style: RoomIdText, textAlign: TextAlign.center,)
+                        )
+                      ],
+                    )
+                  ),
+
+                  Container(
+                    margin: EdgeInsets.only(bottom: 40.0),
+                    height: 140.0,
+                    decoration: BoxDecoration(
+                      border: Border.all(color:Color(0xFFF28473)),
+                      borderRadius: BorderRadius.circular(15.0)
+                    ),
+                    child: Column(      
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical:10.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color:Color(0xFFF28473))
+                            )
+                          ),
+                          child: Text('YOUR USER ID',style: PageTitle, textAlign: TextAlign.center,)
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical:10.0),
+                          child: Text('$_userId',style: RoomIdText, textAlign: TextAlign.center,)
                         )
                       ],
                     )
