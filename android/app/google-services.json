@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "716228888310",
+    "firebase_url": "https://roomies-2e58b.firebaseio.com",
+    "project_id": "roomies-2e58b",
+    "storage_bucket": "roomies-2e58b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716228888310:android:34bbea8efbe4f5d6ef0ed7",
+        "android_client_info": {
+          "package_name": "com.example.household"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "716228888310-kkhn0s9q2m32tkoo9t4vooao689u8o23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmFTXai7U0BkftiRekdM3iLRLaH90RBXE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "716228888310-kkhn0s9q2m32tkoo9t4vooao689u8o23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

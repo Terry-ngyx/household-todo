@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'style.dart';
 import 'start/welcome.dart';
@@ -23,6 +24,7 @@ const ProfileEditRoute = '/profileedit';
 void main() => runApp(MyApp());
 
 final storage = FlutterSecureStorage();
+final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
