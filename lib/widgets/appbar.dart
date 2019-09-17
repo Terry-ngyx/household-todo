@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../style.dart';
+import '../main.dart';
 
 class ReusableWidgets {
     static roomBanner(String title){
@@ -19,8 +20,10 @@ class ReusableWidgets {
 
 class NavBar extends StatelessWidget {
   String pageTitle;
+  int borderColor;
+  bool iconExists;
 
-  NavBar(this.pageTitle);
+  NavBar(this.pageTitle,this.borderColor,this.iconExists);
 
   @override
   Widget build(BuildContext context){
@@ -28,7 +31,7 @@ class NavBar extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0.0,35.0,0.0,15.0),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(width:2.0,color:Color(0xFFBDCC11))
+          bottom: BorderSide(width:2.0,color:Color(borderColor))
         ),
       ),
       child: Row(
@@ -60,7 +63,20 @@ class NavBar extends StatelessWidget {
           ),
           Expanded(
             flex:1,
-            child: Container(),
+            child: Container(
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.only(right:20.0),
+              child: iconExists ? 
+                GestureDetector(
+                  onTap:(){
+                    Navigator.pushNamed(context,ProfileEditRoute);
+                    print("are you working?");
+                  },
+                  child: Icon(Icons.account_box,color: Colors.white, size:35.0) 
+                )
+                :
+                Container(),
+            ),
           ),
         ]
       )

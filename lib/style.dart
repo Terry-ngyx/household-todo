@@ -57,3 +57,16 @@ const MemberNames = TextStyle(
   fontSize: 15.0,
   color: Colors.white,
 );
+const MemberList = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w300,
+  fontSize: 15.0,
+  color: Colors.white,
+);
+
+const RoomIdText = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w600,
+  fontSize: 45.0,
+  color: Colors.white,
+);
