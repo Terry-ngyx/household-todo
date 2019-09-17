@@ -68,7 +68,7 @@ class LoginFormState extends State<LoginForm> {
     String body = response.body;
 
     final jsonResponse = jsonDecode(response.body);
-    _User user = new _User.fromJson(jsonResponse);
+    _User user = new _User.fromJson(jsonResponse[0]);
     // print(user.status);
     // print(user.jwt_token);
 
@@ -95,6 +95,7 @@ class LoginFormState extends State<LoginForm> {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Login Failed!')));
     }
+
   }
 
   @override
@@ -184,7 +185,6 @@ class LoginFormState extends State<LoginForm> {
                                     Scaffold.of(context).showSnackBar(
                                         SnackBar(content: Text('Logging In')));
                                     _formkey.currentState.save();
-
                                     var user =
                                         await _login(username, password);
                                     if (user.room_id!=null) {
@@ -241,7 +241,7 @@ class LoginFormState extends State<LoginForm> {
                               child: GestureDetector(
                             onTap: () {
                               Navigator.pushNamed(context, SignUpRoute);
-                              print("are you working?");
+                              // print("are you working?");
                             },
                             child: Text("Don't have an account? Sign Up now!",
                                 textAlign: TextAlign.center),

@@ -49,7 +49,7 @@ class TodoState extends State<TodoPage> {
 
           children: <Widget>[
             
-            NavBar('To Do'),
+            NavBar('To Do',0xFFBDCC11,false),
 
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20.0),
