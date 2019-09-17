@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:household/start/getstarted.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:household/widgets/messaging_widget.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -54,12 +55,15 @@ class LoginFormState extends State<LoginForm> {
 
   Future<_User> _login(String userUsername, String userPassword) async {
     // set up POST request arguments
-    String url = 'http://10.0.2.2:5000/api/v1/users/login';
+    String url = 'http://192.168.1.198:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
-    String json = '{"username": "$userUsername", "password": "$userPassword"}';
+    var fcmToken = MessagingWidget;
+    String json = '{"username": "$userUsername", "password": "$userPassword", "android_token": "$fcmToken"}';
     // print(json);
     // make POST request
+
     http.Response response = await http.post(url, headers: headers, body: json);
+    print(json);
     // check the status code for the result
     int statusCode = response.statusCode;
     // print(response);
