@@ -66,12 +66,12 @@ class LoginFormState extends State<LoginForm> {
   Future<_User> _login(String userUsername, String userPassword) async {
 
     // set up POST request arguments
-    String url = 'http://localhost:5000/api/v1/users/login';
+    String url = 'http://10.0.2.2:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
 
     // var fcmToken = await getDeviceToken();
     var fcmToken = "qweqwe";
-    
+
     String json = '{"username": "$userUsername", "password": "$userPassword", "android_token": "$fcmToken"}';
     // print(json);
     // make POST request
@@ -205,7 +205,7 @@ class LoginFormState extends State<LoginForm> {
                                     _formkey.currentState.save();
                                     var user =
                                         await _login(username, password);
-                                    if (user.room_id!=null) {
+                                    if (user.room_id!='NULL') {
                                       await new Future.delayed(
                                           const Duration(seconds: 1));
                                       Navigator.pushNamed(
@@ -241,7 +241,7 @@ class LoginFormState extends State<LoginForm> {
                                         await _login(username, password);
                                     if (user.room_id != null) {
                                       await new Future.delayed(
-                                          const Duration(seconds: 3));
+                                          const Duration(seconds: 1));
                                       Navigator.pushNamed(
                                           context, HomeRoute);
                                     }
