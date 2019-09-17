@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:household/widgets/message.dart';
+import '../main.dart';
 
 
 class MessagingWidget extends StatefulWidget {
@@ -8,24 +9,15 @@ class MessagingWidget extends StatefulWidget {
   _MessagingWidgetState createState() => _MessagingWidgetState();
 }
 
+
 class _MessagingWidgetState extends State<MessagingWidget> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Message> messages = [];
-
-  getDeviceToken() async {
-    String fcmToken = await _firebaseMessaging.getToken();
-
-    if (fcmToken != null) {
-      print("token: $fcmToken");
-      return fcmToken;
-    }
-  }
 
   @override
   void initState() {
     super.initState();
 
-    _firebaseMessaging.configure(
+    firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
         final notification = message['notification'];
@@ -55,13 +47,13 @@ class _MessagingWidgetState extends State<MessagingWidget> {
         });
       },
     );
-    _firebaseMessaging.requestNotificationPermissions(
+    firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));
   }
 
   @override
   Widget build(BuildContext context) {
-    return getDeviceToken();
+    return null;
   }
 }
 

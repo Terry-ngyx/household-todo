@@ -28,11 +28,21 @@ class LoginForm extends StatefulWidget {
   }
 }
 
+Future <String> getDeviceToken() async {
+    String fcmToken = await firebaseMessaging.getToken();
+
+    if (fcmToken != null) {
+      print("token: $fcmToken");
+      await storage.write(key:'fcmToken',value:fcmToken);
+      return fcmToken;
+    }
+  }
+
 class _User {
   String status;
   String jwt_token;
-  int user_id;
-  int room_id;
+  String user_id;
+  String room_id;
   bool is_admin;
 
   _User({this.status, this.jwt_token, this.user_id, this.room_id, this.is_admin});
@@ -54,10 +64,14 @@ class LoginFormState extends State<LoginForm> {
   String password;
 
   Future<_User> _login(String userUsername, String userPassword) async {
+
     // set up POST request arguments
-    String url = 'http://192.168.1.198:5000/api/v1/users/login';
+    String url = 'http://localhost:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
-    var fcmToken = MessagingWidget;
+
+    // var fcmToken = await getDeviceToken();
+    var fcmToken = "qweqwe";
+    
     String json = '{"username": "$userUsername", "password": "$userPassword", "android_token": "$fcmToken"}';
     // print(json);
     // make POST request
@@ -72,7 +86,7 @@ class LoginFormState extends State<LoginForm> {
     String body = response.body;
 
     final jsonResponse = jsonDecode(response.body);
-    _User user = new _User.fromJson(jsonResponse[0]);
+    _User user = new _User.fromJson(jsonResponse);
     // print(user.status);
     // print(user.jwt_token);
 
@@ -84,8 +98,8 @@ class LoginFormState extends State<LoginForm> {
       //     .showSnackBar(SnackBar(content: Text('Login Successful!')));
       //Shared Preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setInt('user_id',user.user_id);
-      prefs.setInt('user_room_id',user.room_id);
+      prefs.setString('user_id',user.user_id);
+      prefs.setString('user_room_id',user.room_id);
       prefs.setBool('user_is_admin',user.is_admin);
       //Secured Storage
       await storage.write(key:'jwt',value:user.jwt_token);
