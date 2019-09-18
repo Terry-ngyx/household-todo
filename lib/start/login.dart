@@ -77,7 +77,7 @@ class LoginFormState extends State<LoginForm> {
     // make POST request
 
     http.Response response = await http.post(url, headers: headers, body: json);
-    print(json);
+    // print(json);
     // check the status code for the result
     int statusCode = response.statusCode;
     // print(response);
@@ -98,11 +98,13 @@ class LoginFormState extends State<LoginForm> {
       //     .showSnackBar(SnackBar(content: Text('Login Successful!')));
       //Shared Preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(user.room_id);
       prefs.setString('user_id',user.user_id);
       prefs.setString('user_room_id',user.room_id);
       prefs.setBool('user_is_admin',user.is_admin);
       //Secured Storage
       await storage.write(key:'jwt',value:user.jwt_token);
+      print(await storage.read(key:'jwt'));     //PLEASE REMEMBER TO DELETE
 
       // print(user.user_id);
       // print(user.room_id);

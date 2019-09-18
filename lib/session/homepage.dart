@@ -19,7 +19,7 @@ class _Current{
   String username;
   String email;
   bool is_admin;
-  int room_id;
+  String room_id;
 
   _Current({this.username,this.email,this.is_admin,this.room_id});
 
@@ -27,8 +27,8 @@ class _Current{
     return _Current(
       username: parsedJson['username'],
       email: parsedJson['email'],
-      is_admin: parsedJson['is_admin'],
-      room_id: parsedJson['room_id'],
+      is_admin: parsedJson['is admin'],
+      room_id: parsedJson['room id'],
     );
   }
 }
@@ -47,8 +47,8 @@ class _Housemates{
 }
 
 class HomePageState extends State<HomePage> {
-  int _userid = 0;
-  int _roomid = 0;
+  String _userid = '';
+  String _roomid = '';
   String _username = '';
   bool _isAdmin = false;
   List<String> _memberColors = [];
@@ -65,7 +65,7 @@ class HomePageState extends State<HomePage> {
 
   Future<void> getStoredData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userId = prefs.getInt("user_id");
+    String userId = prefs.getString("user_id");
     setState(() => _userid = userId);
   }
 
@@ -79,16 +79,16 @@ class HomePageState extends State<HomePage> {
       '$url',
       headers:  {'Authorization': 'Bearer $token'},
     );
-    // print(response.body);
+    print(response.body);
     final responseJson = jsonDecode(response.body);
     _Current currentUser = new _Current.fromJson(responseJson);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('username',currentUser.username);
     prefs.setString('email',currentUser.email);
     prefs.setBool('is_admin',currentUser.is_admin);
-    prefs.setInt('room_id',currentUser.room_id);
+    prefs.setString('room_id',currentUser.room_id);
     //Get Shared Preference
-    int roomId = prefs.getInt("room_id");
+    String roomId = prefs.getString("room_id");
     String username = prefs.getString("username");
     bool isAdmin = prefs.getBool("is_admin");
     //setState of current_user info
@@ -101,14 +101,14 @@ class HomePageState extends State<HomePage> {
   Future<void> getHousemates() async {
     //Access Shared Preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int roomId = prefs.getInt('room_id');
+    String roomId = prefs.getString('room_id');
     // set up authenticated GET request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/housemates/$roomId';
     http.Response response = await http.get(
       '$url',
       headers:  {"Content-type": "application/json"}
     );
-    // print(response.body);
+    print(response.body);
     final responseJson = jsonDecode(response.body);
     _Housemates housemates = new _Housemates.fromJson(responseJson);
 

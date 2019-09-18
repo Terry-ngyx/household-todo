@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+import '../main.dart';
 import '../style.dart';
 import '../widgets/appbar.dart';
 
@@ -109,9 +110,24 @@ class ProfileEditState extends State<ProfileEditForm> {
     _UpdateInfo update = new _UpdateInfo.fromJson(jsonResponse);
     print(update.status);
     if (update.status == "success") {
-      // Scaffold.of(context).showSnackBar(SnackBar(content: Text('User info successfully updated!')));
-      // await new Future.delayed(const Duration(seconds: 3));
-      Navigator.pop(context);
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('User info successfully updated!')));
+      await new Future.delayed(const Duration(seconds: 3));
+
+      //Edit Shared Preferences;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      //Edit members list
+      List members = prefs.getStringList('members');
+      String username = prefs.getString("username");
+      members[members.indexOf('$username')] = updateUsername;
+      prefs.remove("members");
+      prefs.remove("username");
+      prefs.remove("email");
+      prefs.setString("username","$updateUsername");
+      prefs.setString("email","$updateEmail");
+      prefs.setString("members","$members");
+      setState(() => _username = updateUsername);
+      setState(() => _username = updateEmail);
+      Navigator.pushNamed(context,HomeRoute);
     }
   }
   

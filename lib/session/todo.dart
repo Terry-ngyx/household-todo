@@ -20,7 +20,7 @@ class TodoPage extends StatefulWidget {
 }
 
 class TodoState extends State<TodoPage> {
-  int _userid = 0;
+  String _userid = '';
   String _token = '';
 
   @override
@@ -31,7 +31,7 @@ class TodoState extends State<TodoPage> {
 
   Future<void> getStoredData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userId = prefs.getInt("user_id");
+    String userId = prefs.getString("user_id");
     final storage = FlutterSecureStorage();
     String token = await storage.read(key:'jwt');
     setState(() => _userid = userId);
@@ -57,27 +57,27 @@ class TodoState extends State<TodoPage> {
               child: Column(
                 children: <Widget>[
 
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10.0,0.0,20.0,0.0),
-                        constraints: BoxConstraints.expand(height:40.0,width:40.0),
-                        child: SvgPicture.asset(
-                          "assets/images/personal.svg",
-                        ),
-                      ),
-                      Text('Personal',style:TitleText),
-                      Container(
-                        decoration: BoxDecoration(border: Border.all(color:Colors.white)),
-                        width: 50.0,
-                        alignment: Alignment.centerRight,
-                        constraints: BoxConstraints.expand(height:40.0,width:40.0),
-                        child: SvgPicture.asset(
-                          "assets/images/add_without_circle.svg",
-                        ),                  //add icon
-                      )
-                    ],
-                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Container(
+                  //       margin: EdgeInsets.fromLTRB(10.0,0.0,20.0,0.0),
+                  //       constraints: BoxConstraints.expand(height:40.0,width:40.0),
+                  //       child: SvgPicture.asset(
+                  //         "assets/images/personal.svg",
+                  //       ),
+                  //     ),
+                  //     Text('Personal',style:TitleText),
+                  //     Container(
+                  //       decoration: BoxDecoration(border: Border.all(color:Colors.white)),
+                  //       width: 50.0,
+                  //       alignment: Alignment.centerRight,
+                  //       constraints: BoxConstraints.expand(height:40.0,width:40.0),
+                  //       child: SvgPicture.asset(
+                  //         "assets/images/add_without_circle.svg",
+                  //       ),                  //add icon
+                  //     )
+                  //   ],
+                  // ),
 
                   Container(      
                     decoration: BoxDecoration(
