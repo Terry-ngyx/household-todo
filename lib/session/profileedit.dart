@@ -86,7 +86,6 @@ class ProfileEditState extends State<ProfileEditForm> {
     String url = 'http://10.0.2.2:5000/api/v1/users/';
     http.Response response = await http.get(url,headers:{"Content-type":"application/json"});
     final responseJson = jsonDecode(response.body);
-    print(response.body);
     _UserInfo userInfo = new _UserInfo.fromJson(responseJson);
     setState(() => existingUsernames = userInfo.usernames);
     setState(() => existingEmails = userInfo.emails);
@@ -105,7 +104,6 @@ class ProfileEditState extends State<ProfileEditForm> {
       },
       body: json,
     );
-    print(response.body);
     final jsonResponse = jsonDecode(response.body);
     _UpdateInfo update = new _UpdateInfo.fromJson(jsonResponse);
     print(update.status);

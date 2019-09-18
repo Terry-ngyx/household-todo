@@ -52,8 +52,8 @@ class _User {
       status: parsedJson['status'],
       jwt_token: parsedJson['jwt_token'],
       user_id: parsedJson['user_id'],
-      room_id: parsedJson['room_id'],
-      is_admin: parsedJson['is_admin'],
+      room_id: parsedJson['room id'],
+      is_admin: parsedJson['is admin'],
     );
   }
 }
@@ -207,7 +207,7 @@ class LoginFormState extends State<LoginForm> {
                                     _formkey.currentState.save();
                                     var user =
                                         await _login(username, password);
-                                    if (user.room_id!='NULL') {
+                                    if (user.room_id!=null) {
                                       await new Future.delayed(
                                           const Duration(seconds: 1));
                                       Navigator.pushNamed(

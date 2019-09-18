@@ -37,11 +37,24 @@ const TitleText = TextStyle(
   color: Colors.white,
 );
 
+const BoldFont = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w600,
+  fontSize: 18.0,
+  color: Colors.white,
+);
 const NormalFont = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w400,
   fontSize: 18.0,
   color: Colors.white,
+);
+const NormalFontStriked = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w400,
+  fontSize: 18.0,
+  color: Color(0xFF0C324E),
+  decoration: TextDecoration.lineThrough
 );
 
 const MutedText = TextStyle(
@@ -60,6 +73,12 @@ const MemberNames = TextStyle(
 const MemberList = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w300,
+  fontSize: 15.0,
+  color: Colors.white,
+);
+const MemberListBold = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w500,
   fontSize: 15.0,
   color: Colors.white,
 );
