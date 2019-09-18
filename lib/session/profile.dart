@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:flushbar/flushbar.dart';
 
 import 'dart:async';
 import 'dart:io';
@@ -22,8 +21,8 @@ class ProfilePage extends StatefulWidget {
 
 class ProfileState extends State<ProfilePage> {
   String _username ='';
-  int _userId = 0;
-  int _roomId = 0;
+  String _userId = '';
+  String _roomId = '';
   bool _isAdmin = false;
   List _members = [];
   List _memberColors = [];
@@ -34,8 +33,8 @@ class ProfileState extends State<ProfilePage> {
   Future<void> getStoredProfileData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = prefs.getString("username");
-    int userId = prefs.getInt("user_id");
-    int roomId = prefs.getInt('room_id');
+    String userId = prefs.getString("user_id");
+    String roomId = prefs.getString('room_id');
     bool isAdmin = prefs.getBool('is_admin');
     List members = prefs.getStringList('members');
     List memberColors = prefs.getStringList('member_color');
@@ -53,6 +52,29 @@ class ProfileState extends State<ProfilePage> {
   void initState() {
     super.initState();
     getStoredProfileData();
+  }
+
+  callback(memberid) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List members = prefs.getStringList("members");
+    List member_id = prefs.getStringList("member_id");
+    List member_color = prefs.getStringList("member_color");
+    List member_is_admin = prefs.getStringList("member_is_admin");
+    int positionDelete = member_id.indexOf(memberid.toString());
+    String memberDeleted = members[positionDelete];
+    members.removeAt(positionDelete);
+    member_id.removeAt(positionDelete);
+    member_color.removeAt(positionDelete);
+    member_is_admin.removeAt(positionDelete);
+    prefs.setStringList("members",members);
+    prefs.setStringList("member_id",member_id);
+    prefs.setStringList("member_color",member_color);
+    prefs.setStringList("member_is_admin",member_is_admin);
+    setState(() {
+      _members = members;
+      _memberColors = member_color;
+      _memberIds = member_id;
+    });
   }
 
   @override
@@ -165,7 +187,7 @@ class ProfileState extends State<ProfilePage> {
                                 var member = _members[index];
                                 var memberid = int.parse(_memberIds[index]);
                                 var color = int.parse(_memberColors[index]);
-                                return HouseMembersProfile(_isAdmin,member,color,memberid);
+                                return HouseMembersProfile(_isAdmin,member,color,memberid,callback);
                               }
                             )
                           )

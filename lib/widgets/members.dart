@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flushbar/flushbar.dart';
 
 import 'dart:async';
 import 'dart:convert';
 
 import '../style.dart';
+import '../session/profile.dart';
 
 class HouseMembers extends StatelessWidget{
   String member;
@@ -43,19 +46,25 @@ class _Kick {
   }
 }
 
-class HouseMembersProfile extends StatelessWidget{
+class HouseMembersProfile extends StatefulWidget{
   bool isadmin;
   String member;
   int color;
-  int member_id;
+  int memberid;
+  final Function(int) callback;
 
-  HouseMembersProfile(this.isadmin,this.member,this.color,this.member_id);
+  HouseMembersProfile(this.isadmin,this.member,this.color,this.memberid,this.callback);
 
-  Future<void> _kickuser(int userId) async{
+  @override 
+  _HouseMembersProfileState createState() => _HouseMembersProfileState();  
+}
+
+class _HouseMembersProfileState extends State<HouseMembersProfile>{
+  Future<bool> _kickuser(int userId) async{
     final storage = FlutterSecureStorage();
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/kick';
-    String json = '{"kicked_id": $member_id}';
+    String json = '{"kicked_id": "${widget.memberid}"}';
     http.Response response = await http.post(
       url,
       headers: {
@@ -64,10 +73,13 @@ class HouseMembersProfile extends StatelessWidget{
       },
       body: json,
     );
-    print(response.body);
     final jsonResponse = jsonDecode(response.body);
+    print(response.body);
     _Kick kickUser = new _Kick.fromJson(jsonResponse);
     print(kickUser.status);
+    if (kickUser.status == "success") {
+      return true;
+    }
   }
 
   @override
@@ -82,19 +94,29 @@ class HouseMembersProfile extends StatelessWidget{
             height: 25.0,
             margin: EdgeInsets.fromLTRB(40.0, 10.0, 20.0, 10.0),
             decoration: BoxDecoration(
-              color: Color(color),
+              color: Color(widget.color),
               shape: BoxShape.circle
             )
           )
         ),
-        Text(member,textAlign:TextAlign.center,style: MemberList),
-        isadmin ?
+        Text(widget.member,textAlign:TextAlign.center,style: MemberList),
+        widget.isadmin ?
           Expanded(
             child: Container( 
               padding: EdgeInsets.only(right: 40.0),
               alignment: Alignment.centerRight,
               child: GestureDetector(
-                onTap: () async {_kickuser(member_id);},
+                onTap: () async {
+                  var kick = await _kickuser(widget.memberid);
+                  if(kick){
+                    Flushbar(
+                      message:'${widget.member} has been successfully kicked out :(',
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 3),
+                      )..show(context);
+                  widget.callback(widget.memberid);
+                  }
+                },
                 child: Icon(
                   Icons.remove_circle_outline,
                   color:Colors.white,
