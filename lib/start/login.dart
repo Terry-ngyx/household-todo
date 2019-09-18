@@ -207,7 +207,7 @@ class LoginFormState extends State<LoginForm> {
                                     _formkey.currentState.save();
                                     var user =
                                         await _login(username, password);
-                                    if (user.room_id!='NULL') {
+                                    if (user.room_id!=null) {
                                       await new Future.delayed(
                                           const Duration(seconds: 1));
                                       Navigator.pushNamed(
