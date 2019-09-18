@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 const String FontNameDefault = 'Montserrat';
 
 const AppBarTitle = TextStyle(
-    fontFamily: FontNameDefault,
-    fontWeight: FontWeight.w600,
-    fontSize: 30.0,
-    color: Colors.white,
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w600,
+  fontSize: 30.0,
+  color: Colors.white,
 );
 
 const WelcomeTitle = TextStyle(
-    fontFamily: FontNameDefault,
-    fontWeight: FontWeight.w700,
-    fontSize: 20.0,
-    color: Colors.white,
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w700,
+  fontSize: 20.0,
+  color: Colors.white,
 );
 
 const PageTitle = TextStyle(
-    fontFamily: FontNameDefault,
-    fontWeight: FontWeight.w600,
-    fontSize: 32.0,
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w600,
+  fontSize: 32.0,
   color: Colors.white,
 );
 
@@ -46,9 +46,17 @@ const NormalFont = TextStyle(
 
 const MutedText = TextStyle(
   fontFamily: FontNameDefault,
-  fontWeight: FontWeight.w200,
+  fontWeight: FontWeight.w400,
   fontSize: 20.0,
   color: Colors.white,
+);
+
+const DoneMutedText = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w400,
+  fontSize: 20.0,
+  color: Colors.white,
+  decoration: TextDecoration.lineThrough,
 );
 
 const MemberNames = TextStyle(
@@ -69,4 +77,18 @@ const RoomIdText = TextStyle(
   fontWeight: FontWeight.w600,
   fontSize: 45.0,
   color: Colors.white,
+);
+
+const AddTaskTitle = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w600,
+  fontSize: 22.0,
+  color: Color(0xFFF96861),
+);
+
+const AddTaskBody = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w400,
+  fontSize: 16.0,
+  color: Colors.black,
 );

@@ -3,40 +3,51 @@ import '../style.dart';
 
 class PersonalTasks extends StatelessWidget {
   String task;
-  PersonalTasks(this.task);
+  // String task_id;
+  bool completed;
+  PersonalTasks(this.task, this.completed);
+  // PersonalTasks(this.task);
+
+  // void toggle (){
+  //   setState(){
+  //     completed = !completed;
+  //   }
+  // }
 
   @override
-  Widget build(BuildContext context){
-    return Container( 
-      height:50.0,
-      margin: EdgeInsets.fromLTRB(10.0,3.0,10.0,3.0),
-      padding: EdgeInsets.fromLTRB(60.0,8.0,0.0,8.0),
-      decoration: BoxDecoration(
-        color: Color(0xFFBDCC11),
-      ),
-      child: Text(task,
-        style: MutedText, textAlign: TextAlign.center
-      ),
-    );
+  Widget build(BuildContext context) {
+    return Container(
+        // height: 100.0,
+        width: 500.0,
+        margin: EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 4.0),
+        padding: EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
+
+          color: completed ? Color(0xFF848484) : Color(0xFF61C6C0),
+          child: Text(task, 
+          style:completed? DoneMutedText : MutedText, 
+          textAlign: TextAlign.left),
+        // )
+        );
   }
 }
 
 class GroupCategory extends StatelessWidget {
   String category;
-  GroupCategory(this.category);
+  bool completedPublic;
+  GroupCategory(this.category, this.completedPublic);
 
   @override
-  Widget build(BuildContext context){
-    return Container( 
-      height:50.0,
-      margin: EdgeInsets.fromLTRB(10.0,3.0,10.0,3.0),
-      padding: EdgeInsets.fromLTRB(60.0,8.0,0.0,8.0),
+  Widget build(BuildContext context) {
+    return Container(
+      width: 500.0,
+      margin: EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 4.0),
+      padding: EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
       decoration: BoxDecoration(
-        color: Color(0xFF61C6C0),
+        color: completedPublic ? Color(0xFF848484) : Color(0xFFB2C214),
       ),
-      child: Text(category,
-        style: MutedText, textAlign: TextAlign.center
-      ),
+      child: Text(category, 
+      style: completedPublic ?DoneMutedText : MutedText, 
+      textAlign: TextAlign.center),
     );
   }
 }
