@@ -119,7 +119,7 @@ class TodoState extends State<TodoPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-              NavBar('To Do'),
+              NavBar('To Do', 0xFFBDCC11, false),
               Container(
                   margin: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(children: <Widget>[
