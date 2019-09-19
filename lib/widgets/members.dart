@@ -63,7 +63,7 @@ class HouseMembersProfile extends StatefulWidget{
 class _HouseMembersProfileState extends State<HouseMembersProfile>{
   String _currUserId = '';
 
-  Future<bool> _kickuser(int userId) async{
+  Future _kickuser(int userId) async{
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/kick';
     String json = '{"kicked_id": "${widget.memberid}"}';
@@ -83,7 +83,7 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
     }
   }
 
-  Future<bool> _deleteroom() async{
+  Future _deleteroom() async{
     String token = await storage.read(key: 'jwt');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String roomId = prefs.getString('room_id');

@@ -109,7 +109,7 @@ class CategoryState extends State<CategoryPage> {
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/newpublictask';
     String json = '{"task":"$task","category_id":"$categoryId"}';
-    http. Response response = await http.post(
+    http.Response response = await http.post(
       url,
       headers: {
         'Content-type':'application/json',

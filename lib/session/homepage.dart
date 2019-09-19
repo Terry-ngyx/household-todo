@@ -27,7 +27,7 @@ class _Current{
     return _Current(
       username: parsedJson['username'],
       email: parsedJson['email'],
-      is_admin: parsedJson['is admin'],
+      is_admin: parsedJson['is_admin'],
       room_id: parsedJson['room id'],
     );
   }
@@ -84,6 +84,7 @@ class HomePageState extends State<HomePage> {
     prefs.setString('username',currentUser.username);
     prefs.setString('email',currentUser.email);
     prefs.setBool('is_admin',currentUser.is_admin);
+    print(currentUser.is_admin);
     prefs.setString('room_id',currentUser.room_id);
     //Get Shared Preference
     String roomId = prefs.getString("room_id");
