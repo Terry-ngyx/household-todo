@@ -23,6 +23,20 @@ const PageTitle = TextStyle(
   color: Colors.white,
 );
 
+const DialogTitlePink = TextStyle(
+    fontFamily: FontNameDefault,
+    fontWeight: FontWeight.w700,
+    fontSize: 32.0,
+    color:  Color(0xFFF73D99),
+);
+
+const DialogTextPink = TextStyle(
+    fontFamily: FontNameDefault,
+    fontWeight: FontWeight.w700,
+    fontSize: 20.0,
+    color:  Color(0xFFF73D99),
+);
+
 const BtnText = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w600,
