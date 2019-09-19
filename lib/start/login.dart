@@ -109,7 +109,7 @@ class LoginFormState extends State<LoginForm> {
       // print(user.user_id);
       // print(user.room_id);
       // print(user.is_admin);
-
+      print(user.status);
       return user;
     } else {
       Scaffold.of(context)
