@@ -6,13 +6,7 @@ class PersonalTasks extends StatelessWidget {
   // String task_id;
   bool completed;
   PersonalTasks(this.task, this.completed);
-  // PersonalTasks(this.task);
-
-  // void toggle (){
-  //   setState(){
-  //     completed = !completed;
-  //   }
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +41,7 @@ class GroupCategory extends StatelessWidget {
       ),
       child: Text(category, 
       style: completedPublic ?DoneMutedText : MutedText, 
-      textAlign: TextAlign.center),
+      textAlign: TextAlign.left),
     );
   }
 }
