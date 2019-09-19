@@ -111,3 +111,16 @@ const AddTaskBody = TextStyle(
   fontSize: 16.0,
   color: Colors.black,
 );
+
+const CompletedBy = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w600,
+  fontSize: 17.0,
+  color: Colors.black,
+);
+
+const TextInBox =  TextStyle(
+    fontFamily: FontNameDefault,
+    color: Color(0xFF0C324E),
+    fontWeight: FontWeight.w600,
+    fontSize: 18.0);
