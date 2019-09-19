@@ -16,8 +16,7 @@ import '../main.dart';
 import '../style.dart';
 import '../widgets/appbar.dart';
 import '../widgets/tasks.dart';
-import '../widgets/publicdialog.dart';
-// import '../widgets/newtasks.dart';
+import '../public/category.dart';
 
 class TodoPage extends StatefulWidget {
   TodoPage({Key key}) : super(key: key);
@@ -39,6 +38,7 @@ class TodoState extends State<TodoPage> {
   List<String> _categoryId = [];
   List<bool> _is_completedPB = [];
   List<String> _completed_byPB = [];
+  List<String> _created_byPB = [];
 
  Future<Null> _selectDate() async {
     final DateTime picked = await showDatePicker(
@@ -155,7 +155,7 @@ class TodoState extends State<TodoPage> {
       '$url',
       headers: {'Authorization': 'Bearer $token'},
     );
-    // print(response.body);
+    print(response.body);
     final responseJson = jsonDecode(response.body);
 
     // List<String> room_id = [];
@@ -163,17 +163,20 @@ class TodoState extends State<TodoPage> {
     List<String> category_id = [];
     List<bool> is_completedPB = [];
     List<String> completed_byPB = [];
+    List<String> created_byPB = [];
     for (int i = 0; i < responseJson.length; i++) {
       category.add(responseJson[i]["category"]);
       category_id.add(responseJson[i]["id"]);
       completed_byPB.add(responseJson[i]["completed by"]);
       is_completedPB.add(responseJson[i]["is completed"]);
+      created_byPB.add(responseJson[i]["created by"]);
     }
     setState(() => _category = category);
     setState(() => _categoryLength = category.length);
     setState(() => _categoryId = category_id);
     setState(() => _is_completedPB = is_completedPB);
     setState(() => _completed_byPB = completed_byPB);
+    setState(() => _created_byPB = created_byPB);
   }
 
   // getPublicTask() async{ 
@@ -681,11 +684,15 @@ class TodoState extends State<TodoPage> {
                                   itemBuilder: (context, index) {
                                     var category = _category;
                                     var categoryStatus = _is_completedPB;
+                                    var completed_byPB = _completed_byPB;
+                                    var created_byPB = _created_byPB;
                                     var descriptionPublic = _category[index];
                                     var categoryId =
                                         int.parse(_categoryId[index]);
                                     bool completedPublic =
                                         _is_completedPB[index];
+                                    var completedby = _completed_byPB[index];
+                                    var createdby = _created_byPB[index];
                                     return Dismissible(
                                       direction: DismissDirection.endToStart,
                                       key: Key(descriptionPublic),
@@ -693,9 +700,13 @@ class TodoState extends State<TodoPage> {
                                         _deletePublicCategory(categoryId);
                                         category.removeAt(index);
                                         categoryStatus.removeAt(index);
+                                        completed_byPB.removeAt(index);
+                                        created_byPB.removeAt(index);
                                         setState(() {
                                           _category = category;
                                           _is_completedPB = categoryStatus;
+                                          _completed_byPB = completed_byPB;
+                                          _created_byPB = created_byPB;
                                           _categoryLength = category.length;
                                         });
                                         // Shows the information on Snackbar
@@ -736,6 +747,9 @@ class TodoState extends State<TodoPage> {
                                           child: GestureDetector(
                                             onTap: (){
                                               print("HI");
+                                              Navigator.push(context,
+                                                MaterialPageRoute(builder: (context)=>CategoryPage(categoryId.toString(),descriptionPublic,createdby,completedby))
+                                              );
                                             },
                                             child:Container(
                                               child:
@@ -757,4 +771,3 @@ class TodoState extends State<TodoPage> {
             ])));
   }
 }
-

@@ -42,6 +42,8 @@ class CategoryState extends State<CategoryPage> {
   String completedBy;
   CategoryState(this.categoryId,this.category,this.createdBy,this.completedBy);
 
+  String _createdByName = '';
+  bool _memberDeleted = false;
   List _members = [];
   List _memberColors = [];
   List _memberIds = [];
@@ -66,10 +68,21 @@ class CategoryState extends State<CategoryPage> {
     List members = prefs.getStringList('members');
     List memberColors = prefs.getStringList('member_color');
     List memberIds = prefs.getStringList('member_id');
+    int creatorPosition = memberIds.indexOf(createdBy);
+    String creatorName = '';
+    bool memberDeleted = false;
+    if (creatorPosition != -1) {
+      creatorName = members[creatorPosition];
+    } else {
+      creatorName = "<deleted>";
+      memberDeleted = true;
+    };
     setState(() {
       _members = members;
       _memberColors = memberColors;
       _memberIds = memberIds;
+      _createdByName = creatorName;
+      _memberDeleted = memberDeleted;
     });
   }
 
@@ -201,7 +214,9 @@ class CategoryState extends State<CategoryPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text('Creator : ',style:BoldFont,textAlign:TextAlign.center),
-                        Text('$createdBy',style:NormalFont,textAlign:TextAlign.center),
+                        Text('$_createdByName',
+                          style: _memberDeleted ? NormalFontItalics : NormalFont,
+                          textAlign:TextAlign.center),
                       ],
                     ) 
                   ),
