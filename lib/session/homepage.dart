@@ -60,7 +60,6 @@ class HomePageState extends State<HomePage> {
     super.initState();
     getStoredData();
     getCurrentUser();
-    getHousemates();
   }
 
   Future<void> getStoredData() async{
@@ -94,7 +93,10 @@ class HomePageState extends State<HomePage> {
     setState(() => _roomid = roomId);
     setState(() => _username = username);
     setState(() => _isAdmin = isAdmin);
-  }
+
+    await new Future.delayed(const Duration (seconds:1));
+    getHousemates();
+    }
   
   // GET REQUEST FOR ALL PEOPLE IN THE ROOM:
   Future<void> getHousemates() async {
@@ -107,6 +109,7 @@ class HomePageState extends State<HomePage> {
       '$url',
       headers:  {"Content-type": "application/json"}
     );
+    print(response.body);
     final responseJson = jsonDecode(response.body);
     _Housemates housemates = new _Housemates.fromJson(responseJson);
 

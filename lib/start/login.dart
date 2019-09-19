@@ -207,17 +207,18 @@ class LoginFormState extends State<LoginForm> {
                                     _formkey.currentState.save();
                                     var user =
                                         await _login(username, password);
-                                    if (user.room_id!=null) {
+                                    print(user.room_id);
+                                    if (user.room_id.isEmpty || user.room_id == null || user.room_id == "NULL" || user.room_id == "None") {
                                       await new Future.delayed(
                                           const Duration(seconds: 1));
                                       Navigator.pushNamed(
-                                          context, HomeRoute);
+                                          context, GetStartedRoute);
                                     }
                                     else{
                                       await new Future.delayed(
                                           const Duration(seconds: 1));
                                       Navigator.pushNamed(
-                                          context, GetStartedRoute);
+                                          context, HomeRoute);
                                     }
                                   }
                                 },

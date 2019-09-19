@@ -7,6 +7,7 @@ import 'package:flushbar/flushbar.dart';
 import 'dart:async';
 import 'dart:convert';
 
+import '../main.dart';
 import '../style.dart';
 import '../session/profile.dart';
 
@@ -60,8 +61,9 @@ class HouseMembersProfile extends StatefulWidget{
 }
 
 class _HouseMembersProfileState extends State<HouseMembersProfile>{
+  String _currUserId = '';
+
   Future<bool> _kickuser(int userId) async{
-    final storage = FlutterSecureStorage();
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/kick';
     String json = '{"kicked_id": "${widget.memberid}"}';
@@ -80,6 +82,68 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
       return true;
     }
   }
+
+  Future<bool> _deleteroom() async{
+    String token = await storage.read(key: 'jwt');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String roomId = prefs.getString('room_id');
+    String curruserId = prefs.getString('user_id');
+    String url = 'http://10.0.2.2:5000/api/v1/users/deleteroom';
+    String json = '{"room_id": "$roomId"}';
+    http.Response response = await http.post(
+      url,
+      headers: {
+        'Content-type':'application/json',
+        'Authorization':'Bearer $token'
+      },
+      body: json,
+    );
+    final jsonResponse = jsonDecode(response.body);
+    _Kick deleteRoom = new _Kick.fromJson(jsonResponse);
+    print(deleteRoom.status);
+    if (deleteRoom.status == "success") {
+      setState(()=>_currUserId=curruserId);
+      print(_currUserId);
+      return true;
+    }
+  }
+
+void _showAlertDialog() {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Container(
+          padding: EdgeInsets.all(20.0),
+          child: Text(
+            'Are you sure you want to destroy this room? :(',
+            style: TextStyle(color: Colors.black),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        actions: <Widget>[
+          RaisedButton(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            color: Color(0xFF61C6C0),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            onPressed: () {
+              _deleteroom();
+              Navigator.pushNamed(context,GetStartedRoute);
+            },
+            child: Text('Yes')
+          ),
+          RaisedButton(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            color: Colors.red,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            onPressed: () {Navigator.pop(context);},
+              child: Text('Close')
+          ),
+        ],
+      );
+    }
+  );
+}
 
   @override
   Widget build(BuildContext context){
@@ -106,16 +170,22 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () async {
-                  var kick = await _kickuser(widget.memberid);
-                  if(kick){
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  String curruserId = prefs.getString('user_id');
+                  print('memberid: ${widget.memberid}');
+                  print('state: $curruserId');
+                  if(widget.memberid != int.parse(curruserId)){
+                    _kickuser(widget.memberid);
                     Flushbar(
                       message:'${widget.member} has been successfully kicked out :(',
                       backgroundColor: Colors.red,
                       duration: Duration(seconds: 3),
                       )..show(context);
-                  widget.callback(widget.memberid);
-                  //NEED TO IMPLEMENT IF ADMIN KICK THEMSELVES OUT, DESTROY ROOM INSTEAD :()
-                  //REROUTE TO GETSTARTED PAGE IN THAT CONTEXT
+                    widget.callback(widget.memberid);
+                  } else {
+                    _showAlertDialog();
+                    // _deleteroom();
+                    // Navigator.pushNamed(context,GetStartedRoute);
                   }
                 },
                 child: Icon(

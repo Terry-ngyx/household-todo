@@ -268,7 +268,7 @@ class CategoryState extends State<CategoryPage> {
                               icon: Icon(Icons.add,color: Colors.white,size: 35.0,),
                               onPressed: (){
                                 _addPublicTask(taskController.text,categoryId);
-                                FocusScope.of(context).unfocus();
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 WidgetsBinding.instance.addPostFrameCallback( (_) => taskController.clear());
                               },
                             ),
