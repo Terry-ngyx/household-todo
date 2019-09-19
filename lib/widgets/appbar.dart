@@ -53,7 +53,7 @@ class NavBar extends StatelessWidget {
             )
           ),
           Expanded(
-            flex:1,
+            flex:2,
             child: Container(
               child: Text(pageTitle,
                 style: AppBarTitle,

@@ -74,7 +74,6 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
       body: json,
     );
     final jsonResponse = jsonDecode(response.body);
-    print(response.body);
     _Kick kickUser = new _Kick.fromJson(jsonResponse);
     print(kickUser.status);
     if (kickUser.status == "success") {
@@ -115,6 +114,8 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
                       duration: Duration(seconds: 3),
                       )..show(context);
                   widget.callback(widget.memberid);
+                  //NEED TO IMPLEMENT IF ADMIN KICK THEMSELVES OUT, DESTROY ROOM INSTEAD :()
+                  //REROUTE TO GETSTARTED PAGE IN THAT CONTEXT
                   }
                 },
                 child: Icon(
@@ -127,6 +128,34 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
           )
           :
           Container()
+      ],)
+    );
+  }
+}
+
+class HouseMembers2 extends StatelessWidget{
+  String member;
+  int color;
+
+  HouseMembers2(this.member,this.color);
+
+  @override
+  Widget build(BuildContext context){
+    return Container(
+      width: 85.0,
+      child: Column(children: <Widget>[
+        Center(
+          child: Container(
+            width: 20.0,
+            height: 20.0,
+            margin: EdgeInsets.fromLTRB(0.0, 15.0, 10.0, 10.0),
+            decoration: BoxDecoration(
+              color: Color(color),
+              shape: BoxShape.circle
+            )
+          )
+        ),
+        Text(member,textAlign:TextAlign.center,style: MemberNames)
       ],)
     );
   }

@@ -52,8 +52,8 @@ class _User {
       status: parsedJson['status'],
       jwt_token: parsedJson['jwt_token'],
       user_id: parsedJson['user_id'],
-      room_id: parsedJson['room_id'],
-      is_admin: parsedJson['is_admin'],
+      room_id: parsedJson['room id'],
+      is_admin: parsedJson['is admin'],
     );
   }
 }

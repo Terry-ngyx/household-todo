@@ -11,6 +11,8 @@ import 'session/homepage.dart';
 import 'session/todo.dart';
 import 'session/profile.dart';
 import 'session/profileedit.dart';
+import 'public/category.dart';
+import 'public/test.dart';
 
 const Home = '/';
 const LoginRoute = '/login';
@@ -20,6 +22,7 @@ const GetStartedRoute = '/getstarted';
 const TodoRoute = '/todo';
 const ProfileRoute = '/profile';
 const ProfileEditRoute = '/profileedit';
+const TestRoute = '/test';
 
 void main() => runApp(MyApp());
 
@@ -67,6 +70,8 @@ class Router{
         return MaterialPageRoute(builder:(_) => ProfilePage());
       case ProfileEditRoute:
         return MaterialPageRoute(builder:(_) => ProfileEditPage());
+      case TestRoute:
+        return MaterialPageRoute(builder:(_) => TestPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

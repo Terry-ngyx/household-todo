@@ -79,7 +79,6 @@ class HomePageState extends State<HomePage> {
       '$url',
       headers:  {'Authorization': 'Bearer $token'},
     );
-    print(response.body);
     final responseJson = jsonDecode(response.body);
     _Current currentUser = new _Current.fromJson(responseJson);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -108,7 +107,6 @@ class HomePageState extends State<HomePage> {
       '$url',
       headers:  {"Content-type": "application/json"}
     );
-    print(response.body);
     final responseJson = jsonDecode(response.body);
     _Housemates housemates = new _Housemates.fromJson(responseJson);
 
@@ -246,8 +244,15 @@ class HomePageState extends State<HomePage> {
                           border: Border.all(width:3.0,color: Color(0xFF61C6C0)),
                           borderRadius: BorderRadius.circular(15.0)
                         ),
-                        child: Center(
-                          child: Text('Assign to Me',textAlign: TextAlign.center,style: TitleText)
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap:() {
+                            Navigator.pushNamed(context,TestRoute);
+                            print("are you working?");
+                          },
+                          child: Center(
+                            child: Text('Assign to Me',textAlign: TextAlign.center,style: TitleText)
+                          )
                         )
                       ),
                       //Schedule
