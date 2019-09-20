@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import '../style.dart';
 import '../main.dart';
@@ -35,8 +36,8 @@ String getdate(DateTime date) {
   return "${date.day}-${date.month}-${date.year}";
 }
 
-String getdate_post(DateTime date) {
-  return "${date.year}-${date.month}-${date.day} 12:12:00";
+String getdate_post(DateTime date, TimeOfDay time) {
+  return "${date.year}-${date.month}-${date.day} ${time.hour}:${time.minute}:00";
 }
 
 String getday(DateTime date) {
@@ -53,12 +54,14 @@ class _SchedulePageState extends State<SchedulePage> {
   DateTime date;
   String _repeatedBy;
   Map<DateTime, List> _events = {};
-  List _selectedEvents;
+  List _selectedEvents = [];
+  List<String> abc = ['A', 'B', 'C'];
   // DateTime _selectedDay;
   CalendarController _calendarController;
 
   ////////////////////////////GET REQUEST GETTING TASKS////////////////////////////
   Future<void> _getScheduledTask() async {
+    print('Fetching');
     List<DateTime> dateTimes = [];
     List<String> task;
     List<List<String>> tasks = [];
@@ -87,7 +90,8 @@ class _SchedulePageState extends State<SchedulePage> {
     for (int x = 0; x < distinctDateTimes.length; x++) {
       task = [];
       for (int y = 0; y < responseJson.length; y++) {
-        if (distinctDateTimes[x] == DateTime.parse('${responseJson[y]["date"]} 00:00:00.000')) {
+        if (distinctDateTimes[x] ==
+            DateTime.parse('${responseJson[y]["date"]} 00:00:00.000')) {
           task.add(responseJson[y]["task"]);
         }
       }
@@ -98,22 +102,27 @@ class _SchedulePageState extends State<SchedulePage> {
       _events.addAll({distinctDateTimes[x]: tasks[x]});
     }
 
-    setState(()=>_events = _events);
-    // print(distinctDateTimes);
-    // print(tasks);
+    DateTime x = DateTime.parse(
+        '${DateTime.now().toString().split(" ")[0]} 00:00:00.000');
+    setState(() {
+      _events = _events;
+      _selectedEvents = _events[x] ?? [];
+    });
+    print(_events);
+    print('Fetched');
   }
 
   @override
   void initState() {
     _calendarController = CalendarController();
     _getScheduledTask();
+    print('dsidasghkjsdsd');
+    // DateTime distinctDateTimes = DateTime.parse('2019-09-19 00:00:00.000');
+    // print('enetajijr ${DateTime.now()}');
+    print(_events);
+    _selectedEvents = _events[DateTime.now()] ?? [];
+    print(_selectedEvents);
     super.initState();
-    // final _selectedDay = DateTime.now();
-
-    // // print(_selectedDay);
-
-    // _selectedEvents = _events[_selectedDay] ?? [];
-    // print(_selectedEvents);
   }
 
   @override
@@ -162,35 +171,187 @@ class _SchedulePageState extends State<SchedulePage> {
                   outsideDaysVisible: false,
                 ),
               ),
-              RaisedButton(
-                color: Color(0xFFF73D99),
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(15.0)),
-                padding: EdgeInsets.all(15.0),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        if (date == null) {
-                          date = DateTime.now();
-                          return DialogBox(date);
-                        } else {
-                          return DialogBox(date);
-                        }
-                        // return DialogBox(callback);
-                      });
-                },
-                child: Text('Add Task',
-                    textAlign: TextAlign.center, style: BtnText),
-              ),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0.0, 20.0, 40.0, 10.0),
+                          constraints:
+                              BoxConstraints.expand(height: 40.0, width: 40.0),
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 40.0,
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0.0, 20.0, 9.0, 5.0),
+                          child: Text('Personal', style: TitleText),
+                        ),
+                        SizedBox(
+                          width: 110.0,
+                        ),
+                        Container(
+                            margin: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 5.0),
+                            width: 80,
+                            child: GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      if (date == null) {
+                                        date = DateTime.now();
+                                        return DialogBox(
+                                            date, _getScheduledTask);
+                                      } else {
+                                        return DialogBox(
+                                            date, _getScheduledTask);
+                                      }
+                                      // return DialogBox(callback);
+                                    });
+                              },
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 40.0,
+                              ),
+                            ) //add icon
+                            )
+                      ],
+                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        width: 500.0,
+                        padding: EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                                width: 500.0,
+                                height: 200.0,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: _selectedEvents.length,
+                                    itemBuilder: (context, index) {
+                                      var task = _selectedEvents;
+                                      // var taskStatus = is_completed;
+                                      var description = _selectedEvents[index];
+                                      // bool completed = is_completed[index];
+                                      // return PersonalTasks(description);
+                                      // return PersonalTasks(description,completed,task_id);
+                                      return Dismissible(
+                                        direction: DismissDirection.endToStart,
+                                        key: Key(description),
+                                        onDismissed: (direction) {
+                                          setState(() {
+                                            task.removeAt(index);
+                                            // taskStatus.removeAt(index);
+                                            print(task.length);
+                                          });
+                                          // Shows the information on Snackbar
+                                          Scaffold.of(context).showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      " Task $description dismissed !")));
+                                        },
+                                        background: Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              0.0, 9.0, 0.0, 9.0),
+                                          alignment:
+                                              AlignmentDirectional.centerEnd,
+                                          height: 50,
+                                          color: Colors.red,
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0, 0, 20, 0),
+                                            child: Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                              size: 40.0,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              0.0, 5.0, 0.0, 5.0),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                // is_completed[index] =
+                                                //     !is_completed[index];
+                                              });
+                                            },
+                                            child: PersonalTasks(description),
+                                          ),
+                                        ),
+                                      );
+                                    })),
+                          ],
+                        )),
+                  ])),
+              // RaisedButton(
+              //   color: Color(0xFFF73D99),
+              //   shape: RoundedRectangleBorder(
+              //       borderRadius: new BorderRadius.circular(15.0)),
+              //   padding: EdgeInsets.all(15.0),
+              //   onPressed: () {
+              //     showDialog(
+              //         context: context,
+              //         builder: (context) {
+              //           if (date == null) {
+              //             date = DateTime.now();
+              //             return DialogBox(date, _getScheduledTask);
+              //           } else {
+              //             return DialogBox(date, _getScheduledTask);
+              //           }
+              //           // return DialogBox(callback);
+              //         });
+              //   },
+              //   child: Text('Add Task',
+              //       textAlign: TextAlign.center, style: BtnText),
+              // ),
             ]))));
+  }
+}
+
+class PersonalTasks extends StatelessWidget {
+  String task;
+  // String task_id;
+  PersonalTasks(this.task);
+  // PersonalTasks(this.task);
+
+  // void toggle (){
+  //   setState(){
+  //     completed = !completed;
+  //   }
+  // }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: 100.0,
+      width: 500.0,
+      margin: EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 4.0),
+      padding: EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
+
+      // color: completed ? Color(0xFF848484) : Color(0xFF61C6C0),
+      child: Text(task, textAlign: TextAlign.left),
+      // )
+    );
   }
 }
 
 class DialogBox extends StatefulWidget {
   DateTime date;
+  Function callback;
   // Function(String) callback;
-  DialogBox(this.date);
+  ///asdasd
+  DialogBox(this.date, this.callback);
   @override
   _DialogBoxState createState() => _DialogBoxState();
 }
@@ -198,11 +359,25 @@ class DialogBox extends StatefulWidget {
 /////////////////////////////// DIALOG BOX //////////////////////////////////
 class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
   List<String> _repeatBy = ['weekly', 'monthly']; // Option 2
-  List<String> _repeatFor = [for (var i = 0; i < 51; i += 1) '$i'];
+  List<String> _repeatFor = [for (var i = 1; i < 51; i += 1) '$i'];
+  TimeOfDay _time = new TimeOfDay.now();
+  bool isButtonEnabled = false;
   final taskController = TextEditingController();
   // List<String> _repeatFor =
-  String _repeatedBy = 'monthly';
-  String _repeatedFor = '12';
+  String _repeatedBy = 'weekly';
+  String _repeatedFor = '1';
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start listening to changes.
+    taskController.addListener(_printLatestValue);
+  }
+
+  _printLatestValue() {
+    print("Second text field: ${taskController.text}");
+  }
 
 ////////////////////////////POST REQUEST CREATE NEW TASK/////////////////////
   Future<String> _createTask(String task, String repeat_by, String repeat_for,
@@ -212,8 +387,6 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
     String url = 'http://10.0.2.2:5000/api/v1/users/new_scheduled';
     String json =
         '{"task": "$task", "repeat_by": "$repeat_by", "repeat_for": "$repeat_for", "repeat_on": "$repeat_on", "date_time": "$date_time"}';
-
-    print(json);
     // make POST request
     http.Response response = await http.post(
       '$url',
@@ -226,27 +399,42 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
 
     // check the status code for the result
     int statusCode = response.statusCode;
-
     final jsonResponse = jsonDecode(response.body);
-    print(response.body);
-    // _Room user = new _Room.fromJson(jsonResponse);
-    // print(user.status);
-    // if (user.status == "success") {
-    //   Scaffold.of(context)
-    //       .showSnackBar(SnackBar(content: Text('New Room created!')));
-    //   await new Future.delayed(const Duration(seconds: 1));
+  }
 
-    //   Navigator.pushNamed(context, HomeRoute);
+  void isEmpty() {
+    setState(() {
+      if (taskController.text.length == 0) {
+        isButtonEnabled = false;
+        print(isButtonEnabled);
+      } else {
+        isButtonEnabled = true;
+        print(isButtonEnabled);
+      }
+    });
+  }
 
-    //   return '';
-    // }
+  Future<Null> _selectTime() async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: _time,
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.dark(),
+          child: child,
+        );
+      },
+    );
+
+    if (picked != null && picked != _time) {
+      setState(() => _time = picked);
+    }
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     taskController.dispose();
-
     super.dispose();
   }
 
@@ -306,6 +494,10 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                       focusedBorder: OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(15.0),
                           borderSide: BorderSide(color: Colors.white))),
+                  onChanged: (val) {
+                    isEmpty();
+                    print('z');
+                  },
                 ),
               ),
               //////////////////// DROPDOWN BUTTON
@@ -371,20 +563,31 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                     },
                   ),
                 ),
+                RaisedButton(
+                    child:
+                        new Text('${_time.hour}' + ' : ' + '${_time.minute}'),
+                    onPressed: () {
+                      _selectTime();
+                    }),
               ]),
               Container(
                   margin: EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 50.0),
                   child: RaisedButton(
                     color: Color(0xFF61C6C0),
-                    onPressed: () async {
-                      _createTask(
-                          taskController.text,
-                          _repeatedBy,
-                          _repeatedFor,
-                          getday(widget.date),
-                          getdate_post(widget.date));
-                      Navigator.pop(context);
-                    },
+                    onPressed: isButtonEnabled
+                        ? () async {
+                            await _createTask(
+                                taskController.text,
+                                _repeatedBy,
+                                _repeatedFor,
+                                getday(widget.date),
+                                getdate_post(widget.date, _time));
+                            // print(_time.hour);
+                            print('task created, Fetching...');
+                            await widget.callback();
+                            Navigator.pop(context);
+                          }
+                        : null,
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(15.0)),
                     padding: EdgeInsets.all(15.0),
