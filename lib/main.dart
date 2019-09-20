@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_background_location/flutter_background_location.dart';
+import 'package:household/widgets/message.dart';
+
+import 'dart:async';
 
 import 'style.dart';
 import 'start/welcome.dart';
@@ -12,9 +16,6 @@ import 'session/todo.dart';
 import 'session/profile.dart';
 import 'session/profileedit.dart';
 import 'session/schedulepage.dart';
-import 'public/category.dart';
-import 'public/test.dart';
-
 
 const Home = '/';
 const LoginRoute = '/login';
@@ -30,10 +31,84 @@ const ScheduleRoute = '/schedule';
 void main() => runApp(MyApp());
 
 final storage = FlutterSecureStorage();
-final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
   // This widget is the root of your application.
+}
+
+class _MyAppState extends State<MyApp>{
+
+  Timer _timer;
+  List<Message> messages = [];
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+    print("hello");
+    
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
+          print("Got Message");
+          stopTimer();
+        }
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          messages.add(Message(
+              notification['title'], notification['body']));
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
+          print("Got Message");
+          stopTimer();
+        }
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          messages.add(Message(
+              notification['title'], notification['body']));
+        });
+      },
+      onResume: (Map<String, dynamic> message) async {
+        if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
+          print("Got Message");
+          stopTimer();
+        }
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          messages.add(Message(
+              notification['title'], notification['body']));
+        });
+      },
+    );
+    FlutterBackgroundLocation.startLocationService();
+    startTimer();
+    print("still working?");
+  }
+
+  void startTimer() {
+    setState(() {  
+      _timer = Timer.periodic(Duration(minutes: 15), (timer) {
+        getCurrentLocation();
+      });
+    });
+  }
+
+  void stopTimer() {
+    _timer.cancel();
+    Future.delayed(Duration(minutes: 10), () => startTimer());
+  }
+
+  getCurrentLocation() {
+    FlutterBackgroundLocation().getCurrentLocation().then((location) {
+      print("This is current Location " + location.longitude.toString() + " " + location.latitude.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +148,8 @@ class Router{
         return MaterialPageRoute(builder:(_) => ProfilePage());
       case ProfileEditRoute:
         return MaterialPageRoute(builder:(_) => ProfileEditPage());
-      case TestRoute:
-        return MaterialPageRoute(builder:(_) => TestPage());
       case ScheduleRoute:
-        return MaterialPageRoute(builder:(_) => SchedulePage());
+        return MaterialPageRoute(builder:(_) => Schedule());
 
       default:
         return MaterialPageRoute(

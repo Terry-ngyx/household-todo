@@ -83,7 +83,7 @@ class ProfileEditState extends State<ProfileEditForm> {
 
   //GET REQUEST TO SEE LIST OF USERS:
   Future <void> getExistingUserInfo() async{
-    String url = 'http://10.0.2.2:5000/api/v1/users/';
+    String url = 'http://192.168.1.137:5000/api/v1/users/';
     http.Response response = await http.get(url,headers:{"Content-type":"application/json"});
     final responseJson = jsonDecode(response.body);
     _UserInfo userInfo = new _UserInfo.fromJson(responseJson);
@@ -94,7 +94,7 @@ class ProfileEditState extends State<ProfileEditForm> {
   //POST REQUEST TO UPDATE USERNAME/EMAIL:
   _update(String updateUsername, String updateEmail) async{
     String token = await storage.read(key:'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/edit';
+    String url = 'http://192.168.1.137:5000/api/v1/users/edit';
     String json ='{"username": "$updateUsername", "email": "$updateEmail"}';
     http.Response response = await http.post(
       url,
