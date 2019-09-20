@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_background_location/flutter_background_location.dart';
+import 'package:household/widgets/message.dart';
 
 import 'dart:async';
 
@@ -30,8 +31,6 @@ const ScheduleRoute = '/schedule';
 void main() => runApp(MyApp());
 
 final storage = FlutterSecureStorage();
-final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -40,16 +39,69 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp>{
 
+  Timer _timer;
+  List<Message> messages = [];
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   @override
   void initState() {
     super.initState();
     print("hello");
-    print(FlutterBackgroundLocation.startLocationService());
+    
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
+          print("Got Message");
+          stopTimer();
+        }
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          messages.add(Message(
+              notification['title'], notification['body']));
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
+          print("Got Message");
+          stopTimer();
+        }
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          messages.add(Message(
+              notification['title'], notification['body']));
+        });
+      },
+      onResume: (Map<String, dynamic> message) async {
+        if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
+          print("Got Message");
+          stopTimer();
+        }
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          messages.add(Message(
+              notification['title'], notification['body']));
+        });
+      },
+    );
     FlutterBackgroundLocation.startLocationService();
-    Timer.periodic(Duration(seconds: 10), (timer) {
-      getCurrentLocation();
-    });
+    startTimer();
     print("still working?");
+  }
+
+  void startTimer() {
+    setState(() {  
+      _timer = Timer.periodic(Duration(minutes: 15), (timer) {
+        getCurrentLocation();
+      });
+    });
+  }
+
+  void stopTimer() {
+    _timer.cancel();
+    Future.delayed(Duration(minutes: 10), () => startTimer());
   }
 
   getCurrentLocation() {
