@@ -94,10 +94,10 @@ class HomePageState extends State<HomePage> {
     setState(() => _username = username);
     setState(() => _isAdmin = isAdmin);
 
+
     await new Future.delayed(const Duration (seconds:1));
     getHousemates();
     }
-  
   // GET REQUEST FOR ALL PEOPLE IN THE ROOM:
   Future<void> getHousemates() async {
     //Access Shared Preferences
@@ -167,7 +167,7 @@ class HomePageState extends State<HomePage> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(15.0)
                     ),
-                    child: Container(       
+                    child: Container(
                       child: Column(
                         children: <Widget>[
                           Text("Members",textAlign: TextAlign.center,style:TitleText),
@@ -267,8 +267,15 @@ class HomePageState extends State<HomePage> {
                           border: Border.all(width:3.0,color: Color(0xFFF73D99)),
                           borderRadius: BorderRadius.circular(15.0)
                         ),
-                        child: Center(
-                          child: Text('Schedule',textAlign: TextAlign.center,style: TitleText)
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap:() {
+                            Navigator.pushNamed(context,ScheduleRoute);
+                            print("are you working?");
+                          },
+                          child: Center(
+                            child: Text('Schedule',textAlign: TextAlign.center,style: TitleText)
+                          )
                         )
                       ),
                     ]

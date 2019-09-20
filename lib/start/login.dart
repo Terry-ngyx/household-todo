@@ -43,7 +43,7 @@ class _User {
   String jwt_token;
   String user_id;
   String room_id;
-  bool is_admin;
+  String is_admin;
 
   _User({this.status, this.jwt_token, this.user_id, this.room_id, this.is_admin});
 
@@ -101,7 +101,7 @@ class LoginFormState extends State<LoginForm> {
       print(user.room_id);
       prefs.setString('user_id',user.user_id);
       prefs.setString('user_room_id',user.room_id);
-      prefs.setBool('user_is_admin',user.is_admin);
+      prefs.setString('user_is_admin',user.is_admin);
       //Secured Storage
       await storage.write(key:'jwt',value:user.jwt_token);
       print(await storage.read(key:'jwt'));     //PLEASE REMEMBER TO DELETE
