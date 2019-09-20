@@ -43,7 +43,7 @@ class _SigninFormState extends State<SigninForm> {
   _signup(String userUsername, String userEmail, String userPassword,
       String userConfirmPassword) async {
     // set up POST request arguments
-    String url = 'http://192.168.1.137:5000/api/v1/users/signup';
+    String url = 'http://10.0.2.2:5000/api/v1/users/signup';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json =
         '{"username": "$userUsername", "email": "$userEmail", "password": "$userPassword", "confirmed_password": "$userConfirmPassword","android_token":"qweqwe"}';

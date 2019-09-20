@@ -31,6 +31,8 @@ const ScheduleRoute = '/schedule';
 void main() => runApp(MyApp());
 
 final storage = FlutterSecureStorage();
+final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -41,14 +43,13 @@ class _MyAppState extends State<MyApp>{
 
   Timer _timer;
   List<Message> messages = [];
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     super.initState();
     print("hello");
     
-    _firebaseMessaging.configure(
+    firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
           print("Got Message");

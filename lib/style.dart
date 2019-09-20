@@ -85,13 +85,6 @@ const NormalFontStriked = TextStyle(
   color: Color(0xFF0C324E),
   decoration: TextDecoration.lineThrough
 );
-const NormalFontItalics = TextStyle(
-  fontFamily: FontNameDefault,
-  fontWeight: FontWeight.w300,
-  fontSize: 15.0,
-  fontStyle: FontStyle.italic,
-  color: Colors.white54,
-);
 
 const MutedText = TextStyle(
   fontFamily: FontNameDefault,
