@@ -55,8 +55,10 @@ class _SchedulePageState extends State<SchedulePage> {
   DateTime date;
   String _repeatedBy;
   Map<DateTime, List> _events = {};
+  Map<DateTime, List> _id = {};
   List _selectedEvents = [];
-  List<String> abc = ['A', 'B', 'C'];
+  int selectedEventsLength = 0;
+  List _selectedId = [];
   // DateTime _selectedDay;
   CalendarController _calendarController;
 
@@ -65,7 +67,9 @@ class _SchedulePageState extends State<SchedulePage> {
     print('Fetching');
     List<DateTime> dateTimes = [];
     List<String> task;
+    List<String> id;
     List<List<String>> tasks = [];
+    List<List<String>> ids = [];
 
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/get/scheduled/all';
@@ -90,41 +94,63 @@ class _SchedulePageState extends State<SchedulePage> {
 
     for (int x = 0; x < distinctDateTimes.length; x++) {
       task = [];
+      id = [];
       for (int y = 0; y < responseJson.length; y++) {
         if (distinctDateTimes[x] ==
             DateTime.parse('${responseJson[y]["date"]} 00:00:00.000')) {
           task.add(responseJson[y]["task"]);
+          id.add(responseJson[y]["task_id"]);
         }
       }
       tasks.add(task);
+      ids.add(id);
     }
 
     for (int x = 0; x < distinctDateTimes.length; x++) {
       _events.addAll({distinctDateTimes[x]: tasks[x]});
+      _id.addAll({distinctDateTimes[x]: ids[x]});
     }
 
     DateTime x = DateTime.parse(
         '${DateTime.now().toString().split(" ")[0]} 00:00:00.000');
     setState(() {
       _events = _events;
+      _id = _id;
       _selectedEvents = _events[x] ?? [];
+      _selectedId = _id[x] ?? [];
+      selectedEventsLength = _selectedEvents.length;
     });
 
     
     print(_events);
+    print(_id);
     print('Fetched');
+  }
+
+  
+  _deleteScheduledTask(int _taskId) async {
+    String token = await storage.read(key: 'jwt');
+    String url = 'http://10.0.2.2:5000/api/v1/users/deletescheduledtask';
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+    String json = '{"task_id":"$_taskId"}';
+    http.Response response = await http.post(url, headers: headers, body: json);
+    int statusCode = response.statusCode;
+    final jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
   }
 
   @override
   void initState() {
     _calendarController = CalendarController();
     _getScheduledTask();
-    print('dsidasghkjsdsd');
-    // DateTime distinctDateTimes = DateTime.parse('2019-09-19 00:00:00.000');
-    // print('enetajijr ${DateTime.now()}');
-    print(_events);
     _selectedEvents = _events[DateTime.now()] ?? [];
+    _selectedId = _events[DateTime.now()] ?? [];
+    selectedEventsLength = _selectedEvents.length;
     print(_selectedEvents);
+    print(_selectedId);
     super.initState();
   }
 
@@ -134,16 +160,6 @@ class _SchedulePageState extends State<SchedulePage> {
     _calendarController.dispose();
     super.dispose();
   }
-
-  // void setEvent(_selectedDay) {
-  //   _events = {
-  //     _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
-  //     _selectedDay: ['Event A7', 'Event B7', 'Event C7', 'Event D7'],
-  //     _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
-  //   };
-
-  //   _selectedEvents = _events[_selectedDay] ?? [];
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -156,22 +172,26 @@ class _SchedulePageState extends State<SchedulePage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
               NavBar('Schedule', 0xFFF73D99, false),
-              
+
               Container(
-                margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
-                child: TableCalendar(
-                  calendarController: _calendarController,
-                  events: _events,
-                  onDaySelected: (calendar_date, events) {
-                    setState(() {
-                      _selectedEvents = events;
-                      print(_selectedEvents);
-                    });
-                    date = calendar_date;
-                    // print(getdate(date));
-                    // print(getweekday(date));
-                  },
-                  daysOfWeekStyle: DaysOfWeekStyle(
+                  margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
+                  child: TableCalendar(
+                      calendarController: _calendarController,
+                      events: _events,
+                      onDaySelected: (calendar_date, events) {
+                        setState(() {
+                          _selectedEvents = events;
+                          print(_selectedEvents);
+                        });
+                        // print(_id);
+                        date = DateTime.parse(
+                            '${calendar_date.toString().split(" ")[0]} 00:00:00.000');
+                        // print(date);
+                        // print(_id[date]);
+                        _selectedId = _id[date];
+                        print(_selectedId);
+                      },
+                      daysOfWeekStyle: DaysOfWeekStyle(
                     weekdayStyle: TextStyle(color: Color(0xFF61C6C0)),
                     weekendStyle: TextStyle(color: Color(0xFFBDCC11))
                   ),
@@ -283,20 +303,25 @@ class _SchedulePageState extends State<SchedulePage> {
                                 height: 200.0,
                                 child:  ListView.builder(
                                     scrollDirection: Axis.vertical,
-                                    itemCount: _selectedEvents.length,
+                                    itemCount: selectedEventsLength,
                                     itemBuilder: (context, index) {
-                                      var task = _selectedEvents;
-                                      // var taskStatus = is_completed;
+                                      var task = _selectedEvents ?? [];
+                                      var ids = _selectedId ?? [];
+                                      var id = int.parse(_selectedId[index]);
                                       var description = _selectedEvents[index];
-                                      // bool completed = is_completed[index];
-                                      // return PersonalTasks(description);
-                                      // return PersonalTasks(description,completed,task_id);
+                                      
                                       return Dismissible(
                                         direction: DismissDirection.endToStart,
                                         key: Key(description),
                                         onDismissed: (direction) {
-                                          setState(() {
+                                            _deleteScheduledTask(id);
                                             task.removeAt(index);
+                                            ids.removeAt(index);
+                                          setState(() {
+                                          _selectedEvents=task;
+                                          _selectedId = ids;
+                                          selectedEventsLength = _selectedEvents.length;
+
                                             // taskStatus.removeAt(index);
                                             print(task.length);
                                           });
