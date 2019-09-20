@@ -68,8 +68,8 @@ class LoginFormState extends State<LoginForm> {
     String url = 'http://10.0.2.2:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
 
-    // var fcmToken = await getDeviceToken();
-    var fcmToken = "qweqwe";
+    var fcmToken = await getDeviceToken();
+    // var fcmToken = "qweqwe";
 
     String json = '{"username": "$userUsername", "password": "$userPassword", "android_token": "$fcmToken"}';
     // print(json);
