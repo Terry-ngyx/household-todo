@@ -17,8 +17,8 @@ class PersonalTasks extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
 
           color: completed ? Color(0xFF848484) : Color(0xFF61C6C0),
-          child: Text(task, 
-          style:completed? DoneMutedText : MutedText, 
+          child: Text(task,
+          style:completed? DoneMutedText : MutedText,
           textAlign: TextAlign.left),
         // )
         );

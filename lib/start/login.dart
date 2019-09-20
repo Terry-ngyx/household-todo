@@ -43,7 +43,7 @@ class _User {
   String jwt_token;
   String user_id;
   String room_id;
-  bool is_admin;
+  String is_admin;
 
   _User({this.status, this.jwt_token, this.user_id, this.room_id, this.is_admin});
 
