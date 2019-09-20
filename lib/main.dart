@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_background_location/flutter_background_location.dart';
+
+import 'dart:async';
 
 import 'style.dart';
 import 'start/welcome.dart';
@@ -12,9 +15,6 @@ import 'session/todo.dart';
 import 'session/profile.dart';
 import 'session/profileedit.dart';
 import 'session/schedulepage.dart';
-import 'public/category.dart';
-import 'public/test.dart';
-
 
 const Home = '/';
 const LoginRoute = '/login';
@@ -32,8 +32,31 @@ void main() => runApp(MyApp());
 final storage = FlutterSecureStorage();
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
   // This widget is the root of your application.
+}
+
+class _MyAppState extends State<MyApp>{
+
+  @override
+  void initState() {
+    super.initState();
+    print("hello");
+    print(FlutterBackgroundLocation.startLocationService());
+    FlutterBackgroundLocation.startLocationService();
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      getCurrentLocation();
+    });
+    print("still working?");
+  }
+
+  getCurrentLocation() {
+    FlutterBackgroundLocation().getCurrentLocation().then((location) {
+      print("This is current Location " + location.longitude.toString() + " " + location.latitude.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +96,8 @@ class Router{
         return MaterialPageRoute(builder:(_) => ProfilePage());
       case ProfileEditRoute:
         return MaterialPageRoute(builder:(_) => ProfileEditPage());
-      case TestRoute:
-        return MaterialPageRoute(builder:(_) => TestPage());
       case ScheduleRoute:
-        return MaterialPageRoute(builder:(_) => SchedulePage());
+        return MaterialPageRoute(builder:(_) => Schedule());
 
       default:
         return MaterialPageRoute(

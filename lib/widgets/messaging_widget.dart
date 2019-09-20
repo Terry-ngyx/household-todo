@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_location/flutter_background_location.dart';
 import 'package:household/widgets/message.dart';
 import '../main.dart';
 
@@ -19,6 +20,10 @@ class _MessagingWidgetState extends State<MessagingWidget> {
 
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
+
+        if (message['data'].title == "There's a grocery shop nearby! Do your work!"){
+          // FlutterBackgroundLocation.stopLocationService();
+        }
         print("onMessage: $message");
         final notification = message['notification'];
         setState(() {

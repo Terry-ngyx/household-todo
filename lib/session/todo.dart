@@ -16,7 +16,6 @@ import '../main.dart';
 import '../style.dart';
 import '../widgets/appbar.dart';
 import '../widgets/tasks.dart';
-import '../public/category.dart';
 
 class TodoPage extends StatefulWidget {
   TodoPage({Key key}) : super(key: key);
@@ -78,7 +77,7 @@ class TodoState extends State<TodoPage> {
 
   getPrivateTask() async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/get/private_task';
+    String url = 'http://192.168.1.137:5000/api/v1/users/get/private_task';
     http.Response response = await http.get(
       '$url',
       headers: {'Authorization': 'Bearer $token'},
@@ -104,7 +103,7 @@ class TodoState extends State<TodoPage> {
 
   _postPrivateTask(String _tasks) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/newprivatetask';
+    String url = 'http://192.168.1.137:5000/api/v1/users/newprivatetask';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -119,7 +118,7 @@ class TodoState extends State<TodoPage> {
 
   _completedPrivateTask(int _taskId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/completeprivatetask';
+    String url = 'http://192.168.1.137:5000/api/v1/users/completeprivatetask';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -133,7 +132,7 @@ class TodoState extends State<TodoPage> {
 
   _deletePrivateTask(int _taskId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/deleteprivatetask';
+    String url = 'http://192.168.1.137:5000/api/v1/users/deleteprivatetask';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -150,7 +149,7 @@ class TodoState extends State<TodoPage> {
     String roomId = prefs.getString("room_id");
     String token = await storage.read(key: 'jwt');
     String url =
-        'http://10.0.2.2:5000/api/v1/users/get/public_category/$roomId';
+        'http://192.168.1.137:5000/api/v1/users/get/public_category/$roomId';
     http.Response response = await http.get(
       '$url',
       headers: {'Authorization': 'Bearer $token'},
@@ -185,7 +184,7 @@ class TodoState extends State<TodoPage> {
 
   _postPublicCategory(String _category, String _completed_byPB) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/newpubliccategory';
+    String url = 'http://192.168.1.137:5000/api/v1/users/newpubliccategory';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -201,7 +200,7 @@ class TodoState extends State<TodoPage> {
 
   _completedPublicCategory(int _categoryId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/completepubliccategory';
+    String url = 'http://192.168.1.137:5000/api/v1/users/completepubliccategory';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -215,7 +214,7 @@ class TodoState extends State<TodoPage> {
 
   _deletePublicCategory(int _categoryId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/deletepubliccategory';
+    String url = 'http://192.168.1.137:5000/api/v1/users/deletepubliccategory';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"

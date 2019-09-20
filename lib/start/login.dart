@@ -65,11 +65,11 @@ class LoginFormState extends State<LoginForm> {
   Future<_User> _login(String userUsername, String userPassword) async {
 
     // set up POST request arguments
-    String url = 'http://10.0.2.2:5000/api/v1/users/login';
+    String url = 'http://192.168.1.137:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
 
-    // var fcmToken = await getDeviceToken();
-    var fcmToken = "qweqwe";
+    var fcmToken = await getDeviceToken();
+    // var fcmToken = "qweqwe";
 
     String json = '{"username": "$userUsername", "password": "$userPassword", "android_token": "$fcmToken"}';
     // print(json);

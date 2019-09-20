@@ -47,7 +47,7 @@ class JoinRoomFormState extends State<JoinRoomForm> {
     String token = await storage.read(key: 'jwt');
     print(token);
     // set up POST request arguments
-    String url = 'http://10.0.2.2:5000/api/v1/users/create';
+    String url = 'http://192.168.1.137:5000/api/v1/users/create';
 
     // make POST request
     http.Response response = await http.post(
@@ -78,7 +78,7 @@ class JoinRoomFormState extends State<JoinRoomForm> {
   Future<String> _joinRoom(String room_id) async {
     String token = await storage.read(key: 'jwt');
     // set up POST request arguments
-    String url = 'http://10.0.2.2:5000/api/v1/users/join';
+    String url = 'http://192.168.1.137:5000/api/v1/users/join';
     // Map<String, String> headers = {
     //   "Content-type": "application/json",
     //   'Authorization': 'Bearer $token',

@@ -89,7 +89,7 @@ class CategoryState extends State<CategoryPage> {
   //GET REQUEST TO GET TASK LIST IN THE PUBLIC CATEGORY
   _getPublicTask(String categoryId) async{
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/get/public_task/$categoryId';
+    String url = 'http://192.168.1.137:5000/api/v1/users/get/public_task/$categoryId';
     http.Response response = await http.get(
       url,
       headers:{'Authorization':'Bearer $token'}
@@ -120,7 +120,7 @@ class CategoryState extends State<CategoryPage> {
   //POST REQUEST TO ADD ITEMS
   _addPublicTask(String task, String categoryId) async{
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/newpublictask';
+    String url = 'http://192.168.1.137:5000/api/v1/users/newpublictask';
     String json = '{"task":"$task","category_id":"$categoryId"}';
     http.Response response = await http.post(
       url,
