@@ -10,6 +10,7 @@ import '../style.dart';
 import '../main.dart';
 import 'dart:async';
 import 'dart:convert';
+import '../widgets/appbar.dart';
 
 String getweekday(DateTime date) {
   switch (date.weekday) {
@@ -108,6 +109,8 @@ class _SchedulePageState extends State<SchedulePage> {
       _events = _events;
       _selectedEvents = _events[x] ?? [];
     });
+
+    
     print(_events);
     print('Fetched');
   }
@@ -146,54 +149,97 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        body: Center(
+        body: Container(
             child: SingleChildScrollView(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-              TableCalendar(
-                calendarController: _calendarController,
-                events: _events,
-                onDaySelected: (calendar_date, events) {
-                  setState(() {
-                    _selectedEvents = events;
-                    print(_selectedEvents);
-                  });
-                  date = calendar_date;
-                  // print(getdate(date));
-                  // print(getweekday(date));
-                },
-                calendarStyle: CalendarStyle(
-                  selectedColor: Colors.deepOrange[400],
-                  todayColor: Colors.deepOrange[200],
-                  markersColor: Colors.white,
-                  outsideDaysVisible: false,
+              NavBar('Schedule', 0xFFF73D99, false),
+              
+              Container(
+                margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
+                child: TableCalendar(
+                  calendarController: _calendarController,
+                  events: _events,
+                  onDaySelected: (calendar_date, events) {
+                    setState(() {
+                      _selectedEvents = events;
+                      print(_selectedEvents);
+                    });
+                    date = calendar_date;
+                    // print(getdate(date));
+                    // print(getweekday(date));
+                  },
+                  daysOfWeekStyle: DaysOfWeekStyle(
+                    weekdayStyle: TextStyle(color: Color(0xFF61C6C0)),
+                    weekendStyle: TextStyle(color: Color(0xFFBDCC11))
+                  ),
+                  calendarStyle: CalendarStyle(
+                    weekendStyle: TextStyle(color: Color(0xFFF28473)),
+                    markersPositionBottom: 10.0,
+                    markersColor: Colors.white,
+                    outsideDaysVisible: false,
+                  ),
+                  headerStyle: HeaderStyle(
+                    leftChevronIcon: const Icon(Icons.chevron_left, color: Colors.white),
+                    rightChevronIcon: const Icon(Icons.chevron_right, color: Colors.white),
+                      formatButtonTextStyle: TextStyle()
+                          .copyWith(color: Colors.white, fontSize: 15.0),
+                      formatButtonDecoration: BoxDecoration(
+                        color: Color(0xFFF28473),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      formatButtonShowsNext: false
+                    ),
+                    builders: CalendarBuilders(
+                      selectedDayBuilder: (context, date, events) => Container(
+                          margin: const EdgeInsets.all(4.0),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFF73D99),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Text(
+                            date.day.toString(),
+                            style: TextStyle(color: Colors.white),
+                          )),
+                      todayDayBuilder: (context, date, events) => Container(
+                          margin: const EdgeInsets.all(4.0),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFF28473),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Text(
+                            date.day.toString(),
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    )
                 ),
               ),
               Container(
+                  //  margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                   margin: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.fromLTRB(0.0, 20.0, 40.0, 10.0),
                           constraints:
                               BoxConstraints.expand(height: 40.0, width: 40.0),
                           child: Icon(
-                            Icons.person,
+                            Icons.av_timer,
                             color: Colors.white,
                             size: 40.0,
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.fromLTRB(0.0, 20.0, 9.0, 5.0),
-                          child: Text('Personal', style: TitleText),
+                          child: Text('Schedules', style: TitleText),
                         ),
-                        SizedBox(
-                          width: 110.0,
-                        ),
+                        // SizedBox(
+                        //   width: 100.0,
+                        // ),
                         Container(
                             margin: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 5.0),
                             width: 80,
@@ -235,7 +281,7 @@ class _SchedulePageState extends State<SchedulePage> {
                             Container(
                                 width: 500.0,
                                 height: 200.0,
-                                child: ListView.builder(
+                                child:  ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     itemCount: _selectedEvents.length,
                                     itemBuilder: (context, index) {
@@ -287,7 +333,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                                 //     !is_completed[index];
                                               });
                                             },
-                                            child: PersonalTasks(description),
+                                            child: Schedules(description),
                                           ),
                                         ),
                                       );
@@ -320,17 +366,11 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 }
 
-class PersonalTasks extends StatelessWidget {
+class Schedules extends StatelessWidget {
   String task;
   // String task_id;
-  PersonalTasks(this.task);
-  // PersonalTasks(this.task);
+   Schedules(this.task);
 
-  // void toggle (){
-  //   setState(){
-  //     completed = !completed;
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -339,8 +379,8 @@ class PersonalTasks extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 4.0),
       padding: EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
 
-      // color: completed ? Color(0xFF848484) : Color(0xFF61C6C0),
-      child: Text(task, textAlign: TextAlign.left),
+      color: Color(0xFFF73D99),
+      child: Text(task, textAlign: TextAlign.left, style: NormalFont,),
       // )
     );
   }
