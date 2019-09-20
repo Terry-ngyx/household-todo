@@ -53,7 +53,6 @@ class _User {
       jwt_token: parsedJson['jwt_token'],
       user_id: parsedJson['user_id'],
       room_id: parsedJson['room id'],
-      is_admin: parsedJson['is admin'],
     );
   }
 }
@@ -101,7 +100,6 @@ class LoginFormState extends State<LoginForm> {
       print(user.room_id);
       prefs.setString('user_id',user.user_id);
       prefs.setString('user_room_id',user.room_id);
-      prefs.setString('user_is_admin',user.is_admin);
       //Secured Storage
       await storage.write(key:'jwt',value:user.jwt_token);
       print(await storage.read(key:'jwt'));     //PLEASE REMEMBER TO DELETE
@@ -207,7 +205,7 @@ class LoginFormState extends State<LoginForm> {
                                     _formkey.currentState.save();
                                     var user =
                                         await _login(username, password);
-                                    print(user.room_id);
+                                        // print(user.room_id);
                                     if (user.room_id.isEmpty || user.room_id == null || user.room_id == "NULL" || user.room_id == "None") {
                                       await new Future.delayed(
                                           const Duration(seconds: 1));

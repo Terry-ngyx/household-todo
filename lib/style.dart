@@ -71,6 +71,13 @@ const NormalFont = TextStyle(
   fontSize: 18.0,
   color: Colors.white,
 );
+const NormalFontItalics = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w400,
+  fontStyle: FontStyle.italic,
+  fontSize: 15.0,
+  color: Colors.white54,
+);
 const NormalFontStriked = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w400,

@@ -106,7 +106,7 @@ class TestState extends State<TestPage> {
                 // behavior: HitTextBehavior.translucent,
                 onTap: (){
                   Navigator.push(context,
-                    MaterialPageRoute(builder: (context)=>CategoryPage("1","Groceries","linglee","Thu, 10 Oct 2019 10:10:10 GMT"))
+                    MaterialPageRoute(builder: (context)=>CategoryPage("2","Groceries","linglee","Thu, 10 Oct 2019 10:10:10 GMT"))
                   );
                 },
                 child: Text('CLICK ME')

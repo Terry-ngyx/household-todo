@@ -64,11 +64,6 @@ class _PublicTaskState extends State<PublicTask>{
     print(jsonResponse);
     _DeleteTask deleteTask = new _DeleteTask.fromJson(jsonResponse);
     if(deleteTask.status=="successfully deleted"){
-      Flushbar(
-        message: 'task has been deleted',
-        backgroundColor: Colors.redAccent,
-        duration: Duration(seconds: 3),
-      )..show(context);
       return true;
     } else {
       return false;
@@ -87,6 +82,11 @@ class _PublicTaskState extends State<PublicTask>{
         key: Key(UniqueKey().toString()),
         onDismissed: (direction) {
           _deleteTask(widget.taskId);
+          Flushbar(
+            message: 'task has been deleted',
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 3),
+          )..show(context);
           widget.delete(widget.taskId);
         },
         background: Container(
