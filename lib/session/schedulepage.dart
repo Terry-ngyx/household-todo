@@ -121,13 +121,11 @@ class _SchedulePageState extends State<SchedulePage> {
       selectedEventsLength = _selectedEvents.length;
     });
 
-    
-    print(_events);
-    print(_id);
-    print('Fetched');
+    // print(_events);
+    // print(_id);
+    // print('Fetched');
   }
 
-  
   _deleteScheduledTask(int _taskId) async {
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/deletescheduledtask';
@@ -139,7 +137,7 @@ class _SchedulePageState extends State<SchedulePage> {
     http.Response response = await http.post(url, headers: headers, body: json);
     int statusCode = response.statusCode;
     final jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
+    // print(jsonResponse);
   }
 
   @override
@@ -149,8 +147,8 @@ class _SchedulePageState extends State<SchedulePage> {
     _selectedEvents = _events[DateTime.now()] ?? [];
     _selectedId = _events[DateTime.now()] ?? [];
     selectedEventsLength = _selectedEvents.length;
-    print(_selectedEvents);
-    print(_selectedId);
+    // print(_selectedEvents);
+    // print(_selectedId);
     super.initState();
   }
 
@@ -174,44 +172,45 @@ class _SchedulePageState extends State<SchedulePage> {
               NavBar('Schedule', 0xFFF73D99, false),
 
               Container(
-                  margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
-                  child: TableCalendar(
-                      calendarController: _calendarController,
-                      events: _events,
-                      onDaySelected: (calendar_date, events) {
-                        setState(() {
-                          _selectedEvents = events;
-                          print(_selectedEvents);
-                        });
-                        // print(_id);
+                margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
+                child: TableCalendar(
+                    calendarController: _calendarController,
+                    events: _events,
+                    onDaySelected: (calendar_date, events) {
+                      setState(() {
+                        _selectedEvents = events;
+                        selectedEventsLength = _selectedEvents.length;
+                        // print(_selectedEvents);
                         date = DateTime.parse(
                             '${calendar_date.toString().split(" ")[0]} 00:00:00.000');
+                        _selectedId = _id[date];
                         // print(date);
                         // print(_id[date]);
-                        _selectedId = _id[date];
-                        print(_selectedId);
-                      },
-                      daysOfWeekStyle: DaysOfWeekStyle(
-                    weekdayStyle: TextStyle(color: Color(0xFF61C6C0)),
-                    weekendStyle: TextStyle(color: Color(0xFFBDCC11))
-                  ),
-                  calendarStyle: CalendarStyle(
-                    weekendStyle: TextStyle(color: Color(0xFFF28473)),
-                    markersPositionBottom: 10.0,
-                    markersColor: Colors.white,
-                    outsideDaysVisible: false,
-                  ),
-                  headerStyle: HeaderStyle(
-                    leftChevronIcon: const Icon(Icons.chevron_left, color: Colors.white),
-                    rightChevronIcon: const Icon(Icons.chevron_right, color: Colors.white),
-                      formatButtonTextStyle: TextStyle()
-                          .copyWith(color: Colors.white, fontSize: 15.0),
-                      formatButtonDecoration: BoxDecoration(
-                        color: Color(0xFFF28473),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      formatButtonShowsNext: false
+                        // print(_id);
+                        // print(_selectedId);
+                      });
+                    },
+                    daysOfWeekStyle: DaysOfWeekStyle(
+                        weekdayStyle: TextStyle(color: Color(0xFF61C6C0)),
+                        weekendStyle: TextStyle(color: Color(0xFFBDCC11))),
+                    calendarStyle: CalendarStyle(
+                      weekendStyle: TextStyle(color: Color(0xFFF28473)),
+                      markersPositionBottom: 10.0,
+                      markersColor: Colors.white,
+                      outsideDaysVisible: false,
                     ),
+                    headerStyle: HeaderStyle(
+                        leftChevronIcon:
+                            const Icon(Icons.chevron_left, color: Colors.white),
+                        rightChevronIcon: const Icon(Icons.chevron_right,
+                            color: Colors.white),
+                        formatButtonTextStyle: TextStyle()
+                            .copyWith(color: Colors.white, fontSize: 15.0),
+                        formatButtonDecoration: BoxDecoration(
+                          color: Color(0xFFF28473),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        formatButtonShowsNext: false),
                     builders: CalendarBuilders(
                       selectedDayBuilder: (context, date, events) => Container(
                           margin: const EdgeInsets.all(4.0),
@@ -233,8 +232,7 @@ class _SchedulePageState extends State<SchedulePage> {
                             date.day.toString(),
                             style: TextStyle(color: Colors.white),
                           )),
-                    )
-                ),
+                    )),
               ),
               Container(
                   //  margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
@@ -301,29 +299,31 @@ class _SchedulePageState extends State<SchedulePage> {
                             Container(
                                 width: 500.0,
                                 height: 200.0,
-                                child:  ListView.builder(
+                                child: ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     itemCount: selectedEventsLength,
                                     itemBuilder: (context, index) {
-                                      var task = _selectedEvents ?? [];
-                                      var ids = _selectedId ?? [];
+                                      var task = _selectedEvents;
+                                      var ids = _selectedId;
                                       var id = int.parse(_selectedId[index]);
                                       var description = _selectedEvents[index];
-                                      
+                                      print(description);
+
                                       return Dismissible(
                                         direction: DismissDirection.endToStart,
                                         key: Key(description),
                                         onDismissed: (direction) {
-                                            _deleteScheduledTask(id);
-                                            task.removeAt(index);
-                                            ids.removeAt(index);
+                                          _deleteScheduledTask(id);
+                                          task.removeAt(index);
+                                          ids.removeAt(index);
                                           setState(() {
-                                          _selectedEvents=task;
-                                          _selectedId = ids;
-                                          selectedEventsLength = _selectedEvents.length;
+                                            _selectedEvents = task;
+                                            _selectedId = ids;
+                                            selectedEventsLength =
+                                                _selectedEvents.length;
 
                                             // taskStatus.removeAt(index);
-                                            print(task.length);
+                                            // print(task.length);
                                           });
                                           // Shows the information on Snackbar
                                           Scaffold.of(context).showSnackBar(
@@ -394,7 +394,7 @@ class _SchedulePageState extends State<SchedulePage> {
 class Schedules extends StatelessWidget {
   String task;
   // String task_id;
-   Schedules(this.task);
+  Schedules(this.task);
 
   @override
   Widget build(BuildContext context) {
@@ -405,7 +405,11 @@ class Schedules extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
 
       color: Color(0xFFF73D99),
-      child: Text(task, textAlign: TextAlign.left, style: NormalFont,),
+      child: Text(
+        task,
+        textAlign: TextAlign.left,
+        style: NormalFont,
+      ),
       // )
     );
   }
