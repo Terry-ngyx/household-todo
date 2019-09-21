@@ -29,7 +29,8 @@ class LoginForm extends StatefulWidget {
 }
 
 Future <String> getDeviceToken() async {
-    String fcmToken = await firebaseMessaging.getToken();
+    // String fcmToken = await firebaseMessaging.getToken();
+    String fcmToken = "qweqwe";
 
     if (fcmToken != null) {
       print("token: $fcmToken");
