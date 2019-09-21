@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_background_location/flutter_background_location.dart';
 import 'package:household/widgets/message.dart';
+import 'package:http/http.dart' as http;
 
 import 'dart:async';
 
@@ -105,9 +106,20 @@ class _MyAppState extends State<MyApp>{
     Future.delayed(Duration(minutes: 10), () => startTimer());
   }
 
-  getCurrentLocation() {
-    FlutterBackgroundLocation().getCurrentLocation().then((location) {
+  getCurrentLocation() async {
+    FlutterBackgroundLocation().getCurrentLocation().then((location) async {
       print("This is current Location " + location.longitude.toString() + " " + location.latitude.toString());
+      String token = await storage.read(key: 'jwt');
+      String url = 'http://10.0.2.2:5000/api/v1/users/completepublictask';
+      String json = '{"latitude": "$location.latitude.toString()", "longitude": "$location.longtitude.toString()"}';
+      http.Response response = await http.post(
+        url,
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization':'Bearer $token'
+        },
+        body: json
+      );
     });
   }
 
