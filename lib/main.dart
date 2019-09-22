@@ -26,7 +26,6 @@ const GetStartedRoute = '/getstarted';
 const TodoRoute = '/todo';
 const ProfileRoute = '/profile';
 const ProfileEditRoute = '/profileedit';
-const TestRoute = '/test';
 const ScheduleRoute = '/schedule';
 
 void main() => runApp(MyApp());
