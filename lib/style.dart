@@ -40,7 +40,7 @@ const DialogTextPink = TextStyle(
 const AddTaskTitle = TextStyle(
     fontFamily: FontNameDefault,
     fontWeight: FontWeight.w700,
-    fontSize: 32.0,
+    fontSize: 25.0,
     color:  Color(0xFFF73D99),
 );
 

@@ -25,8 +25,6 @@ class TodoPage extends StatefulWidget {
 }
 
 class TodoState extends State<TodoPage> {
-  DateTime _date = new DateTime.now();
-  TimeOfDay _time = new TimeOfDay.now();
 
   List<String> _tasks = [];
   int _taskLength = 0;
@@ -39,42 +37,6 @@ class TodoState extends State<TodoPage> {
   List<bool> _is_completedPB = [];
   List<String> _completed_byPB = [];
   List<String> _created_byPB = [];
-
- Future<Null> _selectDate() async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: _date,
-        firstDate: new DateTime(2010),
-        lastDate: new DateTime(2022),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.dark(),
-            child: child,
-          );
-        });
-    if (picked != null && picked != _date) {
-      setState(() {
-        _date = picked;
-      });
-    }
-  }
-
-   Future<Null> _selectTime() async {
-    final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: _time,
-      builder: (BuildContext context, Widget child) {
-        return Theme(
-          data: ThemeData.dark(),
-          child: child,
-        );
-      },
-    );
-    if (picked != null && picked != _time) {
-      // print('Date selected: ${_date.toString()}');
-      setState(() => _time = picked);
-    }
-  }
 
   getPrivateTask() async {
     String token = await storage.read(key: 'jwt');
@@ -183,22 +145,6 @@ class TodoState extends State<TodoPage> {
   //   _getPublicCategory();
   // }
 
-  _postPublicCategory(String _category, String _completed_byPB) async {
-    String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/newpubliccategory';
-    Map<String, String> headers = {
-      "Content-type": "application/json",
-      "Authorization": "Bearer $token"
-    };
-    String json =
-        '{"category":"$_category", "description":" ", "completed_by":"$_completed_byPB"}';
-    http.Response response = await http.post(url, headers: headers, body: json);
-    int statusCode = response.statusCode;
-    final jsonResponse = jsonDecode(response.body);
-    // print(jsonResponse);
-    _getPublicCategory();
-  }
-
   _completedPublicCategory(int _categoryId) async {
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/completepubliccategory';
@@ -235,11 +181,9 @@ class TodoState extends State<TodoPage> {
   }
 
   final newTaskController = TextEditingController();
-  final newCategoryController = TextEditingController();
   @override
   void dispose() {
     newTaskController.dispose();
-    newCategoryController.dispose();
     super.dispose();
   }
 
@@ -308,7 +252,7 @@ class TodoState extends State<TodoPage> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: 50,
+                                                width: 35,
                                               ),
                                               Container(
                                                 child: GestureDetector(
@@ -408,13 +352,13 @@ class TodoState extends State<TodoPage> {
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         width: 500.0,
-                        padding: EdgeInsets.all(20.0),
+                        padding: EdgeInsets.fromLTRB(20.0,0.0,20.0,30.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Container(
                                 width: 500.0,
-                                height: 200.0,
+                                height: 230.0,
                                 child: ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     itemCount: _taskLength,
@@ -489,7 +433,7 @@ class TodoState extends State<TodoPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.fromLTRB(0.0, 40.0, 30.0, 5.0),
+                          margin: EdgeInsets.fromLTRB(0.0, 20.0, 30.0, 5.0),
                           constraints:
                               BoxConstraints.expand(height: 40.0, width: 40.0),
                           child: Icon(
@@ -499,7 +443,7 @@ class TodoState extends State<TodoPage> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0.0, 40.0, 50.0, 5.0),
+                          margin: EdgeInsets.fromLTRB(0.0, 20.0, 50.0, 5.0),
                           child: Text('Public', style: TitleText),
                         ),
                         SizedBox(
@@ -513,147 +457,7 @@ class TodoState extends State<TodoPage> {
                                 showDialog(
                                   context: context,
                                   builder: (context){
-                                    // return PublicDialog(_getPublicCategory);
-                                      return AlertDialog(
-      title: Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 12.0),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Color(0xFFF96861)),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              child: Text(
-                "Add New Category",
-                style: AddTaskTitle,
-              ),
-            ),
-            SizedBox(
-              width: 50,
-            ),
-            Container(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: Color(0xFFF96861),
-                  size: 30.0,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      content: Container(
-        height: 300,
-        width: 400,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-              child: TextFormField(
-                autofocus: true,
-                controller: newCategoryController,
-                style: TextInBox,
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                    hintText: 'New Category?',
-                    hintStyle: TextStyle(
-                        color: Colors.black.withOpacity(0.5),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18.0),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        borderSide: BorderSide(color: Color(0xFFF96861))),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        borderSide: BorderSide(color: Color(0xFFF96861)))),
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 15.0),
-              child: Text(
-                "Completed By ${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00",
-                style: CompletedBy,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(10.0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0)),
-                      color: Color(0xFFBDCC11),
-                      onPressed: () {
-                        _selectDate();
-                        // _completed_byPB.add(
-                        //     "${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00");
-                      },
-                      child: Text(
-                        "Select Date",
-                        style: NormalFont,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(10.0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0)),
-                      color: Color(0xFF61C6C0),
-                      onPressed: () {
-                        _selectTime();
-                        // _completed_byPB.add(
-                        //     "${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00");
-                      },
-                      child: Text(
-                        "Select Time",
-                        style: NormalFont,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-                width: 400,
-                margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
-                child: RaisedButton(
-                  color:Color(0xFFF96861),
-                    onPressed:() 
-                       {
-                          Navigator.pop(context);
-                          // _category.add(newCategoryController.text);
-                          // _is_completedPB.add(false);
-                          // _completed_byPB.add("");
-                          _postPublicCategory(newCategoryController.text,
-                              "${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00");
-                          
-                          newCategoryController.clear();
-                          // result 1 and it will be executed after 2 seconds
-                        },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(15.0)),
-                  padding: EdgeInsets.all(15.0),
-                  child:
-                      Text('Add', textAlign: TextAlign.center, style: BtnText),
-                )),
-          ],
-        ),
-      ),
-    );
+                                    return PublicDialog(_getPublicCategory);
                                   }
                                 );
                               },
@@ -672,12 +476,12 @@ class TodoState extends State<TodoPage> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       width: 500.0,
-                      padding: EdgeInsets.all(20.0),
+                      padding: EdgeInsets.fromLTRB(20.0,0.0,20.0,30.0),
                       child: Column(
                         children: <Widget>[
                           Container(
                               width: 500.0,
-                              height: 200.0,
+                              height: 230.0,
                               child: ListView.builder(
                                   scrollDirection: Axis.vertical,
                                   itemCount: _categoryLength,
@@ -769,5 +573,227 @@ class TodoState extends State<TodoPage> {
                 ),
               )
             ])));
+  }
+}
+
+class PublicDialog extends StatefulWidget{
+  Function callback;
+  PublicDialog(this.callback);
+  @override
+  _PublicDialogState createState() => _PublicDialogState();
+}
+
+class _PublicDialogState extends State<PublicDialog>{
+  String _date = 'Select Date';
+  String _time = 'Select Time';
+
+  Future<Null> _selectDate() async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: new DateTime(2010),
+        lastDate: new DateTime(2022),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.dark(),
+            child: child,
+          );
+        });
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _date = DateFormat("y-MM-dd").format(picked).toString();
+        print(_date);
+      });
+    }
+  }
+
+  Future<Null> _selectTime() async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.dark(),
+          child: child,
+        );
+      },
+    );
+    if (picked != null && picked != TimeOfDay.now()) {
+      String minute = picked.minute.toString();
+      if (minute.length < 2) {
+        minute = '0$minute';
+      }
+      print(minute);
+      setState(() => _time = '${picked.hour.toString()}:$minute');
+    }
+  }
+
+  _postPublicCategory(String _category, String _completed_byPB) async {
+    String token = await storage.read(key: 'jwt');
+    String url = 'http://10.0.2.2:5000/api/v1/users/newpubliccategory';
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+    String json =
+        '{"category":"$_category", "description":" ", "completed_by":"$_completed_byPB"}';
+    http.Response response = await http.post(url, headers: headers, body: json);
+    int statusCode = response.statusCode;
+    final jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+  }
+
+
+  @override
+  void initState(){
+    super.initState();
+  }
+  final newCategoryController = TextEditingController();
+  @override
+  void dispose() {
+    newCategoryController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return AlertDialog(
+      title: Container(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 12.0),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Color(0xFFF96861)),
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              child: Text(
+                "Add New Category",
+                style: AddTaskTitle,
+              ),
+            ),
+            SizedBox(
+              width: 27,
+            ),
+            Container(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: Color(0xFFF96861),
+                  size: 30.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      content: Container(
+        height: 300,
+        width: 400,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+              child: TextFormField(
+                autofocus: true,
+                controller: newCategoryController,
+                style: TextInBox,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                    hintText: 'New Category?',
+                    hintStyle: TextStyle(
+                        color: Colors.black.withOpacity(0.5),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18.0),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(15.0),
+                        borderSide: BorderSide(color: Color(0xFFF96861))),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(15.0),
+                        borderSide: BorderSide(color: Color(0xFFF96861)))),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 15.0),
+              child: Text(
+                "Complete by :",
+                // "Complete by : ${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00",
+                style: CompletedBy,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    child: RaisedButton(
+                      padding: EdgeInsets.all(10.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(10.0)),
+                      color: Color(0xFFBDCC11),
+                      onPressed: () {
+                        _selectDate();
+                        // _completed_byPB.add(
+                        //     "${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00");
+                      },
+                      child: Text('$_date',style: NormalFont),
+                    ),
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      padding: EdgeInsets.all(10.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(10.0)),
+                      color: Color(0xFF61C6C0),
+                      onPressed: () {
+                        _selectTime();
+                        // _completed_byPB.add(
+                        //     "${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00");
+                      },
+                      child: Text(
+                        "$_time",
+                        style: NormalFont,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+                width: 400,
+                margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+                child: RaisedButton(
+                  color:Color(0xFFF96861),
+                    onPressed:() 
+                      {
+                          Navigator.pop(context);
+                          // _category.add(newCategoryController.text);
+                          // _is_completedPB.add(false);
+                          // _completed_byPB.add("");
+                          _postPublicCategory(newCategoryController.text,
+                              "$_date $_time:00");
+                          widget.callback();
+                          newCategoryController.clear();
+                          // result 1 and it will be executed after 2 seconds
+                        },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(15.0)),
+                  padding: EdgeInsets.all(15.0),
+                  child:
+                      Text('Add', textAlign: TextAlign.center, style: BtnText),
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }
