@@ -232,18 +232,18 @@ class ProfileEditState extends State<ProfileEditForm> {
                     )
                   ),
 
-                Container(
-                  margin: EdgeInsets.fromLTRB(60.0, 20.0, 60.0, 40.0),
-                  child: RaisedButton(
-                    color: Color(0xFF61C6C0),
-                    onPressed: null,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(15.0)
-                    ),
-                    padding: EdgeInsets.symmetric(vertical:15.0,horizontal:20.0),
-                    child: Text('Change Password',textAlign: TextAlign.center,style: BtnText),
-                  )
-                ),
+                // Container(
+                //   margin: EdgeInsets.fromLTRB(60.0, 20.0, 60.0, 40.0),
+                //   child: RaisedButton(
+                //     color: Color(0xFF61C6C0),
+                //     onPressed: null,
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: new BorderRadius.circular(15.0)
+                //     ),
+                //     padding: EdgeInsets.symmetric(vertical:15.0,horizontal:20.0),
+                //     child: Text('Change Password',textAlign: TextAlign.center,style: BtnText),
+                //   )
+                // ),
 
                 Container(
                   margin: EdgeInsets.symmetric(horizontal:100.0),

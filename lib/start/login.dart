@@ -29,8 +29,8 @@ class LoginForm extends StatefulWidget {
 }
 
 Future <String> getDeviceToken() async {
-    // String fcmToken = await firebaseMessaging.getToken();
-    String fcmToken = "qweqwe";
+    String fcmToken = await firebaseMessaging.getToken();
+    // String fcmToken = "";
 
     if (fcmToken != null) {
       print("token: $fcmToken");
@@ -197,7 +197,7 @@ class LoginFormState extends State<LoginForm> {
                               margin:
                                   EdgeInsets.fromLTRB(120.0, 0.0, 120.0, 0.0),
                               child: RaisedButton(
-                                padding: EdgeInsets.symmetric(vertical: 20.0),
+                                padding: EdgeInsets.symmetric(vertical: 15.0),
                                 color: Color(0xFFF96861),
                                 onPressed: () async {
                                   if (_formkey.currentState.validate()) {
@@ -228,35 +228,35 @@ class LoginFormState extends State<LoginForm> {
                                     textAlign: TextAlign.center,
                                     style: BtnText),
                               )),
-                          Container(
-                              margin:
-                                  EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 50.0),
-                              child: RaisedButton(
-                                color: Color(0xFF61C6C0),
-                                onPressed: () async {
-                                  if (_formkey.currentState.validate()) {
-                                    Scaffold.of(context).showSnackBar(
-                                        SnackBar(content: Text('Logging In')));
-                                    _formkey.currentState.save();
+                          // Container(
+                          //     margin:
+                          //         EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 50.0),
+                          //     child: RaisedButton(
+                          //       color: Color(0xFF61C6C0),
+                          //       onPressed: () async {
+                          //         if (_formkey.currentState.validate()) {
+                          //           Scaffold.of(context).showSnackBar(
+                          //               SnackBar(content: Text('Logging In')));
+                          //           _formkey.currentState.save();
 
-                                    var user =
-                                        await _login(username, password);
-                                    if (user.room_id != null) {
-                                      await new Future.delayed(
-                                          const Duration(seconds: 1));
-                                      Navigator.pushNamed(
-                                          context, HomeRoute);
-                                    }
-                                  }
-                                },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(15.0)),
-                                padding: EdgeInsets.all(15.0),
-                                child: Text('Login with Google',
-                                    textAlign: TextAlign.center,
-                                    style: BtnText),
-                              )),
+                          //           var user =
+                          //               await _login(username, password);
+                          //           if (user.room_id != null) {
+                          //             await new Future.delayed(
+                          //                 const Duration(seconds: 1));
+                          //             Navigator.pushNamed(
+                          //                 context, HomeRoute);
+                          //           }
+                          //         }
+                          //       },
+                          //       shape: RoundedRectangleBorder(
+                          //           borderRadius:
+                          //               new BorderRadius.circular(15.0)),
+                          //       padding: EdgeInsets.all(15.0),
+                          //       child: Text('Login with Google',
+                          //           textAlign: TextAlign.center,
+                          //           style: BtnText),
+                          //     )),
                           Container(
                               child: GestureDetector(
                             onTap: () {

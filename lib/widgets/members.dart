@@ -114,32 +114,41 @@ void _showAlertDialog() {
     builder: (context) {
       return AlertDialog(
         title: Container(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(5.0),
           child: Text(
             'Are you sure you want to destroy this room? :(',
             style: TextStyle(color: Colors.black),
             textAlign: TextAlign.center,
           ),
         ),
-        actions: <Widget>[
-          RaisedButton(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
-            color: Color(0xFF61C6C0),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-            onPressed: () {
-              _deleteroom();
-              Navigator.pushNamed(context,GetStartedRoute);
-            },
-            child: Text('Yes')
-          ),
-          RaisedButton(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
-            color: Colors.red,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        content:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+                // margin: EdgeInsets.symmetric(horizontal:10.0),
+                child: RaisedButton(
+                color: Color(0xFF61C6C0),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                onPressed: () {
+                  _deleteroom();
+                  Navigator.pushNamed(context,GetStartedRoute);
+                },
+                child: Text('Yes', style:TextStyle(color:Colors.white))
+              ),
+              ),
+          Container(
+          // margin: EdgeInsets.symmetric(horizontal:10.0),
+          child: RaisedButton(
+            color: Color(0xFFF96861),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
             onPressed: () {Navigator.pop(context);},
-              child: Text('Close')
+              child: Text('Cancel',style:TextStyle(color:Colors.white))
           ),
-        ],
+          ),
+            ],
+          ),
       );
     }
   );

@@ -40,7 +40,7 @@ class TodoState extends State<TodoPage> {
   // bool isButtonEnabled = false;
 
 
-  getPrivateTask() async {
+  _getPrivateTask() async {
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/get/private_task';
     http.Response response = await http.get(
@@ -63,23 +63,25 @@ class TodoState extends State<TodoPage> {
     setState(() => _taskLength = tasks.length);
     setState(() => _taskId = task_id);
     setState(() => _is_completed = is_completed);
-    // print(task_id);
+    print(_taskLength);
+    print(_taskId);
+    print(_tasks);
   }
 
-  _postPrivateTask(String _tasks) async {
-    String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/newprivatetask';
-    Map<String, String> headers = {
-      "Content-type": "application/json",
-      "Authorization": "Bearer $token"
-    };
-    String json = '{"description":"$_tasks"}';
-    http.Response response = await http.post(url, headers: headers, body: json);
-    int statusCode = response.statusCode;
-    final jsonResponse = jsonDecode(response.body);
-    // print(jsonResponse);
-    getPrivateTask();
-  }
+  // _postPrivateTask(String _tasks) async {
+  //   String token = await storage.read(key: 'jwt');
+  //   String url = 'http://10.0.2.2:5000/api/v1/users/newprivatetask';
+  //   Map<String, String> headers = {
+  //     "Content-type": "application/json",
+  //     "Authorization": "Bearer $token"
+  //   };
+  //   String json = '{"description":"$_tasks"}';
+  //   http.Response response = await http.post(url, headers: headers, body: json);
+  //   int statusCode = response.statusCode;
+  //   final jsonResponse = jsonDecode(response.body);
+  //   // print(jsonResponse);
+  //   getPrivateTask();
+  // }
 
   _completedPrivateTask(int _taskId) async {
     String token = await storage.read(key: 'jwt');
@@ -178,7 +180,7 @@ class TodoState extends State<TodoPage> {
   @override
   void initState() {
     super.initState();
-    getPrivateTask();
+    _getPrivateTask();
     _getPublicCategory();
   }
 
@@ -201,11 +203,12 @@ class TodoState extends State<TodoPage> {
                 children: <Widget>[
               NavBar('To Do', 0xFFBDCC11, false),
               Container(
-                  margin: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+                  margin: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 10.0),
                   // margin: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.fromLTRB(0.0, 20.0, 40.0, 10.0),
@@ -222,120 +225,17 @@ class TodoState extends State<TodoPage> {
                           child: Text('Personal', style: TitleText),
                         ),
                         SizedBox(
-                          width: 110.0,
+                          width: 100.0,
                         ),
                         Container(
                             margin: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 5.0),
-                            width: 80,
+                            width: 60,
                             child: GestureDetector(
                               onTap: () {
                                 showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return AlertDialog(
-                                        title: Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0, 0, 0, 12.0),
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                              bottom: BorderSide(
-                                                  color: Color(0xFFF96861)),
-                                            ),
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: <Widget>[
-                                              Container(
-                                                child: Text(
-                                                  "Add New Task",
-                                                  style: AddTaskTitle,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              ),
-                                              Container(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Icon(
-                                                    Icons.close,
-                                                    color: Color(0xFFF96861),
-                                                    size: 30.0,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        content: Container(
-                                          height: 180,
-                                          width: 400,
-                                          child: Column(
-                                            children: <Widget>[
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    0.0, 10.0, 0.0, 0.0),
-                                                child: TextFormField(
-                                                  autofocus: true,
-                                                  controller: newTaskController,
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                  textAlign: TextAlign.center,
-                                                  decoration: InputDecoration(
-                                                      hintText:
-                                                          'What Chu wanna Do?',
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.black
-                                                              .withOpacity(0.5),
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 18.0),
-                                                      enabledBorder: OutlineInputBorder(
-                                                          borderRadius:
-                                                              new BorderRadius.circular(
-                                                                  15.0),
-                                                          borderSide: BorderSide(
-                                                              color: Color(
-                                                                  0xFFF96861))),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius:
-                                                              new BorderRadius.circular(
-                                                                  15.0),
-                                                          borderSide: BorderSide(
-                                                              color:
-                                                                  Color(0xFFF96861)))), 
-                                                ),
-                                              ),
-                                              Container(
-                                                  width: 400,
-                                                  margin: EdgeInsets.fromLTRB(
-                                                      0.0, 30.0, 0.0, 0.0),
-                                                  child: RaisedButton(
-                                                    color: Color(0xFFF96861),
-                                                    onPressed:() {
-                                                      Navigator.pop(context);
-                                                      _postPrivateTask(newTaskController.text);
-                                                      newTaskController.clear();
-                                                    },
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            new BorderRadius.circular(15.0)),
-                                                    padding:
-                                                        EdgeInsets.all(15.0),
-                                                    child: Text('Add',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: BtnText),
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
-                                      );
+                                      return PrivateDialog(_getPrivateTask);
                                     });
                               },
                               child: Icon(
@@ -376,7 +276,9 @@ class TodoState extends State<TodoPage> {
                                           _deletePrivateTask(taskId);
                                           task.removeAt(index);
                                           taskStatus.removeAt(index);
+                                          _taskId.removeAt(index);
                                           setState(() {
+                                            _taskId = _taskId;
                                             _tasks = task;
                                             _is_completed = taskStatus;
                                             _taskLength = task.length;
@@ -431,7 +333,7 @@ class TodoState extends State<TodoPage> {
                 child: Column(
                   children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.fromLTRB(0.0, 20.0, 30.0, 5.0),
@@ -448,11 +350,11 @@ class TodoState extends State<TodoPage> {
                           child: Text('Public', style: TitleText),
                         ),
                         SizedBox(
-                          width: 110.0,
+                          width: 100.0,
                         ),
                         Container(
                             margin: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 5.0),
-                            width: 80,
+                            width: 60,
                             child: GestureDetector(
                               onTap: () {
                                 showDialog(
@@ -540,15 +442,6 @@ class TodoState extends State<TodoPage> {
                                       child: Container(
                                         margin: EdgeInsets.fromLTRB(
                                             0.0, 5.0, 0.0, 5.0),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            _completedPublicCategory(
-                                                categoryId);
-                                            setState(() {
-                                              _is_completedPB[index] =
-                                                  !_is_completedPB[index];
-                                            });
-                                          },
                                           child: GestureDetector(
                                             onTap: (){
                                               print("HI");
@@ -563,7 +456,6 @@ class TodoState extends State<TodoPage> {
                                               completedPublic)
                                             ),
                                           ),
-                                        ),
                                       ),
                                     );
                                   })),
@@ -682,7 +574,7 @@ class _PublicDialogState extends State<PublicDialog>{
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
               child: Text(
@@ -690,9 +582,9 @@ class _PublicDialogState extends State<PublicDialog>{
                 style: AddTaskTitle,
               ),
             ),
-            SizedBox(
-              width: 27,
-            ),
+            // SizedBox(
+            //   width: 27,
+            // ),
             Container(
               child: GestureDetector(
                 onTap: () {
@@ -792,17 +684,160 @@ class _PublicDialogState extends State<PublicDialog>{
                 child: RaisedButton(
                   color:Color(0xFFF96861),
                     onPressed:isButtonEnabled? () 
-                      {
+                      async{
                           Navigator.pop(context);
                           // _category.add(newCategoryController.text);
                           // _is_completedPB.add(false);
                           // _completed_byPB.add("");
-                          _postPublicCategory(newCategoryController.text,
+                          await _postPublicCategory(newCategoryController.text,
                               "$_date $_time:00");
-                          widget.callback();
+                          await widget.callback();
                           newCategoryController.clear();
                           // result 1 and it will be executed after 2 seconds
                         }:null,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(15.0)),
+                  padding: EdgeInsets.all(15.0),
+                  child:
+                      Text('Add', textAlign: TextAlign.center, style: BtnText),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class PrivateDialog extends StatefulWidget {
+  Function refresh;
+  PrivateDialog(this.refresh);
+  @override
+  _PrivateDialogState createState() => _PrivateDialogState();
+}
+
+class _PrivateDialogState extends State<PrivateDialog> {
+  bool isButtonEnabled = false;
+
+  _postPrivateTask(String _tasks) async {
+    String token = await storage.read(key: 'jwt');
+    String url = 'http://10.0.2.2:5000/api/v1/users/newprivatetask';
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+    String json = '{"description":"$_tasks"}';
+    http.Response response = await http.post(url, headers: headers, body: json);
+    int statusCode = response.statusCode;
+    final jsonResponse = jsonDecode(response.body);
+    // print(jsonResponse);
+    // getPrivateTask();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void isEmpty() {
+    setState(() {
+      if (newTaskController.text.length == 0) {
+        isButtonEnabled = false;
+        print(isButtonEnabled);
+      } else {
+        isButtonEnabled = true;
+        print(isButtonEnabled);
+      }
+    });
+  }
+
+  final newTaskController = TextEditingController();
+  @override
+  void dispose() {
+    newTaskController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Container(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 12.0),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Color(0xFFF96861)),
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              child: Text(
+                "Add New Task",
+                style: AddTaskTitle,
+              ),
+            ),
+            SizedBox(
+              width: 35,
+            ),
+            Container(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: Color(0xFFF96861),
+                  size: 30.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      content: Container(
+        height: 180,
+        width: 400,
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+              child: TextFormField(
+                  autofocus: true,
+                  controller: newTaskController,
+                  style: TextStyle(color: Colors.black),
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      hintText: 'What Chu wanna Do?',
+                      hintStyle: TextStyle(
+                          color: Colors.black.withOpacity(0.5),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18.0),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: BorderSide(color: Color(0xFFF96861))),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: BorderSide(color: Color(0xFFF96861)))),
+                  onChanged: (val) {
+                    isEmpty();
+                  }),
+            ),
+            Container(
+                width: 400,
+                margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                child: RaisedButton(
+                  color: Color(0xFFF96861),
+                  onPressed: isButtonEnabled
+                      ? () async {
+                          await _postPrivateTask(newTaskController.text);
+                          await widget.refresh();
+                          newTaskController.clear();
+                          Navigator.pop(context);
+                        
+                        }
+                      : null,
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(15.0)),
                   padding: EdgeInsets.all(15.0),
