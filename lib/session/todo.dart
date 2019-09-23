@@ -25,7 +25,6 @@ class TodoPage extends StatefulWidget {
 }
 
 class TodoState extends State<TodoPage> {
-
   List<String> _tasks = [];
   int _taskLength = 0;
   List<String> _taskId = [];
@@ -38,7 +37,6 @@ class TodoState extends State<TodoPage> {
   List<String> _completed_byPB = [];
   List<String> _created_byPB = [];
   // bool isButtonEnabled = false;
-
 
   _getPrivateTask() async {
     String token = await storage.read(key: 'jwt');
@@ -111,7 +109,7 @@ class TodoState extends State<TodoPage> {
     print(jsonResponse);
   }
 
-   _getPublicCategory() async {
+  _getPublicCategory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String roomId = prefs.getString("room_id");
     String token = await storage.read(key: 'jwt');
@@ -145,7 +143,7 @@ class TodoState extends State<TodoPage> {
     setState(() => _created_byPB = created_byPB);
   }
 
-  // getPublicTask() async{ 
+  // getPublicTask() async{
   //   _getPublicCategory();
   // }
 
@@ -183,7 +181,6 @@ class TodoState extends State<TodoPage> {
     _getPrivateTask();
     _getPublicCategory();
   }
-
 
   final newTaskController = TextEditingController();
   @override
@@ -253,78 +250,93 @@ class TodoState extends State<TodoPage> {
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                         width: 500.0,
-                        padding: EdgeInsets.fromLTRB(20.0,0.0,20.0,30.0),
+                        padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 30.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Container(
                                 width: 500.0,
                                 height: 230.0,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: _taskLength,
-                                    itemBuilder: (context, index) {
-                                      var task = _tasks;
-                                      var taskStatus = _is_completed;
-                                      var description = _tasks[index];
-                                      var taskId = int.parse(_taskId[index]);
-                                      bool completed = _is_completed[index];
-                                      return Dismissible(
-                                        direction: DismissDirection.endToStart,
-                                        key: Key(description),
-                                        onDismissed: (direction) {
-                                          _deletePrivateTask(taskId);
-                                          task.removeAt(index);
-                                          taskStatus.removeAt(index);
-                                          _taskId.removeAt(index);
-                                          setState(() {
-                                            _taskId = _taskId;
-                                            _tasks = task;
-                                            _is_completed = taskStatus;
-                                            _taskLength = task.length;
-                                          });
-                                          // Shows the information on Snackbar
-                                          Scaffold.of(context).showSnackBar(
-                                              SnackBar(
-                                                  content: Text(
-                                                      " Task $description dismissed !",
-                                                      textAlign: TextAlign.center,)));
-                                        },
-                                        background: Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              0.0, 9.0, 0.0, 9.0),
-                                          alignment:
-                                              AlignmentDirectional.centerEnd,
-                                          height: 50,
-                                          color: Colors.red,
-                                          child: Padding(
-                                            padding: EdgeInsets.fromLTRB(
-                                                0, 0, 20, 0),
-                                            child: Icon(
-                                              Icons.delete,
-                                              color: Colors.white,
-                                              size: 40.0,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              0.0, 5.0, 0.0, 5.0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              //pass Task id
-                                              _completedPrivateTask(taskId);
-                                              setState(() {
-                                                _is_completed[index] =
-                                                    !_is_completed[index];
-                                              });
-                                            },
-                                            child: PersonalTasks(
-                                                description, completed),
-                                          ),
-                                        ),
-                                      );
-                                    })),
+                                child: Center(
+                                  child: (_taskLength == 0)
+                                      ? Container(
+                                          margin: EdgeInsets.only(top: 10.0),
+                                          child: Text(
+                                            'No Task Yet',
+                                            textAlign: TextAlign.center,
+                                            style: NormalFont,
+                                          ))
+                                      : ListView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: _taskLength,
+                                          itemBuilder: (context, index) {
+                                            var task = _tasks;
+                                            var taskStatus = _is_completed;
+                                            var description = _tasks[index];
+                                            var taskId =
+                                                int.parse(_taskId[index]);
+                                            bool completed =
+                                                _is_completed[index];
+                                            return Dismissible(
+                                              direction:
+                                                  DismissDirection.endToStart,
+                                              key: Key(description),
+                                              onDismissed: (direction) {
+                                                _deletePrivateTask(taskId);
+                                                task.removeAt(index);
+                                                taskStatus.removeAt(index);
+                                                _taskId.removeAt(index);
+                                                setState(() {
+                                                  _taskId = _taskId;
+                                                  _tasks = task;
+                                                  _is_completed = taskStatus;
+                                                  _taskLength = task.length;
+                                                });
+                                                // Shows the information on Snackbar
+                                                Scaffold.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                  " Task $description dismissed !",
+                                                  textAlign: TextAlign.center,
+                                                )));
+                                              },
+                                              background: Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    0.0, 9.0, 0.0, 9.0),
+                                                alignment: AlignmentDirectional
+                                                    .centerEnd,
+                                                height: 50,
+                                                color: Colors.red,
+                                                child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      0, 0, 20, 0),
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.white,
+                                                    size: 40.0,
+                                                  ),
+                                                ),
+                                              ),
+                                              child: Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    0.0, 5.0, 0.0, 5.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    //pass Task id
+                                                    _completedPrivateTask(
+                                                        taskId);
+                                                    setState(() {
+                                                      _is_completed[index] =
+                                                          !_is_completed[index];
+                                                    });
+                                                  },
+                                                  child: PersonalTasks(
+                                                      description, completed),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                )),
                           ],
                         )),
                   ])),
@@ -358,11 +370,10 @@ class TodoState extends State<TodoPage> {
                             child: GestureDetector(
                               onTap: () {
                                 showDialog(
-                                  context: context,
-                                  builder: (context){
-                                    return PublicDialog(_getPublicCategory);
-                                  }
-                                );
+                                    context: context,
+                                    builder: (context) {
+                                      return PublicDialog(_getPublicCategory);
+                                    });
                               },
                               child: Icon(
                                 Icons.add,
@@ -379,86 +390,106 @@ class TodoState extends State<TodoPage> {
                         borderRadius: BorderRadius.circular(15.0),
                       ),
                       width: 500.0,
-                      padding: EdgeInsets.fromLTRB(20.0,0.0,20.0,30.0),
+                      padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 30.0),
                       child: Column(
                         children: <Widget>[
                           Container(
                               width: 500.0,
                               height: 230.0,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: _categoryLength,
-                                  itemBuilder: (context, index) {
-                                    var category = _category;
-                                    var categoryStatus = _is_completedPB;
-                                    var completed_byPB = _completed_byPB;
-                                    var created_byPB = _created_byPB;
-                                    var descriptionPublic = _category[index];
-                                    var categoryId =
-                                        int.parse(_categoryId[index]);
-                                    bool completedPublic =
-                                        _is_completedPB[index];
-                                    var completedby = _completed_byPB[index];
-                                    var createdby = _created_byPB[index];
-                                    return Dismissible(
-                                      direction: DismissDirection.endToStart,
-                                      key: Key(descriptionPublic),
-                                      onDismissed: (direction) {
-                                        _deletePublicCategory(categoryId);
-                                        category.removeAt(index);
-                                        categoryStatus.removeAt(index);
-                                        completed_byPB.removeAt(index);
-                                        created_byPB.removeAt(index);
-                                        setState(() {
-                                          _category = category;
-                                          _is_completedPB = categoryStatus;
-                                          _completed_byPB = completed_byPB;
-                                          _created_byPB = created_byPB;
-                                          _categoryLength = category.length;
-                                        });
-                                        // Shows the information on Snackbar
-                                        Scaffold.of(context).showSnackBar(SnackBar(
-                                            content: Text(
+                              child: Center(
+                                child: (_categoryLength == 0)
+                                    ? Container(
+                                        margin: EdgeInsets.only(top: 10.0),
+                                        child: Text(
+                                          'No Category Yet',
+                                          textAlign: TextAlign.center,
+                                          style: NormalFont,
+                                        ))
+                                    : ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: _categoryLength,
+                                        itemBuilder: (context, index) {
+                                          var category = _category;
+                                          var categoryStatus = _is_completedPB;
+                                          var completed_byPB = _completed_byPB;
+                                          var created_byPB = _created_byPB;
+                                          var descriptionPublic =
+                                              _category[index];
+                                          var categoryId =
+                                              int.parse(_categoryId[index]);
+                                          bool completedPublic =
+                                              _is_completedPB[index];
+                                          var completedby =
+                                              _completed_byPB[index];
+                                          var createdby = _created_byPB[index];
+                                          return Dismissible(
+                                            direction:
+                                                DismissDirection.endToStart,
+                                            key: Key(descriptionPublic),
+                                            onDismissed: (direction) {
+                                              _deletePublicCategory(categoryId);
+                                              category.removeAt(index);
+                                              categoryStatus.removeAt(index);
+                                              completed_byPB.removeAt(index);
+                                              created_byPB.removeAt(index);
+                                              setState(() {
+                                                _category = category;
+                                                _is_completedPB = categoryStatus;
+                                                _completed_byPB = completed_byPB;
+                                                _created_byPB = created_byPB;
+                                                _categoryLength = category.length;
+                                              });
+                                              // Shows the information on Snackbar
+                                              Scaffold.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
                                                 " Category $descriptionPublic dismissed !",
-                                                textAlign: TextAlign.center,)));
-                                      },
-                                      background: Container(
-                                        margin: EdgeInsets.fromLTRB(
-                                            0.0, 9.0, 0.0, 9.0),
-                                        alignment:
-                                            AlignmentDirectional.centerEnd,
-                                        height: 50,
-                                        color: Colors.red,
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                          child: Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
-                                            size: 40.0,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Container(
-                                        margin: EdgeInsets.fromLTRB(
-                                            0.0, 5.0, 0.0, 5.0),
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              print("HI");
-                                              Navigator.push(context,
-                                                MaterialPageRoute(builder: (context)=>CategoryPage(categoryId.toString(),descriptionPublic,createdby,completedby))
-                                              );
+                                                textAlign: TextAlign.center,
+                                              )));
                                             },
-                                            child:Container(
-                                              child:
-                                              GroupCategory(
-                                              descriptionPublic,
-                                              completedPublic)
+                                            background: Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0.0, 9.0, 0.0, 9.0),
+                                              alignment:
+                                                  AlignmentDirectional.centerEnd,
+                                              height: 50,
+                                              color: Colors.red,
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0, 0, 20, 0),
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  color: Colors.white,
+                                                  size: 40.0,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                      ),
-                                    );
-                                  })),
+                                            child: Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  0.0, 5.0, 0.0, 5.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  print("HI");
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CategoryPage(
+                                                                  categoryId
+                                                                      .toString(),
+                                                                  descriptionPublic,
+                                                                  createdby,
+                                                                  completedby)));
+                                                },
+                                                child: Container(
+                                                    child: GroupCategory(
+                                                        descriptionPublic,
+                                                        completedPublic)),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                              )),
                         ],
                       ),
                     ),
@@ -469,14 +500,14 @@ class TodoState extends State<TodoPage> {
   }
 }
 
-class PublicDialog extends StatefulWidget{
+class PublicDialog extends StatefulWidget {
   Function callback;
   PublicDialog(this.callback);
   @override
   _PublicDialogState createState() => _PublicDialogState();
 }
 
-class _PublicDialogState extends State<PublicDialog>{
+class _PublicDialogState extends State<PublicDialog> {
   String _date = 'Select Date';
   String _time = 'Select Time';
   bool isButtonEnabled = false;
@@ -537,9 +568,8 @@ class _PublicDialogState extends State<PublicDialog>{
     print(jsonResponse);
   }
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
@@ -563,7 +593,7 @@ class _PublicDialogState extends State<PublicDialog>{
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return AlertDialog(
       title: Container(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 12.0),
@@ -609,26 +639,25 @@ class _PublicDialogState extends State<PublicDialog>{
             Container(
               margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
               child: TextFormField(
-                autofocus: true,
-                controller: newCategoryController,
-                style: TextInBox,
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                    hintText: 'New Category?',
-                    hintStyle: TextStyle(
-                        color: Colors.black.withOpacity(0.5),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18.0),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        borderSide: BorderSide(color: Color(0xFFF96861))),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        borderSide: BorderSide(color: Color(0xFFF96861)))),
-                    onChanged: (val) {
-                        isEmpty(); 
-                          }   
-              ),
+                  autofocus: true,
+                  controller: newCategoryController,
+                  style: TextInBox,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      hintText: 'New Category?',
+                      hintStyle: TextStyle(
+                          color: Colors.black.withOpacity(0.2),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18.0),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: BorderSide(color: Color(0xFFF96861))),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: BorderSide(color: Color(0xFFF96861)))),
+                  onChanged: (val) {
+                    isEmpty();
+                  }),
             ),
             Container(
               alignment: Alignment.center,
@@ -655,7 +684,7 @@ class _PublicDialogState extends State<PublicDialog>{
                         // _completed_byPB.add(
                         //     "${DateFormat("y-MM-dd").format(_date).toString()} ${_time.hour.toString()}:${_time.minute.toString()}:00");
                       },
-                      child: Text('$_date',style: NormalFont),
+                      child: Text('$_date', style: NormalFont),
                     ),
                   ),
                   Container(
@@ -682,19 +711,20 @@ class _PublicDialogState extends State<PublicDialog>{
                 width: 400,
                 margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
                 child: RaisedButton(
-                  color:Color(0xFFF96861),
-                    onPressed:isButtonEnabled? () 
-                      async{
+                  color: Color(0xFFF96861),
+                  onPressed: isButtonEnabled
+                      ? () async {
                           Navigator.pop(context);
                           // _category.add(newCategoryController.text);
                           // _is_completedPB.add(false);
                           // _completed_byPB.add("");
-                          await _postPublicCategory(newCategoryController.text,
-                              "$_date $_time:00");
+                          await _postPublicCategory(
+                              newCategoryController.text, "$_date $_time:00");
                           await widget.callback();
                           newCategoryController.clear();
                           // result 1 and it will be executed after 2 seconds
-                        }:null,
+                        }
+                      : null,
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(15.0)),
                   padding: EdgeInsets.all(15.0),
@@ -707,7 +737,6 @@ class _PublicDialogState extends State<PublicDialog>{
     );
   }
 }
-
 
 class PrivateDialog extends StatefulWidget {
   Function refresh;
@@ -806,12 +835,12 @@ class _PrivateDialogState extends State<PrivateDialog> {
               child: TextFormField(
                   autofocus: true,
                   controller: newTaskController,
-                  style: TextStyle(color: Colors.black),
+                  style: TextInBox,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                       hintText: 'What Chu wanna Do?',
                       hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.2),
                           fontWeight: FontWeight.w600,
                           fontSize: 18.0),
                       enabledBorder: OutlineInputBorder(
@@ -835,7 +864,6 @@ class _PrivateDialogState extends State<PrivateDialog> {
                           await widget.refresh();
                           newTaskController.clear();
                           Navigator.pop(context);
-                        
                         }
                       : null,
                   shape: RoundedRectangleBorder(
