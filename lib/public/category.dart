@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flushbar/flushbar.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:async';
 import 'dart:io';
@@ -19,16 +20,18 @@ class CategoryPage extends StatefulWidget {
   String category;
   String createdBy;
   String completedBy;
-  CategoryPage(this.categoryId,this.category,this.createdBy,this.completedBy);
+  CategoryPage(
+      this.categoryId, this.category, this.createdBy, this.completedBy);
 
   @override
-  CategoryState createState() => CategoryState(categoryId,category,createdBy,completedBy);
+  CategoryState createState() =>
+      CategoryState(categoryId, category, createdBy, completedBy);
 }
 
-class _AddTask{
+class _AddTask {
   String status;
   _AddTask({this.status});
-  factory _AddTask.fromJson(Map<String,dynamic> parsedJson){
+  factory _AddTask.fromJson(Map<String, dynamic> parsedJson) {
     return _AddTask(
       status: parsedJson['status'],
     );
@@ -40,7 +43,8 @@ class CategoryState extends State<CategoryPage> {
   String category;
   String createdBy;
   String completedBy;
-  CategoryState(this.categoryId,this.category,this.createdBy,this.completedBy);
+  CategoryState(
+      this.categoryId, this.category, this.createdBy, this.completedBy);
 
   String _createdByName = '';
   bool _memberDeleted = false;
@@ -52,7 +56,7 @@ class CategoryState extends State<CategoryPage> {
   List<String> _createdBys = [];
   List<bool> _isCompleteds = [];
   int _taskLength = 0;
- 
+
   final storage = FlutterSecureStorage();
   final taskController = TextEditingController();
 
@@ -63,7 +67,7 @@ class CategoryState extends State<CategoryPage> {
     super.dispose();
   }
 
-   Future<void> getStoredMemberData() async{
+  Future<void> getStoredMemberData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List members = prefs.getStringList('members');
     List memberColors = prefs.getStringList('member_color');
@@ -76,7 +80,8 @@ class CategoryState extends State<CategoryPage> {
     } else {
       creatorName = "<deleted>";
       memberDeleted = true;
-    };
+    }
+    ;
     setState(() {
       _members = members;
       _memberColors = memberColors;
@@ -87,20 +92,19 @@ class CategoryState extends State<CategoryPage> {
   }
 
   //GET REQUEST TO GET TASK LIST IN THE PUBLIC CATEGORY
-  _getPublicTask(String categoryId) async{
+  _getPublicTask(String categoryId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/get/public_task/$categoryId';
-    http.Response response = await http.get(
-      url,
-      headers:{'Authorization':'Bearer $token'}
-    );
+    String url =
+        'http://10.0.2.2:5000/api/v1/users/get/public_task/$categoryId';
+    http.Response response =
+        await http.get(url, headers: {'Authorization': 'Bearer $token'});
     final responseJson = jsonDecode(response.body);
     //Convert list of objects into individual lists:
     List<String> taskId = [];
     List<String> task = [];
     List<String> createdBy = [];
     List<bool> isCompleted = [];
-    for (int i=0;i<responseJson.length;i++){
+    for (int i = 0; i < responseJson.length; i++) {
       taskId.add(responseJson[i]["id"]);
       task.add(responseJson[i]["task"]);
       createdBy.add(responseJson[i]["created by"]);
@@ -108,7 +112,7 @@ class CategoryState extends State<CategoryPage> {
     }
     print(taskId);
     print(task);
-    setState((){
+    setState(() {
       _taskIds = taskId;
       _tasks = task;
       _createdBys = createdBy;
@@ -118,14 +122,14 @@ class CategoryState extends State<CategoryPage> {
   }
 
   //POST REQUEST TO ADD ITEMS
-  _addPublicTask(String task, String categoryId) async{
+  _addPublicTask(String task, String categoryId) async {
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/newpublictask';
     String json = '{"task":"$task","category_id":"$categoryId"}';
     http.Response response = await http.post(
       url,
       headers: {
-        'Content-type':'application/json',
+        'Content-type': 'application/json',
         'Authorization': 'Bearer $token'
       },
       body: json,
@@ -133,10 +137,10 @@ class CategoryState extends State<CategoryPage> {
     final jsonResponse = jsonDecode(response.body);
     _AddTask addTask = new _AddTask.fromJson(jsonResponse);
     print(addTask.status);
-    if (addTask.status == "success"){
+    if (addTask.status == "success") {
       Flushbar(
         message: '$category list has been updated',
-        backgroundColor: Colors.blueGrey,   
+        backgroundColor: Colors.blueGrey,
         duration: Duration(seconds: 3),
       )..show(context);
       _getPublicTask(categoryId);
@@ -151,19 +155,20 @@ class CategoryState extends State<CategoryPage> {
     _getPublicTask(categoryId);
   }
 
-  complete(int taskId) async{
+  complete(int taskId) async {
     int positionChg = _taskIds.indexOf(taskId.toString());
     List updatedIsCompleted = _isCompleteds;
-    if (updatedIsCompleted[positionChg]){
+    if (updatedIsCompleted[positionChg]) {
       updatedIsCompleted[positionChg] = false;
     } else {
       updatedIsCompleted[positionChg] = true;
     }
-    setState((){
+    setState(() {
       _isCompleteds = updatedIsCompleted;
     });
   }
-  delete(int taskId) async{
+
+  delete(int taskId) async {
     int positionDelete = _taskIds.indexOf(taskId.toString());
     List<String> newTaskIds = _taskIds;
     List<String> newTasks = _tasks;
@@ -173,7 +178,7 @@ class CategoryState extends State<CategoryPage> {
     newTasks.removeAt(positionDelete);
     newCreatedBy.removeAt(positionDelete);
     newIsCompleted.removeAt(positionDelete);
-    setState((){
+    setState(() {
       _taskIds = newTaskIds;
       _tasks = newTasks;
       _createdBys = newCreatedBy;
@@ -183,155 +188,165 @@ class CategoryState extends State<CategoryPage> {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor, 
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-
-          children: <Widget>[
-            
-            NavBar('$category',0xFFBDCC11,false),
-
-            Container(
-              margin: EdgeInsets.symmetric(vertical:30.0,horizontal:40.0),
-              // decoration: BoxDecoration(border: Border.all(color:Colors.white)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-
-                  Container(
-                    margin: EdgeInsets.fromLTRB(80.0,0.0,80.0,20.0),
-                    padding: EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color:Color(0xFFF96861)),
-                      borderRadius: BorderRadius.circular(15.0)
-                    ),
-                    child: Row(
+              NavBar('$category', 0xFFBDCC11, false),
+              Container(
+                  margin:
+                      EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
+                  // decoration: BoxDecoration(border: Border.all(color:Colors.white)),
+                  child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Creator : ',style:BoldFont,textAlign:TextAlign.center),
-                        Text('$_createdByName',
-                          style: _memberDeleted ? NormalFontItalics : NormalFont,
-                          textAlign:TextAlign.center),
-                      ],
-                    ) 
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.only(left: 30.0, bottom: 5.0),
-                    child:Text('Members',style:NormalFont),
-                  ),
-
-                   Container(
-                    height: 85.0,
-                    padding: EdgeInsets.all(5.0),
-                    margin: EdgeInsets.only(bottom: 20.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color:Colors.white),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Column(children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: _members.length,
-                            itemBuilder: (context,index){
-                              var member = _members[index];
-                              var color = int.parse(_memberColors[index]);
-                              return HouseMembers2(member,color);
-                            }
-                          )
-                        ),
-                      ),
-                    ],)
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5.0),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.start,children: <Widget>[
-                      Text('complete by: ',style:MemberListBold),
-                      Text('$completedBy',style:MemberList),
-
-                    ],)
-                  ),
-
-                  Container(
-                    height: 450.0,
-                    padding: EdgeInsets.symmetric(vertical:30.0,horizontal:40.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color:Colors.white),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-
-                        TextField(
-                          controller: taskController,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            hintText: 'Type Something',
-                            hintStyle: TextStyle(color:Colors.grey,),
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.add,color: Colors.white,size: 35.0,),
-                              onPressed: (){
-                                _addPublicTask(taskController.text,categoryId);
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                WidgetsBinding.instance.addPostFrameCallback( (_) => taskController.clear());
-                              },
+                        Container(
+                            margin: EdgeInsets.fromLTRB(80.0, 0.0, 80.0, 20.0),
+                            padding: EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xFFF96861)),
+                                borderRadius: BorderRadius.circular(15.0)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text('Creator : ',
+                                    style: BoldFont,
+                                    textAlign: TextAlign.center),
+                                Text('$_createdByName',
+                                    style: _memberDeleted
+                                        ? NormalFontItalics
+                                        : NormalFont,
+                                    textAlign: TextAlign.center),
+                              ],
+                            )),
+                        Container(
+                            height: 120.0,
+                            padding: EdgeInsets.all(5.0),
+                            margin: EdgeInsets.only(bottom: 20.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(15.0),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color:Colors.white),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 1.0),  
+                                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 0, 0),                                // padding:
+                                    //  padding:EdgeInsets.only(left: 10.0, bottom: 5.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text('Members :', style: CompleteBy),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: _members.length,
+                                          itemBuilder: (context, index) {
+                                            var member = _members[index];
+                                            var color =
+                                                int.parse(_memberColors[index]);
+                                            return HouseMembers2(member, color);
+                                          })),
+                                ),
+                              ],
+                            )),
+                        Container(
+                            height: 450.0,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 25.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(15.0),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color:Color(0xFFDB6ED6)),
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          child: Container(
-                            child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: _taskLength,
-                              itemBuilder: (context,index){
-                                var taskId = int.parse(_taskIds[index]);
-                                var task = _tasks[index];
-                                var createdBy = _createdBys[index];
-                                var isCompleted = _isCompleteds[index];
-                                var memberPosition = _memberIds.indexOf(createdBy);
-                                int memberColor = 0;
-                                if (memberPosition != -1){
-                                  memberColor = int.parse(_memberColors[memberPosition]);
-                                } else {
-                                  memberColor = 0xFF808080;
-                                }
-                                return PublicTask(taskId,task,isCompleted,memberColor,complete,delete);
-                              }
-                            ),
-                          )
-                        )
-                      
-                      ],
-                    )
-                  )     
-
-                ]
-              )
-            ) 
-            
-          ]
-        )
-      )
-    );
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(bottom: 5.0),
+                                  child:
+                                      Text('Complete by : ', style: CompleteBy),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10.0),
+                                  child: Text(
+                                      '${completedBy.substring(0, completedBy.length - 7)}',
+                                      style: MemberListBold),
+                                ),
+                                TextField(
+                                  controller: taskController,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    hintText: 'Type Something',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                        size: 35.0,
+                                      ),
+                                      onPressed: () {
+                                        _addPublicTask(
+                                            taskController.text, categoryId);
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback(
+                                                (_) => taskController.clear());
+                                      },
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFDB6ED6)),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Container(
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: _taskLength,
+                                      itemBuilder: (context, index) {
+                                        var taskId = int.parse(_taskIds[index]);
+                                        var task = _tasks[index];
+                                        var createdBy = _createdBys[index];
+                                        var isCompleted = _isCompleteds[index];
+                                        var memberPosition =
+                                            _memberIds.indexOf(createdBy);
+                                        int memberColor = 0;
+                                        if (memberPosition != -1) {
+                                          memberColor = int.parse(
+                                              _memberColors[memberPosition]);
+                                        } else {
+                                          memberColor = 0xFF808080;
+                                        }
+                                        return PublicTask(
+                                            taskId,
+                                            task,
+                                            isCompleted,
+                                            memberColor,
+                                            complete,
+                                            delete);
+                                      }),
+                                ))
+                              ],
+                            ))
+                      ]))
+            ])));
   }
-
 }

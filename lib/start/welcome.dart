@@ -55,7 +55,7 @@ class WelcomePage extends StatelessWidget {
                     ),
                     Container(
                       width: 150.0,
-                      margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 15.0),
+                      margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 15.0),
                       child: RaisedButton(
                         color: Color(0xFFF73D99),
                         onPressed: () {
@@ -69,18 +69,18 @@ class WelcomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(110.0, 0.0, 110.0, 0.0),
-                child: RaisedButton(
-                  color: Color(0xFF61C6C0),
-                  onPressed: () {
-                    Navigator.pushNamed(context,LoginRoute);
-                  },
-                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
-                  padding: EdgeInsets.all(5.0),
-                  child: Text('Login with Google', textAlign: TextAlign.center, style: BtnText),
-                ) 
-              ),
+              // Container(
+              //   margin: EdgeInsets.fromLTRB(110.0, 0.0, 110.0, 0.0),
+              //   child: RaisedButton(
+              //     color: Color(0xFF61C6C0),
+              //     onPressed: () {
+              //       Navigator.pushNamed(context,LoginRoute);
+              //     },
+              //     shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+              //     padding: EdgeInsets.all(5.0),
+              //     child: Text('Login with Google', textAlign: TextAlign.center, style: BtnText),
+              //   ) 
+              // ),
             ]
           )
         )

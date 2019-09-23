@@ -40,7 +40,7 @@ const DialogTextPink = TextStyle(
 const AddTaskTitle = TextStyle(
     fontFamily: FontNameDefault,
     fontWeight: FontWeight.w700,
-    fontSize: 25.0,
+    fontSize: 20.0,
     color:  Color(0xFFF96861),
 );
 
@@ -103,11 +103,17 @@ const DoneMutedText = TextStyle(
 
 const MemberNames = TextStyle(
   fontFamily: FontNameDefault,
-  fontWeight: FontWeight.w200,
+  fontWeight: FontWeight.w400,
   fontSize: 15.0,
   color: Colors.white,
 );
 const MemberList = TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w300,
+  fontSize: 18.0,
+  color: Colors.white,
+);
+const CompleteBy = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w300,
   fontSize: 15.0,
@@ -116,7 +122,7 @@ const MemberList = TextStyle(
 const MemberListBold = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w500,
-  fontSize: 15.0,
+  fontSize: 18.0,
   color: Colors.white,
 );
 

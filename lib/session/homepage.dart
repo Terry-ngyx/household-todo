@@ -151,27 +151,42 @@ class HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
 
           children: <Widget>[
-            ReusableWidgets.roomBanner("ROOM ID: $_roomid"),
+            // ReusableWidgets.roomBanner("ROOM ID: $_roomid"),
+            NavBar('ROOM ID: $_roomid',0xFFF96861,false),
             Container(
-              margin: EdgeInsets.symmetric(horizontal:20.0),
+              margin: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-
                   //Members
                   Container(
-                    height: 150.0,
-                    margin: EdgeInsets.only(bottom:20.0),
-                    padding: EdgeInsets.fromLTRB(20.0,20.0,20.0,20.0),
+                    height: 200.0,
+                    margin: EdgeInsets.fromLTRB(0, 40.0, 0, 20.0),
+                    // margin: EdgeInsets.only(bottom:20.0),
+                    padding: EdgeInsets.fromLTRB(0.0,20.0,0.0,20.0),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
+                      border: Border.all(width:3.0 , color: Colors.white),
                       borderRadius: BorderRadius.circular(15.0)
                     ),
                     child: Container(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 20.0),
+                          child:
                           Text("Members",textAlign: TextAlign.center,style:TitleText),
+                          ),
+                          Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 20.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(width:3.0 ,color:Colors.white)
+                            ),
+                          ),
+                          ),
                           Expanded(
                             child: Center(
                               child: ListView.builder(
@@ -195,9 +210,10 @@ class HomePageState extends State<HomePage> {
                     children: <Widget>[
                       //Profile
                       Container(
-                        margin: EdgeInsets.only(bottom:20.0),
-                        height: 170.0,
-                        width: 190.0,
+                        margin: EdgeInsets.fromLTRB(0, 10.0, 0, 20.0),
+                        // margin: EdgeInsets.only(bottom:20.0),
+                        height: 160.0,
+                        width: 160.0,
                         decoration: BoxDecoration(
                           border: Border.all(width:3.0,color: Color(0xFFF96861)),
                           borderRadius: BorderRadius.circular(15.0),
@@ -215,9 +231,10 @@ class HomePageState extends State<HomePage> {
                       ), 
                       //To do
                       Container(
-                        margin: EdgeInsets.only(bottom:20.0),
-                        height: 170.0,
-                        width: 190.0,
+                        margin: EdgeInsets.fromLTRB(0, 10.0, 0, 20.0),
+                        // margin: EdgeInsets.only(bottom:20.0),
+                        height: 160.0,
+                        width: 160.0,
                         decoration: BoxDecoration(
                           border: Border.all(width:3.0,color: Color(0xFFBDCC11)),
                           borderRadius: BorderRadius.circular(15.0)
@@ -241,9 +258,10 @@ class HomePageState extends State<HomePage> {
                     children: <Widget>[
                       //Assign to me
                       Container(
-                        margin: EdgeInsets.only(bottom:20.0),
-                        height: 170.0,
-                        width: 190.0,
+                        margin: EdgeInsets.fromLTRB(0, 10.0, 0, 20.0),
+                        // margin: EdgeInsets.only(bottom:20.0),
+                        height: 160.0,
+                        width: 160.0,
                         decoration: BoxDecoration(
                           border: Border.all(width:3.0,color: Color(0xFF61C6C0)),
                           borderRadius: BorderRadius.circular(15.0)
@@ -261,9 +279,10 @@ class HomePageState extends State<HomePage> {
                       ),
                       //Schedule
                       Container(
-                        margin: EdgeInsets.only(bottom:20.0),
-                        height: 170.0,
-                        width: 190.0,
+                        margin: EdgeInsets.fromLTRB(0, 10.0, 0, 20.0),
+                        // margin: EdgeInsets.only(bottom:20.0),
+                        height: 160.0,
+                        width: 160.0,
                         decoration: BoxDecoration(
                           border: Border.all(width:3.0,color: Color(0xFFF73D99)),
                           borderRadius: BorderRadius.circular(15.0)
@@ -283,27 +302,27 @@ class HomePageState extends State<HomePage> {
                   ),
 
                   //Due Today
-                  Container(
-                    height: 125.0,
-                    margin: EdgeInsets.only(bottom:20.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(15.0)
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: Column(children: <Widget>[
-                        Text("Due Today :",textAlign: TextAlign.left,style:TitleText),
-                        Container(
-                          height: 73.0,
-                          child: Center(
-                            child: Text("Task/Schedule due by today", textAlign: TextAlign.center,style:MutedText)
-                            //PENDING: NEED TO ADD IF ELSE STATEMENT SO IF THERE IS SOMETHING TO BE COMPLETED BY TODAY IT SHOWS UP HERE!
-                          )
-                        )
-                      ],)
-                    )
-                  ),
+                  // Container(
+                  //   height: 125.0,
+                  //   margin: EdgeInsets.only(bottom:20.0),
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(color: Colors.white),
+                  //     borderRadius: BorderRadius.circular(15.0)
+                  //   ),
+                  //   child: Container(
+                  //     padding: EdgeInsets.all(10.0),
+                  //     child: Column(children: <Widget>[
+                  //       Text("Due Today :",textAlign: TextAlign.left,style:TitleText),
+                  //       Container(
+                  //         height: 73.0,
+                  //         child: Center(
+                  //           child: Text("Task/Schedule due by today", textAlign: TextAlign.center,style:MutedText)
+                  //           //PENDING: NEED TO ADD IF ELSE STATEMENT SO IF THERE IS SOMETHING TO BE COMPLETED BY TODAY IT SHOWS UP HERE!
+                  //         )
+                  //       )
+                  //     ],)
+                  //   )
+                  // ),
 
                 ]
               )
