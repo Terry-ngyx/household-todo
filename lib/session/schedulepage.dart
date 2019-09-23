@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../style.dart';
 import '../main.dart';
@@ -56,20 +57,33 @@ class _SchedulePageState extends State<SchedulePage> {
   String _repeatedBy;
   Map<DateTime, List> _events = {};
   Map<DateTime, List> _id = {};
+  Map<DateTime, List> _user_incharge_id = {};
   List _selectedEvents = [];
-  int selectedEventsLength = 0;
   List _selectedId = [];
-  // DateTime _selectedDay;
+  List _selectedUserInchargeId = [];
+  DateTime _selectedDate;
+  int selectedEventsLength = 0;
+  List _members = [];
+  List _memberColors = [];
+  List _memberIds = [];
   CalendarController _calendarController;
 
   ////////////////////////////GET REQUEST GETTING TASKS////////////////////////////
   Future<void> _getScheduledTask() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List members = prefs.getStringList('members');
+    List memberColors = prefs.getStringList('member_color');
+    List memberIds = prefs.getStringList('member_id');
+
     print('Fetching');
     List<DateTime> dateTimes = [];
     List<String> task;
     List<String> id;
+    List<String> user_incharge_id;
     List<List<String>> tasks = [];
     List<List<String>> ids = [];
+    List<List<String>> user_incharge_ids = [];
+    DateTime x;
 
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/get/scheduled/all';
@@ -85,44 +99,53 @@ class _SchedulePageState extends State<SchedulePage> {
     }
 
     var distinctDateTimes = dateTimes.toSet().toList();
-    // setState(()=>_tasks = tasks);
-    // setState(()=>_is_completed = is_completed);
-
-    // print(tasks);
-    // print(distinctDateTimes);
-    // print(responseJson);
+    print(responseJson);
 
     for (int x = 0; x < distinctDateTimes.length; x++) {
       task = [];
       id = [];
+      user_incharge_id = [];
       for (int y = 0; y < responseJson.length; y++) {
         if (distinctDateTimes[x] ==
             DateTime.parse('${responseJson[y]["date"]} 00:00:00.000')) {
           task.add(responseJson[y]["task"]);
           id.add(responseJson[y]["task_id"]);
+          user_incharge_id.add(responseJson[y]["user_id_incharge"].toString());
         }
       }
       tasks.add(task);
       ids.add(id);
+      user_incharge_ids.add(user_incharge_id);
     }
 
     for (int x = 0; x < distinctDateTimes.length; x++) {
       _events.addAll({distinctDateTimes[x]: tasks[x]});
       _id.addAll({distinctDateTimes[x]: ids[x]});
+      _user_incharge_id.addAll({distinctDateTimes[x]: user_incharge_ids[x]});
     }
 
-    DateTime x = DateTime.parse(
-        '${DateTime.now().toString().split(" ")[0]} 00:00:00.000');
+    if (_selectedDate == null) {
+      x = DateTime.parse(
+          '${DateTime.now().toString().split(" ")[0]} 00:00:00.000');
+    } else {
+      x = DateTime.parse(
+          '${_selectedDate.toString().split(" ")[0]} 00:00:00.000');
+    }
     setState(() {
       _events = _events;
       _id = _id;
+      _user_incharge_id = _user_incharge_id;
       _selectedEvents = _events[x] ?? [];
       _selectedId = _id[x] ?? [];
+      _selectedUserInchargeId = _user_incharge_id[x] ?? [];
       selectedEventsLength = _selectedEvents.length;
+      _members = members;
+      _memberColors = memberColors;
+      _memberIds = memberIds;
     });
 
     // print(_events);
-    // print(_id);
+    print(_selectedEvents);
     // print('Fetched');
   }
 
@@ -170,7 +193,6 @@ class _SchedulePageState extends State<SchedulePage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
               NavBar('Schedule', 0xFFF73D99, false),
-
               Container(
                 margin: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 0.0),
                 child: TableCalendar(
@@ -181,9 +203,11 @@ class _SchedulePageState extends State<SchedulePage> {
                         _selectedEvents = events;
                         selectedEventsLength = _selectedEvents.length;
                         // print(_selectedEvents);
+                        _selectedDate = calendar_date;
                         date = DateTime.parse(
                             '${calendar_date.toString().split(" ")[0]} 00:00:00.000');
                         _selectedId = _id[date];
+                        _selectedUserInchargeId = _user_incharge_id[date] ?? [];
                         // print(date);
                         // print(_id[date]);
                         // print(_id);
@@ -303,6 +327,17 @@ class _SchedulePageState extends State<SchedulePage> {
                                     scrollDirection: Axis.vertical,
                                     itemCount: selectedEventsLength,
                                     itemBuilder: (context, index) {
+                                      String assigned = '';
+                                      int color;
+                                      int pos = _memberIds.indexOf(
+                                          _selectedUserInchargeId[index]);
+                                      if (pos != -1) {
+                                        assigned = _members[pos];
+                                        color = int.parse(_memberColors[pos]);
+                                      } else {
+                                        assigned = 'Assign to user';
+                                        color = 0xFF848484;
+                                      }
                                       var task = _selectedEvents;
                                       var ids = _selectedId;
                                       var id = int.parse(_selectedId[index]);
@@ -358,7 +393,8 @@ class _SchedulePageState extends State<SchedulePage> {
                                                 //     !is_completed[index];
                                               });
                                             },
-                                            child: Schedules(description),
+                                            child: Schedules(description,
+                                                assigned, color, id, _getScheduledTask),
                                           ),
                                         ),
                                       );
@@ -366,55 +402,249 @@ class _SchedulePageState extends State<SchedulePage> {
                           ],
                         )),
                   ])),
-              // RaisedButton(
-              //   color: Color(0xFFF73D99),
-              //   shape: RoundedRectangleBorder(
-              //       borderRadius: new BorderRadius.circular(15.0)),
-              //   padding: EdgeInsets.all(15.0),
-              //   onPressed: () {
-              //     showDialog(
-              //         context: context,
-              //         builder: (context) {
-              //           if (date == null) {
-              //             date = DateTime.now();
-              //             return DialogBox(date, _getScheduledTask);
-              //           } else {
-              //             return DialogBox(date, _getScheduledTask);
-              //           }
-              //           // return DialogBox(callback);
-              //         });
-              //   },
-              //   child: Text('Add Task',
-              //       textAlign: TextAlign.center, style: BtnText),
-              // ),
             ]))));
   }
 }
 
-class Schedules extends StatelessWidget {
+class Schedules extends StatefulWidget {
   String task;
+  String assigned;
+  int color;
+  int id;
+  Function getSceduledTask;
   // String task_id;
-  Schedules(this.task);
+  Schedules(this.task, this.assigned, this.color, this.id, this.getSceduledTask);
+  @override
+  _SchedulesState createState() => _SchedulesState();
+}
+
+class _SchedulesState extends State<Schedules> {
+  _assign(String username, int taskId) async {
+    String token = await storage.read(key: 'jwt');
+    String url = 'http://10.0.2.2:5000/api/v1/users/assign';
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+    String json = '{"user_incharge_username":"$username", "task_id":"$taskId"}';
+    http.Response response = await http.post(url, headers: headers, body: json);
+    int statusCode = response.statusCode;
+    final jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 100.0,
-      width: 500.0,
-      margin: EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 4.0),
-      padding: EdgeInsets.fromLTRB(15.0, 15.0, 0.0, 15.0),
-
-      color: Color(0xFFF73D99),
-      child: Text(
-        task,
-        textAlign: TextAlign.left,
-        style: NormalFont,
-      ),
-      // )
-    );
+        // alignment: MainAxisAlignment.spaceBetween,
+        // height: 100.0,
+        width: 500.0,
+        margin: EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 4.0),
+        padding: EdgeInsets.fromLTRB(15.0, 15.0, 10.0, 15.0),
+        color: Color(widget.color),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Text(
+              widget.task,
+              textAlign: TextAlign.left,
+              style: NormalFont,
+            ),
+            SizedBox(
+              width: 40.0,
+            ),
+            Container(
+                child: GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogBoxAssign(widget.id, widget.getSceduledTask);
+                      // return DialogBox(callback);
+                    });
+              },
+              child: Text(widget.assigned, textAlign: TextAlign.center),
+            ))
+          ],
+        )
+        // )
+        );
   }
 }
 
+/////////////////////////////// DIALOG BOX ASSIGN TASK//////////////////////////////////
+class DialogBoxAssign extends StatefulWidget {
+  int id;
+  Function getScheduledTask;
+  DialogBoxAssign(this.id, this.getScheduledTask);
+  // DateTime date;
+  // Function callback;
+  // DialogBoxAssign(this.date, this.callback);
+  @override
+  _DialogBoxAssignState createState() => _DialogBoxAssignState();
+}
+
+class _DialogBoxAssignState extends State<DialogBoxAssign>
+    with TickerProviderStateMixin {
+  List<String> _assignTypeList = ['Individual', 'Round Robin', 'Randomise'];
+  List<String> _memberNames = []; // Option 2
+  // List<String> _repeatFor = [for (var i = 1; i < 51; i += 1) '$i'];
+  // TimeOfDay _time = new TimeOfDay.now();
+  bool isButtonEnabled = false;
+  final assignController = TextEditingController();
+  // List<String> _repeatFor =
+  String _assignedType = 'Round Robin';
+  String _pickedMember;
+  // String _repeatedFor = '1';
+
+  Future<void> _getMemberNames() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> memberNames = prefs.getStringList('members');
+    setState(() {
+      _memberNames = memberNames;
+      _pickedMember = _memberNames[0];
+    });
+  }
+
+
+  Future<void> _assign(String username, int taskId) async {
+    String token = await storage.read(key: 'jwt');
+    String url = 'http://10.0.2.2:5000/api/v1/users/assign';
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+    String json = '{"user_incharge_username":"$username", "task_id":"$taskId"}';
+    http.Response response = await http.post(url, headers: headers, body: json);
+    int statusCode = response.statusCode;
+    final jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+  }
+
+  @override
+  void initState() {
+    _getMemberNames();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    assignController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        title: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Color(0xFFF73D99)),
+              ),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    child: Text(
+                      "Assign to roomie",
+                      style: DialogTextPink,
+                    ),
+                  ),
+                ),
+              ],
+            )),
+        content: Container(
+            height: 200.0,
+            width: 300.0,
+            child: Column(children: <Widget>[
+              //////////////////// DROPDOWN BUTTON
+              Row(
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      'Repeat Type:  ',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  Container(
+                    child: DropdownButton(
+                      hint: Text(''), // Not necessary for Option 1
+                      value: _assignedType,
+                      items: _assignTypeList.map((option) {
+                        return DropdownMenuItem(
+                          child: new Text(
+                            option,
+                            style: TextStyle(color: Color(0xFFF73D99)),
+                          ),
+                          value: option,
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _assignedType = newValue;
+                          // widget.callback(newValue);
+                          print(_assignedType);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Visibility(
+                  visible: _assignedType == 'Individual' ? true : false,
+                  child: Row(children: <Widget>[
+                    Container(
+                      child: Text(
+                        'Assign To:  ',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    Container(
+                      child: DropdownButton(
+                        hint: Text(''), // Not necessary for Option 1
+                        value: _pickedMember,
+                        items: _memberNames.map((option) {
+                          return DropdownMenuItem(
+                            child: new Text(
+                              option,
+                              style: TextStyle(color: Color(0xFFF73D99)),
+                            ),
+                            value: option,
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _pickedMember = newValue;
+                            // widget.callback(newValue);
+                            print(_pickedMember);
+                          });
+                        },
+                      ),
+                    ),
+                  ])),
+              Container(
+                  margin: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 50.0),
+                  child: RaisedButton(
+                    color: Color(0xFF61C6C0),
+                    onPressed: () async {
+                      await _assign(_pickedMember, widget.id);
+                      await widget.getScheduledTask();
+                      Navigator.pop(context);
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(15.0)),
+                    padding: EdgeInsets.all(10.0),
+                    child: Text('Assign',
+                        textAlign: TextAlign.center, style: BtnText),
+                  )),
+            ])));
+  }
+}
+
+/////////////////////////////// DIALOG BOX ADD TASK//////////////////////////////////
 class DialogBox extends StatefulWidget {
   DateTime date;
   Function callback;
@@ -425,7 +655,6 @@ class DialogBox extends StatefulWidget {
   _DialogBoxState createState() => _DialogBoxState();
 }
 
-/////////////////////////////// DIALOG BOX //////////////////////////////////
 class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
   List<String> _repeatBy = ['weekly', 'monthly']; // Option 2
   List<String> _repeatFor = [for (var i = 1; i < 51; i += 1) '$i'];
@@ -442,12 +671,12 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
     super.initState();
 
     // Start listening to changes.
-    taskController.addListener(_printLatestValue);
+    // taskController.addListener(_printLatestValue);
   }
 
-  _printLatestValue() {
-    print("Second text field: ${taskController.text}");
-  }
+  // _printLatestValue() {
+  //   print("Second text field: ${taskController.text}");
+  // }
 
 ////////////////////////////POST REQUEST CREATE NEW TASK/////////////////////
   Future<String> _createTask(String task, String repeat_by, String repeat_for,
@@ -476,10 +705,10 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
     setState(() {
       if (taskController.text.length == 0) {
         isButtonEnabled = false;
-        print(isButtonEnabled);
+        // print(isButtonEnabled);
       } else {
         isButtonEnabled = true;
-        print(isButtonEnabled);
+        // print(isButtonEnabled);
       }
     });
   }
@@ -588,7 +817,10 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                           borderSide: BorderSide(color:  Color(0xFF61C6C0)))),
                   onChanged: (val) {
                     isEmpty();
+<<<<<<< HEAD
                     // print('z');
+=======
+>>>>>>> users can do individual assign
                   },
                 ),
               ),
@@ -620,10 +852,10 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                         );
                       }).toList(),
                       onChanged: (newValue) {
-                        print(widget.date);
                         setState(() {
                           _repeatedBy = newValue;
                           // widget.callback(newValue);
+                          print(widget.date);
                           print(_repeatedBy);
                         });
                       },
@@ -658,7 +890,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                       setState(() {
                         _repeatedFor = newValue;
                         // widget.callback(newValue);
-                        print(_repeatedFor);
+                        // print(_repeatedFor);
                       });
                     },
                   ),

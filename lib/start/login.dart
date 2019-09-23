@@ -4,6 +4,7 @@ import 'package:household/start/getstarted.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:household/widgets/messaging_widget.dart';
+// import android.provider.Settings.Secure;
 
 import 'dart:async';
 import 'dart:convert';
@@ -15,9 +16,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: LoginForm()
-    );
+        backgroundColor: Theme.of(context).backgroundColor, body: LoginForm());
   }
 }
 
@@ -30,18 +29,14 @@ class LoginForm extends StatefulWidget {
 
 Future <String> getDeviceToken() async {
     String fcmToken = await firebaseMessaging.getToken();
-<<<<<<< HEAD
-    // String fcmToken = "";
-=======
-    // String fcmToken = "qweqwe";
->>>>>>> set up front end view of grocers nearby using google maps
 
-    if (fcmToken != null) {
-      print("token: $fcmToken");
-      await storage.write(key:'fcmToken',value:fcmToken);
-      return fcmToken;
-    }
+
+  if (fcmToken != null) {
+    print("token: $fcmToken");
+    await storage.write(key: 'fcmToken', value: fcmToken);
+    return fcmToken;
   }
+}
 
 class _User {
   String status;
@@ -50,7 +45,8 @@ class _User {
   String room_id;
   String is_admin;
 
-  _User({this.status, this.jwt_token, this.user_id, this.room_id, this.is_admin});
+  _User(
+      {this.status, this.jwt_token, this.user_id, this.room_id, this.is_admin});
 
   factory _User.fromJson(Map<String, dynamic> parsedJson) {
     return _User(
@@ -68,7 +64,6 @@ class LoginFormState extends State<LoginForm> {
   String password;
 
   Future<_User> _login(String userUsername, String userPassword) async {
-
     // set up POST request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/login';
     Map<String, String> headers = {"Content-type": "application/json"};
@@ -76,7 +71,8 @@ class LoginFormState extends State<LoginForm> {
     var fcmToken = await getDeviceToken();
     // var fcmToken = "qweqwe";
 
-    String json = '{"username": "$userUsername", "password": "$userPassword", "android_token": "$fcmToken"}';
+    String json =
+        '{"username": "$userUsername", "password": "$userPassword", "android_token": "$fcmToken"}';
     // print(json);
     // make POST request
 
@@ -103,11 +99,11 @@ class LoginFormState extends State<LoginForm> {
       //Shared Preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       print(user.room_id);
-      prefs.setString('user_id',user.user_id);
-      prefs.setString('user_room_id',user.room_id);
+      prefs.setString('user_id', user.user_id);
+      prefs.setString('user_room_id', user.room_id);
       //Secured Storage
-      await storage.write(key:'jwt',value:user.jwt_token);
-      print(await storage.read(key:'jwt'));     //PLEASE REMEMBER TO DELETE
+      await storage.write(key: 'jwt', value: user.jwt_token);
+      print(await storage.read(key: 'jwt')); //PLEASE REMEMBER TO DELETE
 
       // print(user.user_id);
       // print(user.room_id);
@@ -118,7 +114,6 @@ class LoginFormState extends State<LoginForm> {
       Scaffold.of(context)
           .showSnackBar(SnackBar(content: Text('Login Failed!')));
     }
-
   }
 
   @override
@@ -208,20 +203,20 @@ class LoginFormState extends State<LoginForm> {
                                     Scaffold.of(context).showSnackBar(
                                         SnackBar(content: Text('Logging In')));
                                     _formkey.currentState.save();
-                                    var user =
-                                        await _login(username, password);
-                                        // print(user.room_id);
-                                    if (user.room_id.isEmpty || user.room_id == null || user.room_id == "NULL" || user.room_id == "None") {
+                                    var user = await _login(username, password);
+                                    // print(user.room_id);
+                                    if (user.room_id.isEmpty ||
+                                        user.room_id == null ||
+                                        user.room_id == "NULL" ||
+                                        user.room_id == "None") {
                                       await new Future.delayed(
                                           const Duration(seconds: 1));
                                       Navigator.pushNamed(
                                           context, GetStartedRoute);
-                                    }
-                                    else{
+                                    } else {
                                       await new Future.delayed(
                                           const Duration(seconds: 1));
-                                      Navigator.pushNamed(
-                                          context, HomeRoute);
+                                      Navigator.pushNamed(context, HomeRoute);
                                     }
                                   }
                                 },
