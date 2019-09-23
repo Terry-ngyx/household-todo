@@ -37,6 +37,8 @@ class TodoState extends State<TodoPage> {
   List<bool> _is_completedPB = [];
   List<String> _completed_byPB = [];
   List<String> _created_byPB = [];
+  // bool isButtonEnabled = false;
+
 
   getPrivateTask() async {
     String token = await storage.read(key: 'jwt');
@@ -180,6 +182,7 @@ class TodoState extends State<TodoPage> {
     _getPublicCategory();
   }
 
+
   final newTaskController = TextEditingController();
   @override
   void dispose() {
@@ -305,7 +308,7 @@ class TodoState extends State<TodoPage> {
                                                                   15.0),
                                                           borderSide: BorderSide(
                                                               color:
-                                                                  Color(0xFFF96861)))),
+                                                                  Color(0xFFF96861)))), 
                                                 ),
                                               ),
                                               Container(
@@ -314,16 +317,14 @@ class TodoState extends State<TodoPage> {
                                                       0.0, 30.0, 0.0, 0.0),
                                                   child: RaisedButton(
                                                     color: Color(0xFFF96861),
-                                                    onPressed: () {
+                                                    onPressed:() {
                                                       Navigator.pop(context);
                                                       _postPrivateTask(newTaskController.text);
                                                       newTaskController.clear();
                                                     },
                                                     shape: RoundedRectangleBorder(
                                                         borderRadius:
-                                                            new BorderRadius
-                                                                    .circular(
-                                                                15.0)),
+                                                            new BorderRadius.circular(15.0)),
                                                     padding:
                                                         EdgeInsets.all(15.0),
                                                     child: Text('Add',
@@ -586,6 +587,7 @@ class PublicDialog extends StatefulWidget{
 class _PublicDialogState extends State<PublicDialog>{
   String _date = 'Select Date';
   String _time = 'Select Time';
+  bool isButtonEnabled = false;
 
   Future<Null> _selectDate() async {
     final DateTime picked = await showDatePicker(
@@ -648,6 +650,19 @@ class _PublicDialogState extends State<PublicDialog>{
   void initState(){
     super.initState();
   }
+
+  void isEmpty() {
+    setState(() {
+      if (newCategoryController.text.length == 0) {
+        isButtonEnabled = false;
+        print(isButtonEnabled);
+      } else {
+        isButtonEnabled = true;
+        print(isButtonEnabled);
+      }
+    });
+  }
+
   final newCategoryController = TextEditingController();
   @override
   void dispose() {
@@ -694,7 +709,7 @@ class _PublicDialogState extends State<PublicDialog>{
         ),
       ),
       content: Container(
-        height: 300,
+        height: 280,
         width: 400,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -718,6 +733,9 @@ class _PublicDialogState extends State<PublicDialog>{
                     focusedBorder: OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(15.0),
                         borderSide: BorderSide(color: Color(0xFFF96861)))),
+                    onChanged: (val) {
+                        isEmpty(); 
+                          }   
               ),
             ),
             Container(
@@ -773,7 +791,7 @@ class _PublicDialogState extends State<PublicDialog>{
                 margin: EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
                 child: RaisedButton(
                   color:Color(0xFFF96861),
-                    onPressed:() 
+                    onPressed:isButtonEnabled? () 
                       {
                           Navigator.pop(context);
                           // _category.add(newCategoryController.text);
@@ -784,7 +802,7 @@ class _PublicDialogState extends State<PublicDialog>{
                           widget.callback();
                           newCategoryController.clear();
                           // result 1 and it will be executed after 2 seconds
-                        },
+                        }:null,
                   shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(15.0)),
                   padding: EdgeInsets.all(15.0),

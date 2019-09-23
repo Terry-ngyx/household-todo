@@ -251,7 +251,7 @@ class HomePageState extends State<HomePage> {
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap:() {
-                            Navigator.pushNamed(context,TestRoute);
+                            // Navigator.pushNamed(context,TestRoute);
                             print("are you working?");
                           },
                           child: Center(

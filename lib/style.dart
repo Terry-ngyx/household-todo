@@ -41,7 +41,7 @@ const AddTaskTitle = TextStyle(
     fontFamily: FontNameDefault,
     fontWeight: FontWeight.w700,
     fontSize: 25.0,
-    color:  Color(0xFFF73D99),
+    color:  Color(0xFFF96861),
 );
 
 
@@ -138,12 +138,18 @@ const AddTaskBody = TextStyle(
 const CompletedBy = TextStyle(
   fontFamily: FontNameDefault,
   fontWeight: FontWeight.w600,
-  fontSize: 17.0,
-  color: Colors.black,
+  fontSize: 18.0,
+  color: Color(0xFFF96861),
 );
 
 const TextInBox =  TextStyle(
     fontFamily: FontNameDefault,
     color: Color(0xFF0C324E),
     fontWeight: FontWeight.w600,
+    fontSize: 18.0);
+
+const TextInBoxPink =  TextStyle(
+    fontFamily: FontNameDefault,
+    color: Color(0xFFF73D99),
+    fontWeight: FontWeight.w400,
     fontSize: 18.0);

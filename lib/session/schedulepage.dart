@@ -329,7 +329,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                           Scaffold.of(context).showSnackBar(
                                               SnackBar(
                                                   content: Text(
-                                                      " Task $description dismissed !")));
+                                                      " Schedule $description dismissed !")));
                                         },
                                         background: Container(
                                           margin: EdgeInsets.fromLTRB(
@@ -511,6 +511,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Container(
+          padding: EdgeInsets.only(bottom:12.0),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(color: Color(0xFFF73D99)),
@@ -522,7 +523,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                 flex: 1,
                 child: Container(
                   child: Text(
-                    "Add New Task",
+                    "New Task",
                     style: DialogTextPink,
                   ),
                 ),
@@ -536,36 +537,50 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                     style: DialogTextPink,
                   ),
                 ),
-              )
+              ),
+              Container(
+              margin: EdgeInsets.only(left: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  color: Color(0xFFF73D99),
+                  size: 30.0,
+                ),
+              ),
+            ),
             ],
           )),
       content: Container(
-          height: 400.0,
+          height: 300.0,
           width: 300.0,
           child: Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+                margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
                 child: TextFormField(
                   controller: taskController,
-                  // style: TextStyle(height: 2.0),
-                  style: TextStyle(color: Color(0xFFF73D99)),
+                                  style: TextInBox,
+
+                  // style: TextStyle(color: Color(0xFFF73D99)),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                       hintText: 'Add Task',
                       hintStyle: TextStyle(
-                          color: Color(0xFFF73D99).withOpacity(0.5),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 28.0),
+                          color: Color(0xFF848484).withOpacity(0.5),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20.0),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(15.0),
                           borderSide: BorderSide(color: Color(0xFFF73D99))),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color: Colors.white))),
+                          borderSide: BorderSide(color:  Color(0xFF61C6C0)))),
                   onChanged: (val) {
                     isEmpty();
-                    print('z');
+                    // print('z');
                   },
                 ),
               ),
@@ -573,12 +588,16 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
               Row(
                 children: <Widget>[
                   Container(
+                    padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
+                    margin: EdgeInsets.only(right: 20.0),
                     child: Text(
                       'Repeat On:',
-                      style: TextStyle(color: Colors.black),
+                      // style: TextStyle(color: Color(0xFFF73D99)),
+                      style: TextInBoxPink,
                     ),
                   ),
                   Container(
+                    padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
                     child: DropdownButton(
                       hint: Text(''), // Not necessary for Option 1
                       value: _repeatedBy,
@@ -586,7 +605,8 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                         return DropdownMenuItem(
                           child: new Text(
                             option,
-                            style: TextStyle(color: Color(0xFFF73D99)),
+                            // style: TextStyle(color: Color(0xFFF73D99)),
+                            style: TextInBoxPink,
                           ),
                           value: option,
                         );
@@ -605,12 +625,15 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
               ),
               Row(children: <Widget>[
                 Container(
+                  padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
+                  margin: EdgeInsets.only(right: 20.0),
                   child: Text(
                     'Repeat For:',
-                    style: TextStyle(color: Colors.black),
+                    style: TextInBoxPink,
                   ),
                 ),
                 Container(
+                  padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
                   child: DropdownButton(
                     hint: Text(''), // Not necessary for Option 1
                     value: _repeatedFor,
@@ -632,37 +655,58 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                     },
                   ),
                 ),
-                RaisedButton(
+              ]),
+              Row(children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
+                  margin: EdgeInsets.only(right: 20.0),
+                  child: Text("Remind At:",
+                  style: TextInBoxPink,),
+
+                ),
+                Container(
+                  height: 40.0,
+                  padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
+                  child:RaisedButton(
+                    color:Color(0xFFF73D99).withOpacity(0.8),
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: new BorderRadius.circular(15.0)),
+                  padding: EdgeInsets.all(5.0),
                     child:
                         new Text('${_time.hour}' + ' : ' + '${_time.minute}'),
+                        textColor: Colors.white,
                     onPressed: () {
                       _selectTime();
                     }),
-              ]),
-              Container(
-                  margin: EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 50.0),
-                  child: RaisedButton(
-                    color: Color(0xFF61C6C0),
-                    onPressed: isButtonEnabled
-                        ? () async {
-                            await _createTask(
-                                taskController.text,
-                                _repeatedBy,
-                                _repeatedFor,
-                                getday(widget.date),
-                                getdate_post(widget.date, _time));
-                            // print(_time.hour);
-                            print('task created, Fetching...');
-                            await widget.callback();
-                            Navigator.pop(context);
-                          }
-                        : null,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(15.0)),
-                    padding: EdgeInsets.all(15.0),
-                    child: Text('Add Task',
-                        textAlign: TextAlign.center, style: BtnText),
-                  )),
+                ),
+              ],),
+              Center(
+                child: Container(
+                  margin: EdgeInsets.only(top:25.0),
+                    // margin: EdgeInsets.fromLTRB(50.0, 15.0, 60.0, 50.0),
+                    child: RaisedButton(
+                      color: Color(0xFF61C6C0),
+                      onPressed: isButtonEnabled
+                          ? () async {
+                              await _createTask(
+                                  taskController.text,
+                                  _repeatedBy,
+                                  _repeatedFor,
+                                  getday(widget.date),
+                                  getdate_post(widget.date, _time));
+                              // print(_time.hour);
+                              print('task created, Fetching...');
+                              await widget.callback();
+                              Navigator.pop(context);
+                            }
+                          : null,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(15.0)),
+                      padding: EdgeInsets.all(15.0),
+                      child: Text('Add Task',
+                          textAlign: TextAlign.center, style: BtnText),
+                    )),
+              ),
             ],
           )),
 
