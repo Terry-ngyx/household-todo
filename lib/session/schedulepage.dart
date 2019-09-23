@@ -42,6 +42,10 @@ String getdate_post(DateTime date, TimeOfDay time) {
   return "${date.year}-${date.month}-${date.day} ${time.hour}:${time.minute}:00";
 }
 
+String getdate_post2(DateTime date) {
+  return "${date.year}-${date.month}-${date.day} 00:00:00";
+}
+
 String getday(DateTime date) {
   return "${date.day}";
 }
@@ -393,8 +397,13 @@ class _SchedulePageState extends State<SchedulePage> {
                                                 //     !is_completed[index];
                                               });
                                             },
-                                            child: Schedules(description,
-                                                assigned, color, id, _getScheduledTask),
+                                            child: Schedules(
+                                                description,
+                                                assigned,
+                                                color,
+                                                id,
+                                                _getScheduledTask,
+                                                _selectedDate),
                                           ),
                                         ),
                                       );
@@ -412,27 +421,15 @@ class Schedules extends StatefulWidget {
   int color;
   int id;
   Function getSceduledTask;
+  DateTime selectedDate;
   // String task_id;
-  Schedules(this.task, this.assigned, this.color, this.id, this.getSceduledTask);
+  Schedules(this.task, this.assigned, this.color, this.id, this.getSceduledTask,
+      this.selectedDate);
   @override
   _SchedulesState createState() => _SchedulesState();
 }
 
 class _SchedulesState extends State<Schedules> {
-  _assign(String username, int taskId) async {
-    String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/assign';
-    Map<String, String> headers = {
-      "Content-type": "application/json",
-      "Authorization": "Bearer $token"
-    };
-    String json = '{"user_incharge_username":"$username", "task_id":"$taskId"}';
-    http.Response response = await http.post(url, headers: headers, body: json);
-    int statusCode = response.statusCode;
-    final jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -459,7 +456,8 @@ class _SchedulesState extends State<Schedules> {
                 showDialog(
                     context: context,
                     builder: (context) {
-                      return DialogBoxAssign(widget.id, widget.getSceduledTask);
+                      return DialogBoxAssign(widget.id, widget.getSceduledTask,
+                          widget.selectedDate);
                       // return DialogBox(callback);
                     });
               },
@@ -476,7 +474,8 @@ class _SchedulesState extends State<Schedules> {
 class DialogBoxAssign extends StatefulWidget {
   int id;
   Function getScheduledTask;
-  DialogBoxAssign(this.id, this.getScheduledTask);
+  DateTime selectedDate;
+  DialogBoxAssign(this.id, this.getScheduledTask, this.selectedDate);
   // DateTime date;
   // Function callback;
   // DialogBoxAssign(this.date, this.callback);
@@ -486,7 +485,7 @@ class DialogBoxAssign extends StatefulWidget {
 
 class _DialogBoxAssignState extends State<DialogBoxAssign>
     with TickerProviderStateMixin {
-  List<String> _assignTypeList = ['Individual', 'Round Robin', 'Randomise'];
+  List<String> _assignTypeList = ['Individual', 'Round Robin'];
   List<String> _memberNames = []; // Option 2
   // List<String> _repeatFor = [for (var i = 1; i < 51; i += 1) '$i'];
   // TimeOfDay _time = new TimeOfDay.now();
@@ -506,7 +505,6 @@ class _DialogBoxAssignState extends State<DialogBoxAssign>
     });
   }
 
-
   Future<void> _assign(String username, int taskId) async {
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/assign';
@@ -515,6 +513,22 @@ class _DialogBoxAssignState extends State<DialogBoxAssign>
       "Authorization": "Bearer $token"
     };
     String json = '{"user_incharge_username":"$username", "task_id":"$taskId"}';
+    http.Response response = await http.post(url, headers: headers, body: json);
+    int statusCode = response.statusCode;
+    final jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+  }
+
+  Future<void> _assignroundrobin(int taskId, DateTime selected_date) async {
+    String token = await storage.read(key: 'jwt');
+    // DateTime.parse('${responseJson[y]["date"]} 00:00:00.000');
+    String date = getdate_post2(selected_date);
+    String url = 'http://10.0.2.2:5000/api/v1/users/assignroundrobin';
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Authorization": "Bearer $token"
+    };
+    String json = '{"task_id":"$taskId", "selected_date":"$date"}';
     http.Response response = await http.post(url, headers: headers, body: json);
     int statusCode = response.statusCode;
     final jsonResponse = jsonDecode(response.body);
@@ -630,9 +644,15 @@ class _DialogBoxAssignState extends State<DialogBoxAssign>
                   child: RaisedButton(
                     color: Color(0xFF61C6C0),
                     onPressed: () async {
-                      await _assign(_pickedMember, widget.id);
-                      await widget.getScheduledTask();
-                      Navigator.pop(context);
+                      if (_assignedType == 'Individual') {
+                        await _assign(_pickedMember, widget.id);
+                        await widget.getScheduledTask();
+                        Navigator.pop(context);
+                      } else {
+                        await _assignroundrobin(widget.id, widget.selectedDate);
+                        await widget.getScheduledTask();
+                        Navigator.pop(context);
+                      }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(15.0)),
