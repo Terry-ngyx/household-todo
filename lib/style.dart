@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:household/main.dart';
 
 const String FontNameDefault = 'Montserrat';
 
@@ -11,8 +12,14 @@ const AppBarTitle = TextStyle(
 
 const WelcomeTitle = TextStyle(
   fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w400,
+  fontSize: 24.0,
+  color: Colors.white,
+);
+const AppNameTitle = TextStyle(
+  fontFamily: FontNameDefault,
   fontWeight: FontWeight.w700,
-  fontSize: 20.0,
+  fontSize: 28.0,
   color: Colors.white,
 );
 
@@ -159,3 +166,19 @@ const TextInBoxPink =  TextStyle(
     color: Color(0xFFF73D99),
     fontWeight: FontWeight.w400,
     fontSize: 18.0);
+
+const SplashScreenText = TextStyle(
+   fontFamily: FontNameDefault,
+    // color: Color(0xFF3F5F8E),
+    color: Colors.white,
+    fontWeight: FontWeight.w800,
+    fontSize: 32.0
+);
+
+const SplashScreenSmallText = TextStyle(
+   fontFamily: FontNameDefault,
+    color: Color(0xFF5A78A9),
+    // color: Colors.white,
+    fontWeight: FontWeight.w600,
+    fontSize: 18.0
+);

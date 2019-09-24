@@ -66,21 +66,6 @@ class TodoState extends State<TodoPage> {
     print(_tasks);
   }
 
-  // _postPrivateTask(String _tasks) async {
-  //   String token = await storage.read(key: 'jwt');
-  //   String url = 'http://10.0.2.2:5000/api/v1/users/newprivatetask';
-  //   Map<String, String> headers = {
-  //     "Content-type": "application/json",
-  //     "Authorization": "Bearer $token"
-  //   };
-  //   String json = '{"description":"$_tasks"}';
-  //   http.Response response = await http.post(url, headers: headers, body: json);
-  //   int statusCode = response.statusCode;
-  //   final jsonResponse = jsonDecode(response.body);
-  //   // print(jsonResponse);
-  //   getPrivateTask();
-  // }
-
   _completedPrivateTask(int _taskId) async {
     String token = await storage.read(key: 'jwt');
     String url = 'http://10.0.2.2:5000/api/v1/users/completeprivatetask';

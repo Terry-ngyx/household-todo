@@ -32,7 +32,10 @@ class WelcomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(      
-                child: Text('Welcome to Household', style: WelcomeTitle, textAlign: TextAlign.center,),
+                child: Text('Welcome to', style: WelcomeTitle, textAlign: TextAlign.center,),
+              ),
+              Container(      
+                child: Text('Chores of Duty', style: AppNameTitle, textAlign: TextAlign.center,),
               ),
               ImageBanner('assets/images/logo.svg'),
               Container(
