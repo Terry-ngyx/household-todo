@@ -62,9 +62,13 @@ class _SchedulePageState extends State<SchedulePage> {
   Map<DateTime, List> _events = {};
   Map<DateTime, List> _id = {};
   Map<DateTime, List> _user_incharge_id = {};
+  Map<DateTime, List> _color = {};
+  Map<DateTime, List> _assigned = {};
   List _selectedEvents = [];
   List _selectedId = [];
   List _selectedUserInchargeId = [];
+  List _selectedColor = [];
+  List _selectedAssigned = [];
   DateTime _selectedDate;
   int selectedEventsLength = 0;
   List _members = [];
@@ -84,13 +88,17 @@ class _SchedulePageState extends State<SchedulePage> {
     List<String> task;
     List<String> id;
     List<String> user_incharge_id;
+    List<int> color = [];
+    List<String> assigned = [];
     List<List<String>> tasks = [];
     List<List<String>> ids = [];
     List<List<String>> user_incharge_ids = [];
+    List<List<int>> colors = [];
+    List<List<String>> assigneds = [];
     DateTime x;
 
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/get/scheduled/all';
+    String url = 'http://192.168.1.21:5000/api/v1/users/get/scheduled/all';
     http.Response response = await http.get(
       '$url',
       headers: {'Authorization': 'Bearer $token'},
@@ -109,24 +117,48 @@ class _SchedulePageState extends State<SchedulePage> {
       task = [];
       id = [];
       user_incharge_id = [];
+      color = [];
+      assigned = [];
       for (int y = 0; y < responseJson.length; y++) {
         if (distinctDateTimes[x] ==
             DateTime.parse('${responseJson[y]["date"]} 00:00:00.000')) {
           task.add(responseJson[y]["task"]);
           id.add(responseJson[y]["task_id"]);
           user_incharge_id.add(responseJson[y]["user_id_incharge"].toString());
+          int pos =
+              memberIds.indexOf(responseJson[y]["user_id_incharge"].toString());
+          if (pos != -1) {
+            assigned.add(members[pos]);
+            color.add(int.parse(memberColors[pos]));
+          } else {
+            assigned.add('Assign');
+            color.add(0xFF848484);
+          }
         }
       }
       tasks.add(task);
       ids.add(id);
       user_incharge_ids.add(user_incharge_id);
+      colors.add(color);
+      assigneds.add(assigned);
     }
+
+    // print(memberIds);
+    // print(user_incharge_ids);
+
+    // print(assigneds);
+    // print(colors);
 
     for (int x = 0; x < distinctDateTimes.length; x++) {
       _events.addAll({distinctDateTimes[x]: tasks[x]});
       _id.addAll({distinctDateTimes[x]: ids[x]});
       _user_incharge_id.addAll({distinctDateTimes[x]: user_incharge_ids[x]});
+      _color.addAll({distinctDateTimes[x]: colors[x]});
+      _assigned.addAll({distinctDateTimes[x]: assigneds[x]});
     }
+
+    print(_color);
+    print(_assigned);
 
     if (_selectedDate == null) {
       x = DateTime.parse(
@@ -139,8 +171,12 @@ class _SchedulePageState extends State<SchedulePage> {
       _events = _events;
       _id = _id;
       _user_incharge_id = _user_incharge_id;
+      _assigned = _assigned;
+      _color = _color;
       _selectedEvents = _events[x] ?? [];
       _selectedId = _id[x] ?? [];
+      _selectedColor = _color[x] ?? [];
+      _selectedAssigned = _assigned[x] ?? [];
       _selectedUserInchargeId = _user_incharge_id[x] ?? [];
       selectedEventsLength = _selectedEvents.length;
       _members = members;
@@ -155,7 +191,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
   _deleteScheduledTask(int _taskId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/deletescheduledtask';
+    String url = 'http://192.168.1.21:5000/api/v1/users/deletescheduledtask';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -212,7 +248,9 @@ class _SchedulePageState extends State<SchedulePage> {
                             '${calendar_date.toString().split(" ")[0]} 00:00:00.000');
                         _selectedId = _id[date];
                         _selectedUserInchargeId = _user_incharge_id[date] ?? [];
-                        // print(date);
+                        _selectedColor = _color[date] ?? [];
+                        _selectedAssigned = _assigned[date] ?? [];
+                        print(_selectedDate);
                         // print(_id[date]);
                         // print(_id);
                         // print(_selectedId);
@@ -331,36 +369,43 @@ class _SchedulePageState extends State<SchedulePage> {
                                     scrollDirection: Axis.vertical,
                                     itemCount: selectedEventsLength,
                                     itemBuilder: (context, index) {
-                                      String assigned = '';
-                                      int color;
-                                      int pos = _memberIds.indexOf(
-                                          _selectedUserInchargeId[index]);
-                                      if (pos != -1) {
-                                        assigned = _members[pos];
-                                        color = int.parse(_memberColors[pos]);
-                                      } else {
-                                        assigned = 'Assign to user';
-                                        color = 0xFF848484;
-                                      }
+                                      var colors = _selectedColor;
+                                      var assigneds = _selectedAssigned;
                                       var task = _selectedEvents;
                                       var ids = _selectedId;
                                       var id = int.parse(_selectedId[index]);
+                                      var color = _selectedColor[index];
+                                      var assigned = _selectedAssigned[index];
                                       var description = _selectedEvents[index];
                                       print(description);
-
                                       return Dismissible(
                                         direction: DismissDirection.endToStart,
                                         key: Key(description),
-                                        onDismissed: (direction) {
-                                          _deleteScheduledTask(id);
+                                        onDismissed: (direction) async {
+                                          await _deleteScheduledTask(id);
+                                          // _getScheduledTask();
                                           task.removeAt(index);
                                           ids.removeAt(index);
+                                          colors.removeAt(index);
+                                          assigneds.removeAt(index);
                                           setState(() {
                                             _selectedEvents = task;
                                             _selectedId = ids;
                                             selectedEventsLength =
                                                 _selectedEvents.length;
+                                            _selectedColor = colors;
+                                            _selectedAssigned = assigneds;
 
+                                            // pos = _memberIds.indexOf(
+                                            //     _selectedUserInchargeId[index]);
+                                            // if (pos != -1) {
+                                            //   assigned = _members[pos];
+                                            //   color =
+                                            //       int.parse(_memberColors[pos]);
+                                            // } else {
+                                            //   assigned = 'Assign to user';
+                                            //   color = 0xFF848484;
+                                            // }
                                             // taskStatus.removeAt(index);
                                             // print(task.length);
                                           });
@@ -502,12 +547,13 @@ class _DialogBoxAssignState extends State<DialogBoxAssign>
     setState(() {
       _memberNames = memberNames;
       _pickedMember = _memberNames[0];
+      print(widget.selectedDate);
     });
   }
 
   Future<void> _assign(String username, int taskId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/assign';
+    String url = 'http://192.168.1.21:5000/api/v1/users/assign';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -522,8 +568,9 @@ class _DialogBoxAssignState extends State<DialogBoxAssign>
   Future<void> _assignroundrobin(int taskId, DateTime selected_date) async {
     String token = await storage.read(key: 'jwt');
     // DateTime.parse('${responseJson[y]["date"]} 00:00:00.000');
+    print(selected_date);
     String date = getdate_post2(selected_date);
-    String url = 'http://10.0.2.2:5000/api/v1/users/assignroundrobin';
+    String url = 'http://192.168.1.21:5000/api/v1/users/assignroundrobin';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -703,7 +750,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
     String repeat_on, String date_time) async {
     String token = await storage.read(key: 'jwt');
     // set up POST request arguments
-    String url = 'http://10.0.2.2:5000/api/v1/users/new_scheduled';
+    String url = 'http://192.168.1.21:5000/api/v1/users/new_scheduled';
     String json =
         '{"task": "$task", "repeat_by": "$repeat_by", "repeat_for": "$repeat_for", "repeat_on": "$repeat_on", "date_time": "$date_time"}';
     // make POST request
@@ -768,7 +815,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Container(
-          padding: EdgeInsets.only(bottom:12.0),
+          padding: EdgeInsets.only(bottom: 12.0),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(color: Color(0xFFF73D99)),
@@ -796,18 +843,18 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                 ),
               ),
               Container(
-              margin: EdgeInsets.only(left: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  Icons.close,
-                  color: Color(0xFFF73D99),
-                  size: 30.0,
+                margin: EdgeInsets.only(left: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: Color(0xFFF73D99),
+                    size: 30.0,
+                  ),
                 ),
               ),
-            ),
             ],
           )),
       content: Container(
@@ -819,7 +866,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                 margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
                 child: TextFormField(
                   controller: taskController,
-                                  style: TextInBox,
+                  style: TextInBox,
 
                   // style: TextStyle(color: Color(0xFFF73D99)),
                   textAlign: TextAlign.center,
@@ -834,13 +881,9 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                           borderSide: BorderSide(color: Color(0xFFF73D99))),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(15.0),
-                          borderSide: BorderSide(color:  Color(0xFF61C6C0)))),
+                          borderSide: BorderSide(color: Color(0xFF61C6C0)))),
                   onChanged: (val) {
                     isEmpty();
-<<<<<<< HEAD
-                    // print('z');
-=======
->>>>>>> users can do individual assign
                   },
                 ),
               ),
@@ -916,6 +959,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                   ),
                 ),
               ]),
+<<<<<<< HEAD
               Row(children: <Widget>[
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
@@ -940,9 +984,38 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                     }),
                 ),
               ],),
+=======
+              Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
+                    margin: EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      "Remind At:",
+                      style: TextInBoxPink,
+                    ),
+                  ),
+                  Container(
+                    height: 40.0,
+                    padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
+                    child: RaisedButton(
+                        color: Color(0xFFF73D99).withOpacity(0.8),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: new BorderRadius.circular(15.0)),
+                        padding: EdgeInsets.all(5.0),
+                        child: new Text(
+                            '${_time.hour}' + ' : ' + '${_time.minute}'),
+                        textColor: Colors.white,
+                        onPressed: () {
+                          _selectTime();
+                        }),
+                  ),
+                ],
+              ),
+>>>>>>> final scheduled
               Center(
                 child: Container(
-                  margin: EdgeInsets.only(top:25.0),
+                    margin: EdgeInsets.only(top: 25.0),
                     // margin: EdgeInsets.fromLTRB(50.0, 15.0, 60.0, 50.0),
                     child: RaisedButton(
                       color: Color(0xFF61C6C0),
