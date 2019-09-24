@@ -168,17 +168,30 @@ const TextInBoxPink =  TextStyle(
     fontSize: 18.0);
 
 const SplashScreenText = TextStyle(
-   fontFamily: FontNameDefault,
-    // color: Color(0xFF3F5F8E),
-    color: Colors.white,
-    fontWeight: FontWeight.w800,
-    fontSize: 32.0
+  fontFamily: FontNameDefault,
+  // color: Color(0xFF3F5F8E),
+  color: Colors.white,
+  fontWeight: FontWeight.w800,
+  fontSize: 32.0
 );
 
 const SplashScreenSmallText = TextStyle(
-   fontFamily: FontNameDefault,
-    color: Color(0xFF5A78A9),
-    // color: Colors.white,
-    fontWeight: FontWeight.w600,
-    fontSize: 18.0
+  fontFamily: FontNameDefault,
+  color: Color(0xFF5A78A9),
+  // color: Colors.white,
+  fontWeight: FontWeight.w600,
+  fontSize: 18.0
+);
+
+const LocationDialog =  TextStyle(
+  fontFamily: FontNameDefault,
+  color: Color(0xFF0C324E),
+  fontWeight: FontWeight.w400,
+  fontSize: 16.0
+);
+const LocationDialogBold =  TextStyle(
+  fontFamily: FontNameDefault,
+  color: Color(0xFF0C324E),
+  fontWeight: FontWeight.w600,
+  fontSize: 18.0
 );

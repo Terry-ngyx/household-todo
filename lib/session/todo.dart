@@ -512,7 +512,6 @@ class _PublicDialogState extends State<PublicDialog> {
     if (picked != null && picked != DateTime.now()) {
       setState(() {
         _date = DateFormat("y-MM-dd").format(picked).toString();
-        print(_date);
       });
     }
   }
@@ -528,12 +527,11 @@ class _PublicDialogState extends State<PublicDialog> {
         );
       },
     );
-    if (picked != null && picked != TimeOfDay.now()) {
+    if (picked != null) {
       String minute = picked.minute.toString();
       if (minute.length < 2) {
         minute = '0$minute';
       }
-      print(minute);
       setState(() => _time = '${picked.hour.toString()}:$minute');
     }
   }

@@ -39,11 +39,11 @@ class NavBar extends StatelessWidget {
         children: <Widget>[
           Expanded(
             flex:1,
-            child: Container(
-              padding: EdgeInsets.only(left:20.0),
-              constraints: BoxConstraints.expand(height:20.0,width:2.0),
-              child: GestureDetector(
-                onTap: () => Navigator.pop(context),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                padding: EdgeInsets.only(left:20.0),
+                constraints: BoxConstraints.expand(height:20.0,width:2.0),
                 child: SvgPicture.asset(
                   "assets/images/back.svg",
                   fit:BoxFit.contain,
@@ -53,7 +53,7 @@ class NavBar extends StatelessWidget {
             )
           ),
           Expanded(
-            flex:2,
+            flex:3,
             child: Container(
               child: Text(pageTitle,
                 style: AppBarTitle,

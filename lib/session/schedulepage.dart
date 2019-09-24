@@ -430,6 +430,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
   List<String> _repeatBy = ['weekly', 'monthly']; // Option 2
   List<String> _repeatFor = [for (var i = 1; i < 51; i += 1) '$i'];
   TimeOfDay _time = new TimeOfDay.now();
+  String _timeString = 'Select Time';
   bool isButtonEnabled = false;
   final taskController = TextEditingController();
   // List<String> _repeatFor =
@@ -450,7 +451,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
 
 ////////////////////////////POST REQUEST CREATE NEW TASK/////////////////////
   Future<String> _createTask(String task, String repeat_by, String repeat_for,
-      String repeat_on, String date_time) async {
+    String repeat_on, String date_time) async {
     String token = await storage.read(key: 'jwt');
     // set up POST request arguments
     String url = 'http://10.0.2.2:5000/api/v1/users/new_scheduled';
@@ -495,8 +496,15 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
       },
     );
 
-    if (picked != null && picked != _time) {
-      setState(() => _time = picked);
+    if (picked != null) {
+      String minute = picked.minute.toString();
+      if (minute.length<2){
+        minute = '0$minute';
+      }
+      setState(() {
+        _time = picked;
+        _timeString = '${picked.hour.toString()}:$minute';
+      });
     }
   }
 
@@ -673,8 +681,8 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                     //   borderRadius: new BorderRadius.circular(15.0)),
                   padding: EdgeInsets.all(5.0),
                     child:
-                        new Text('${_time.hour}' + ' : ' + '${_time.minute}'),
-                        textColor: Colors.white,
+                      new Text('$_timeString'),
+                      textColor: Colors.white,
                     onPressed: () {
                       _selectTime();
                     }),
