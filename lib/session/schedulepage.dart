@@ -959,7 +959,6 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                   ),
                 ),
               ]),
-<<<<<<< HEAD
               Row(children: <Widget>[
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
@@ -984,35 +983,6 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
                     }),
                 ),
               ],),
-=======
-              Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
-                    margin: EdgeInsets.only(right: 20.0),
-                    child: Text(
-                      "Remind At:",
-                      style: TextInBoxPink,
-                    ),
-                  ),
-                  Container(
-                    height: 40.0,
-                    padding: EdgeInsets.fromLTRB(0, 3.0, 0, 0),
-                    child: RaisedButton(
-                        color: Color(0xFFF73D99).withOpacity(0.8),
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: new BorderRadius.circular(15.0)),
-                        padding: EdgeInsets.all(5.0),
-                        child: new Text(
-                            '${_time.hour}' + ' : ' + '${_time.minute}'),
-                        textColor: Colors.white,
-                        onPressed: () {
-                          _selectTime();
-                        }),
-                  ),
-                ],
-              ),
->>>>>>> final scheduled
               Center(
                 child: Container(
                     margin: EdgeInsets.only(top: 25.0),
