@@ -4,8 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_background_location/flutter_background_location.dart';
 import 'package:household/widgets/message.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_config/flutter_config.dart';
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'style.dart';
 import 'start/welcome.dart';
@@ -17,6 +19,7 @@ import 'session/todo.dart';
 import 'session/profile.dart';
 import 'session/profileedit.dart';
 import 'session/schedulepage.dart';
+import 'places_search_map.dart';
 
 const Home = '/welcome';
 const LoginRoute = '/login';
@@ -27,6 +30,7 @@ const TodoRoute = '/todo';
 const ProfileRoute = '/profile';
 const ProfileEditRoute = '/profileedit';
 const ScheduleRoute = '/schedule';
+const MapRoute = '/map';
 
 void main() => runApp(MyApp());
 
@@ -111,15 +115,18 @@ class _MyAppState extends State<MyApp> {
           " " +
           location.latitude.toString());
       String token = await storage.read(key: 'jwt');
-      String url = 'http://10.0.2.2:5000/api/v1/users/completepublictask';
-      String json =
-          '{"latitude": "$location.latitude.toString()", "longitude": "$location.longtitude.toString()"}';
-      http.Response response = await http.post(url,
-          headers: {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer $token'
-          },
-          body: json);
+      String url = 'http://10.0.2.2:5000/api/v1/users/geolocation';
+      String json = '{"latitude": "${location.latitude}", "longitude": "${location.longitude}"}';
+      http.Response response = await http.post(
+        url,
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization':'Bearer $token'
+        },
+        body: json
+      );
+      final jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
     });
   }
 
@@ -166,6 +173,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => ProfileEditPage());
       case ScheduleRoute:
         return MaterialPageRoute(builder: (_) => SchedulePage());
+      case MapRoute:
+        return MaterialPageRoute(builder: (_) => ShowMap());
 
       default:
         return MaterialPageRoute(

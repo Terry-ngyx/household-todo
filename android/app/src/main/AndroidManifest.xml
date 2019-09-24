@@ -14,8 +14,18 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
+<<<<<<< HEAD
         android:label="Chores of Duty"
         android:icon="@mipmap/ic_launcher">>
+=======
+        android:label="household"
+        android:icon="@mipmap/ic_launcher">
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="@string/ANDROID_MAPS_KEY"/>
+
+>>>>>>> set up front end view of grocers nearby using google maps
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

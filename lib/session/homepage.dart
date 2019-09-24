@@ -269,11 +269,11 @@ class HomePageState extends State<HomePage> {
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap:() {
-                            // Navigator.pushNamed(context,TestRoute);
+                            Navigator.pushNamed(context,MapRoute);
                             print("are you working?");
                           },
                           child: Center(
-                            child: Text('Assign to Me',textAlign: TextAlign.center,style: TitleText)
+                            child: Text('Grocers Nearby',textAlign: TextAlign.center,style: TitleText)
                           )
                         )
                       ),
