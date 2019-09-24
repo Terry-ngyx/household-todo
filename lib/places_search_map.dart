@@ -62,7 +62,7 @@ class _ShowMapState extends State<ShowMap>{
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                              color: Color(0xFFF96861)),
+                              color: Color(0xFF61C6C0)),
                         ),
                       ),
                       child: Row(
@@ -72,7 +72,7 @@ class _ShowMapState extends State<ShowMap>{
                             MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Container(
-                            child: Text("${jsonResponse["response"]["venues"][0]["name"]}",style: AddTaskTitle),
+                            child: Text("${jsonResponse["response"]["venues"][0]["name"]}",style: DialogTitleMint),
                           ),
                           SizedBox(
                             width: 35,
@@ -93,7 +93,7 @@ class _ShowMapState extends State<ShowMap>{
                       ),
                     ),
                     content: Container(
-                      height: 400,
+                      height: 380,
                       width: 500,
                       child: Column(
                         children: <Widget>[
@@ -109,9 +109,10 @@ class _ShowMapState extends State<ShowMap>{
                           Container(
                             height: 250.0,
                             width: 300.0,
+                            margin: EdgeInsets.only(top:10.0),
                             padding: EdgeInsets.symmetric(vertical: 40.0,horizontal:10.0),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Color(0xFFF28473)),
+                              border: Border.all(color: Color(0xFF61C6C0)),
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                             child: Column(

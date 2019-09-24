@@ -51,6 +51,13 @@ const AddTaskTitle = TextStyle(
     color:  Color(0xFFF96861),
 );
 
+const DialogTitleMint = TextStyle(
+    fontFamily: FontNameDefault,
+    fontWeight: FontWeight.w700,
+    fontSize: 25.0,
+    color:  Color(0XFF61C6C0),
+);
+
 
 const BtnText = TextStyle(
   fontFamily: FontNameDefault,
