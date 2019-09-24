@@ -95,7 +95,7 @@ class CategoryState extends State<CategoryPage> {
   _getPublicTask(String categoryId) async {
     String token = await storage.read(key: 'jwt');
     String url =
-        'http://10.0.2.2:5000/api/v1/users/get/public_task/$categoryId';
+        'http://192.168.1.21:5000/api/v1/users/get/public_task/$categoryId';
     http.Response response =
         await http.get(url, headers: {'Authorization': 'Bearer $token'});
     final responseJson = jsonDecode(response.body);
@@ -124,7 +124,7 @@ class CategoryState extends State<CategoryPage> {
   //POST REQUEST TO ADD ITEMS
   _addPublicTask(String task, String categoryId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://10.0.2.2:5000/api/v1/users/newpublictask';
+    String url = 'http://192.168.1.21:5000/api/v1/users/newpublictask';
     String json = '{"task":"$task","category_id":"$categoryId"}';
     http.Response response = await http.post(
       url,
@@ -206,7 +206,7 @@ class CategoryState extends State<CategoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Container(
-                            margin: EdgeInsets.fromLTRB(80.0, 0.0, 80.0, 20.0),
+                            margin: EdgeInsets.fromLTRB(60.0, 0.0, 60.0, 20.0),
                             padding: EdgeInsets.all(10.0),
                             decoration: BoxDecoration(
                                 border: Border.all(color: Color(0xFFF96861)),

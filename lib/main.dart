@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_background_location/flutter_background_location.dart';
 import 'package:household/widgets/message.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_config/flutter_config.dart';
+
 
 import 'dart:async';
 import 'dart:convert';
