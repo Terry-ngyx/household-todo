@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
           " " +
           location.latitude.toString());
       String token = await storage.read(key: 'jwt');
-      String url = 'http://10.0.2.2:5000/api/v1/users/geolocation';
+      String url = 'http://192.168.1.21:5000/api/v1/users/geolocation';
       String json = '{"latitude": "${location.latitude}", "longitude": "${location.longitude}"}';
       http.Response response = await http.post(
         url,

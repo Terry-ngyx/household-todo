@@ -21,11 +21,14 @@ class _ShowMapState extends State<ShowMap>{
   static double _latitude = 0;
   List<Marker> _allMarkers = [];
 
+  
+final storage = FlutterSecureStorage();
+
   getCurrentLocation() async {
     FlutterBackgroundLocation().getCurrentLocation().then((location) async {
 
       String token = await storage.read(key: 'jwt');
-      String url = 'http://10.0.2.2:5000/api/v1/users/geolocation';
+      String url = 'http://192.168.1.21:5000/api/v1/users/geolocation';
       String json = '{"latitude": "${location.latitude}", "longitude": "${location.longitude}"}';
       http.Response response = await http.post(
         url,
@@ -38,7 +41,7 @@ class _ShowMapState extends State<ShowMap>{
 
       final jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
-      
+
       List<Marker> allMarkers = [];
       if (jsonResponse["response"]["venues"].length > 0) {
         for (int i=0; i < jsonResponse["response"]["venues"].length; i++){
@@ -46,6 +49,7 @@ class _ShowMapState extends State<ShowMap>{
           double long = jsonResponse["response"]["venues"][i]["location"]["lng"];
           double distance = jsonResponse["response"]["venues"][i]["location"]["distance"]/1000;
           List<dynamic> address = jsonResponse["response"]["venues"][i]["location"]["formattedAddress"];
+          String storeName = jsonResponse["response"]["venues"][i]["name"];
           allMarkers.add(Marker(
             markerId: MarkerId('myMarker_$i'),
             draggable: false,
@@ -72,7 +76,7 @@ class _ShowMapState extends State<ShowMap>{
                             MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Container(
-                            child: Text("${jsonResponse["response"]["venues"][0]["name"]}",style: DialogTitleMint),
+                            child: Text("$storeName",style: DialogTitleMint),
                           ),
                           SizedBox(
                             width: 35,
