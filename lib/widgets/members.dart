@@ -65,7 +65,7 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
 
   Future _kickuser(int userId) async{
     String token = await storage.read(key: 'jwt');
-    String url = 'http://192.168.1.21:5000/api/v1/users/kick';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/kick';
     String json = '{"kicked_id": "${widget.memberid}"}';
     http.Response response = await http.post(
       url,
@@ -88,7 +88,7 @@ class _HouseMembersProfileState extends State<HouseMembersProfile>{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String roomId = prefs.getString('room_id');
     String curruserId = prefs.getString('user_id');
-    String url = 'http://192.168.1.21:5000/api/v1/users/deleteroom';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/deleteroom';
     String json = '{"room_id": "$roomId"}';
     http.Response response = await http.post(
       url,

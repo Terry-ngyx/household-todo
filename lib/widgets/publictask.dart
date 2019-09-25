@@ -36,7 +36,7 @@ class _PublicTaskState extends State<PublicTask>{
   Future<bool> _completeTask(int taskId) async{
     final storage = FlutterSecureStorage();
     String token = await storage.read(key: 'jwt');
-    String url = 'http://192.168.1.21:5000/api/v1/users/completepublictask';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/completepublictask';
     String json = '{"task_id": $taskId}';
     http.Response response = await http.post(
       url,
@@ -50,7 +50,7 @@ class _PublicTaskState extends State<PublicTask>{
   Future<bool> _deleteTask(int taskId) async{
     final storage = FlutterSecureStorage();
     String token = await storage.read(key: 'jwt');
-    String url = 'http://192.168.1.21:5000/api/v1/users/deletepublictask';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/deletepublictask';
     String json = '{"task_id": $taskId}';
     http.Response response = await http.post(
       url,

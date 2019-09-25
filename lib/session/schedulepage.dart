@@ -98,7 +98,7 @@ class _SchedulePageState extends State<SchedulePage> {
     DateTime x;
 
     String token = await storage.read(key: 'jwt');
-    String url = 'http://192.168.1.21:5000/api/v1/users/get/scheduled/all';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/get/scheduled/all';
     http.Response response = await http.get(
       '$url',
       headers: {'Authorization': 'Bearer $token'},
@@ -191,7 +191,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
   _deleteScheduledTask(int _taskId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://192.168.1.21:5000/api/v1/users/deletescheduledtask';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/deletescheduledtask';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -553,7 +553,7 @@ class _DialogBoxAssignState extends State<DialogBoxAssign>
 
   Future<void> _assign(String username, int taskId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://192.168.1.21:5000/api/v1/users/assign';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/assign';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -570,7 +570,7 @@ class _DialogBoxAssignState extends State<DialogBoxAssign>
     // DateTime.parse('${responseJson[y]["date"]} 00:00:00.000');
     print(selected_date);
     String date = getdate_post2(selected_date);
-    String url = 'http://192.168.1.21:5000/api/v1/users/assignroundrobin';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/assignroundrobin';
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "Bearer $token"
@@ -750,7 +750,7 @@ class _DialogBoxState extends State<DialogBox> with TickerProviderStateMixin {
     String repeat_on, String date_time) async {
     String token = await storage.read(key: 'jwt');
     // set up POST request arguments
-    String url = 'http://192.168.1.21:5000/api/v1/users/new_scheduled';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/new_scheduled';
     String json =
         '{"task": "$task", "repeat_by": "$repeat_by", "repeat_for": "$repeat_for", "repeat_on": "$repeat_on", "date_time": "$date_time"}';
     // make POST request

@@ -47,7 +47,7 @@ class JoinRoomFormState extends State<JoinRoomForm> {
     String token = await storage.read(key: 'jwt');
     print(token);
     // set up POST request arguments
-    String url = 'http://192.168.1.21:5000/api/v1/users/create';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/create';
 
     // make POST request
     http.Response response = await http.post(
@@ -78,7 +78,7 @@ class JoinRoomFormState extends State<JoinRoomForm> {
   Future<String> _joinRoom(String room_id) async {
     String token = await storage.read(key: 'jwt');
     // set up POST request arguments
-    String url = 'http://192.168.1.21:5000/api/v1/users/join';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/join';
     // Map<String, String> headers = {
     //   "Content-type": "application/json",
     //   'Authorization': 'Bearer $token',
@@ -141,7 +141,7 @@ class JoinRoomFormState extends State<JoinRoomForm> {
                       child: Text('Get Started !',
                           style: PageTitle, textAlign: TextAlign.center)),
                   Container(
-                    height: 300.0,
+                    height: 350.0,
                     padding: EdgeInsets.all(20.0),
                     margin: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 50.0),
                     decoration: BoxDecoration(
@@ -157,8 +157,15 @@ class JoinRoomFormState extends State<JoinRoomForm> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        CustomPaint(painter: Drawhorizontalline()),
-
+                        // CustomPaint(painter: Drawhorizontalline()),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 20.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(width:1.0 ,color:Color(0xFFF96861))
+                            ),
+                          ),
+                          ),
                         // Expanded(child: Divider()),
                         Container(
                           margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
@@ -229,23 +236,23 @@ class JoinRoomFormState extends State<JoinRoomForm> {
   }
 }
 
-class Drawhorizontalline extends CustomPainter {
-  Paint _paint;
+// class Drawhorizontalline extends CustomPainter {
+//   Paint _paint;
 
-  Drawhorizontalline() {
-    _paint = Paint()
-      ..color = Color(0xFFF96861)
-      ..strokeWidth = 1
-      ..strokeCap = StrokeCap.round;
-  }
+//   Drawhorizontalline() {
+//     _paint = Paint()
+//       ..color = Color(0xFFF96861)
+//       ..strokeWidth = 1
+//       ..strokeCap = StrokeCap.round;
+//   }
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawLine(Offset(-175.0, 0.0), Offset(175.0, 0.0), _paint);
-  }
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     canvas.drawLine(Offset(-175.0, 0.0), Offset(175.0, 0.0), _paint);
+//   }
 
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return false;
+//   }
+// }

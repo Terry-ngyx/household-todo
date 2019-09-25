@@ -72,7 +72,7 @@ class HomePageState extends State<HomePage> {
   Future<void> getCurrentUser() async {
     String token = await storage.read(key:'jwt');
     // set up authenticated GET request arguments
-    String url = 'http://192.168.1.21:5000/api/v1/users/me';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/me';
     // Map<String, String> headers ={'Authorization:': 'Bearer $_token'};
     http.Response response = await http.get(
       '$url',
@@ -105,7 +105,7 @@ class HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String roomId = prefs.getString('room_id');
     // set up authenticated GET request arguments
-    String url = 'http://192.168.1.21:5000/api/v1/users/housemates/$roomId';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/housemates/$roomId';
     http.Response response = await http.get(
       '$url',
       headers:  {"Content-type": "application/json"}

@@ -95,7 +95,7 @@ class CategoryState extends State<CategoryPage> {
   _getPublicTask(String categoryId) async {
     String token = await storage.read(key: 'jwt');
     String url =
-        'http://192.168.1.21:5000/api/v1/users/get/public_task/$categoryId';
+        'https://chores-of-duty.herokuapp.com/api/v1/users/get/public_task/$categoryId';
     http.Response response =
         await http.get(url, headers: {'Authorization': 'Bearer $token'});
     final responseJson = jsonDecode(response.body);
@@ -124,7 +124,7 @@ class CategoryState extends State<CategoryPage> {
   //POST REQUEST TO ADD ITEMS
   _addPublicTask(String task, String categoryId) async {
     String token = await storage.read(key: 'jwt');
-    String url = 'http://192.168.1.21:5000/api/v1/users/newpublictask';
+    String url = 'https://chores-of-duty.herokuapp.com/api/v1/users/newpublictask';
     String json = '{"task":"$task","category_id":"$categoryId"}';
     http.Response response = await http.post(
       url,
